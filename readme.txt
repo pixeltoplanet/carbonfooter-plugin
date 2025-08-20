@@ -68,11 +68,9 @@ Yes, the plugin is GDPR compliant. It does not collect or store any personal dat
 
 == Screenshots ==
 
-1. Minimal emissions display - Shows a simple badge with your page's carbon emissions
-2. Sticker display option - A more detailed sticker showing emissions and hosting type
-3. Full banner display - Comprehensive display with all emissions data and tips
-4. Admin settings page - Configure your plugin settings and display options
-5. Post columns showing emissions - Quick overview in your posts list
+1-Overview. screenshot-1.png
+2-Footer. screenshot-2.png
+3-Settings page. screenshot-3.png
 
 == Changelog ==
 
