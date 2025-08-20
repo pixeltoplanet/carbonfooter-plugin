@@ -48,7 +48,7 @@ class Plugin
    *
    * @var string
    */
-  public const VERSION = '0.16.1';
+  public const VERSION = '0.16.2';
 
   /**
    * Core components
