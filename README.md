@@ -12,7 +12,7 @@ Carbonfooter helps you understand and showcase the carbon emissions of your webs
 - **Background Processing**: Runs API requests asynchronously to avoid impacting page performance
 - **Automatic Refresh**: Emissions data is refreshed automatically (weekly by default)
 - **Admin Columns**: Displays CO₂ emissions for each post/page in the admin list view
-- **Multiple Display Options**: Choose from minimal, sticker, or full display options via shortcodes
+- **Flexible Display**: One shortcode with multiple styles (minimal, sticker, full) configurable in Settings
 
 ## Installation
 
@@ -36,41 +36,33 @@ You can configure the plugin by visiting the Settings page in the WordPress admi
 
 ## Usage
 
-### Shortcodes
+### Shortcode
 
-The plugin provides three shortcodes to display carbon emissions data:
-
-#### 1. Minimal Display
+Use the single shortcode to render the widget. The visual style is selected in Settings.
 
 ```
-[carbonfooter_minimal]
+[carbonfooter]
 ```
 
-Displays a simple text showing the current page emissions (falls back to site average).
-
-#### 2. Sticker Display
-
-```
-[carbonfooter_sticker]
-```
-
-Displays a compact sticker with emissions data.
-
-#### 3. Full Display
-
-```
-[carbonfooter_full]
-```
-
-Displays a detailed emissions banner with additional information and comparisons.
+- **Style selection**: Choose between "minimal", "sticker", or "full" in Carbonfooter → Settings → Appearance → Widget style. The shortcode does not take attributes; site-wide style is applied.
+- **Automatic insertion**: In Settings, set Display to "Auto" to automatically inject the widget into the site footer on the frontend. Set to "Shortcode" to only render where the shortcode is used.
+- **Colors**: Background and text colors are controlled via Settings (exposed as CSS variables `--cf-color-background` and `--cf-color-foreground`).
+- **Data shown**: If the current page has measured data, its emissions are shown; otherwise the site average is displayed.
 
 ### Usage in Themes
 
 You can add the shortcodes to your theme templates using WordPress's `do_shortcode()` function:
 
 ```php
-<?php echo do_shortcode('[carbonfooter_minimal]'); ?>
+<?php echo do_shortcode('[carbonfooter]'); ?>
 ```
+
+## How it works
+
+- The `[carbonfooter]` shortcode dispatches to one of three renderers (minimal, sticker, full) based on the configured widget style.
+- When Display is set to Auto, the plugin adds the widget to the frontend footer via `wp_footer`.
+- Emissions are fetched per page (or fall back to the site average) and formatted for display. The full style includes additional comparisons like estimated annual driving distance and trees needed for offsetting.
+- Admin pages (Results, Settings) are available under Carbonfooter in the WP admin menu.
 
 ## Developer Documentation
 

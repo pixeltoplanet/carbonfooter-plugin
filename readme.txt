@@ -1,7 +1,6 @@
 === Carbonfooter ===
-Contributors: pixeltoplanet, dannymoons
-Donate link: https://carbonfooter.nl/donate
-Tags: carbon footprint, sustainability, green hosting, emissions, eco-friendly
+Contributors: dannymoons
+Tags: carbon footprint, sustainability, emissions, eco-friendly, sustainable website
 Requires at least: 5.6
 Tested up to: 6.8
 Requires PHP: 8.0
