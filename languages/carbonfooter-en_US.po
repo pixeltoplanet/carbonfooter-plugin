@@ -1,0 +1,103 @@
+# Copyright (C) 2023 CarbonFooter
+# This file is distributed under the same license as the CarbonFooter package.
+msgid ""
+msgstr ""
+"Project-Id-Version: CarbonFooter\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/carbonfooter\n"
+"POT-Creation-Date: 2023-09-20 12:00:00+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2023-09-20 12:00:00+00:00\n"
+"Last-Translator: Admin <admin@example.com>\n"
+"Language-Team: English <en@example.com>\n"
+"Language: en_US\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.0\n"
+
+#: inc/class-footer-emissions.php:163
+#, php-format
+msgid "This page produced %1$s per page view. Want to learn more? %2$s"
+msgstr "This page produced %1$s per page view. Want to learn more? %2$s"
+
+#: inc/class-footer-emissions.php:203
+#, php-format
+msgid "This page produced %1$s per page view."
+msgstr "This page produced %1$s per page view."
+
+#: inc/class-footer-emissions.php:220
+msgid "Carbon Footprint"
+msgstr "Carbon Footprint"
+
+#: inc/class-footer-emissions.php:224
+msgid "This page:"
+msgstr "This page:"
+
+#: inc/class-footer-emissions.php:229
+msgid "Site average:"
+msgstr "Site average:"
+
+#: inc/class-footer-emissions.php:235
+msgid "Green hosting:"
+msgstr "Green hosting:"
+
+#: inc/class-footer-emissions.php:237
+msgid "Yes"
+msgstr "Yes"
+
+#: inc/class-footer-emissions.php:238
+msgid "No"
+msgstr "No"
+
+#: inc/class-footer-emissions.php:243
+msgid "Measured by"
+msgstr "Measured by"
+
+#: views/settings-page.php:15
+msgid "Caching Plugin Detected"
+msgstr "Caching Plugin Detected"
+
+#: views/settings-page.php:20
+#, php-format
+msgid "We detected the following caching plugin(s): %1$s."
+msgstr "We detected the following caching plugin(s): %1$s."
+
+#: views/settings-page.php:24
+msgid "Caching plugins may interfere with accurate carbon emissions measurements. Please ensure your caching plugin is configured to exclude Carbonfooter measurement requests or consider temporarily disabling caching when measuring emissions."
+msgstr "Caching plugins may interfere with accurate carbon emissions measurements. Please ensure your caching plugin is configured to exclude Carbonfooter measurement requests or consider temporarily disabling caching when measuring emissions."
+
+#: views/settings-page.php:28
+msgid "Caching plugin detection is active for testing purposes in local environment."
+msgstr "Caching plugin detection is active for testing purposes in local environment."
+
+#: views/dashboard-widget.php:35
+msgid "Top 10 Highest Emission Pages"
+msgstr "Top 10 Highest Emission Pages"
+
+#: src/views/AdminPage.js:220
+msgid "Top 10 Heaviest Pages"
+msgstr "Top 10 Heaviest Pages"
+
+#: src/views/AdminPage.js:240
+msgid "Page Title"
+msgstr "Page Title"
+
+#: src/views/AdminPage.js:250
+msgid "Emissions"
+msgstr "Emissions"
+
+#: src/views/AdminPage.js:260
+msgid "Actions"
+msgstr "Actions"
+
+#: src/views/AdminPage.js:290
+msgid "Edit"
+msgstr "Edit"
+
+#: src/views/AdminPage.js:300
+msgid "View"
+msgstr "View"
+
+#: src/views/AdminPage.js:320
+msgid "No pages with emissions data found."
+msgstr "No pages with emissions data found." 

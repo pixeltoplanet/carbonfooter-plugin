@@ -1,0 +1,10 @@
+/logs
+logs
+vendor
+.DS_Store
+carbonfooter-*.zip
+releases
+.cursor
+node_modules
+/node_modules
+build

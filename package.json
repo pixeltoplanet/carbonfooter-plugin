@@ -1,0 +1,33 @@
+{
+  "name": "carbonfooter",
+  "version": "0.16.1",
+  "description": "Measure the carbon emissions of your website right inside WordPress",
+  "main": "build/index.js",
+  "scripts": {
+    "build": "wp-scripts build",
+    "dev": "wp-scripts start",
+    "format": "wp-scripts format",
+    "lint:css": "wp-scripts lint-style",
+    "lint:js": "wp-scripts lint-js",
+    "packages-update": "wp-scripts packages-update",
+    "version-up": "bun scripts/bump-version.js",
+    "release": "bun run build && bun scripts/release.js"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.0.5",
+    "@types/bun": "latest",
+    "@wordpress/scripts": "^26.0.0"
+  },
+  "dependencies": {
+    "@wordpress/api-fetch": "^6.0.0",
+    "@wordpress/components": "^25.0.0",
+    "@wordpress/element": "^5.0.0",
+    "@wordpress/i18n": "^4.0.0",
+    "@wordpress/icons": "^10.26.0",
+    "@wordpress/notices": "^4.0.0"
+  },
+  "packageManager": "pnpm@9.15.4+sha512.b2dc20e2fc72b3e18848459b37359a32064663e5627a51e4c74b2c29dd8e8e0491483c3abb40789cfd578bf362fb6ba8261b05f0387d76792ed6e23ea3b1b6a0",
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  }
+}
