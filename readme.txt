@@ -4,7 +4,7 @@ Tags: carbon footprint, sustainability, emissions, eco-friendly, sustainable web
 Requires at least: 5.6
 Tested up to: 6.8
 Requires PHP: 8.0
-Stable tag: 0.16.1
+Stable tag: 0.16.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -75,6 +75,9 @@ Yes, the plugin is GDPR compliant. It does not collect or store any personal dat
 5. Post columns showing emissions - Quick overview in your posts list
 
 == Changelog ==
+
+= 0.16.2 =
+* Update readme files
 
 = 0.16.1 =
 * Fix shortcode output
