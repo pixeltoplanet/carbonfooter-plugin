@@ -64,13 +64,13 @@ class Emissions
     try {
       // Check if data collection is enabled
       if (!get_option(Constants::OPTION_DATA_COLLECTION_ENABLED, Constants::DEFAULT_DATA_COLLECTION_ENABLED)) {
-        throw new \Exception('Data collection is disabled in privacy settings');
+        throw new \Exception(__('Data collection is disabled in privacy settings', 'carbonfooter'));
       }
 
       // Get post URL
       $url = get_permalink($post_id);
       if (!$url) {
-        throw new \Exception('Invalid post URL');
+        throw new \Exception(__('Invalid post URL', 'carbonfooter'));
       }
 
       // Ensure using HTTPS
@@ -247,30 +247,33 @@ class Emissions
     if (is_wp_error($response)) {
       $error_message = $response->get_error_message();
       Logger::error("API Error: $error_message");
-      throw new \Exception(sprintf('API Error: %s', esc_html($error_message)));
+      /* translators: %s: API error message returned by the remote request */
+      throw new \Exception(sprintf(__('API Error: %s', 'carbonfooter'), esc_html($error_message)));
     }
 
     $response_code = wp_remote_retrieve_response_code($response);
     if ($response_code !== 200) {
       $error_message = wp_remote_retrieve_response_message($response);
       Logger::error("API Error: Status $response_code - $error_message");
-      throw new \Exception(sprintf('API Error: Status %s', esc_html($response_code)));
+      /* translators: %s: HTTP response status code from the API */
+      throw new \Exception(sprintf(__('API Error: Status %s', 'carbonfooter'), esc_html($response_code)));
     }
 
     $body = wp_remote_retrieve_body($response);
     if (empty($body)) {
-      throw new \Exception('Empty API response');
+      throw new \Exception(__('Empty API response', 'carbonfooter'));
     }
 
     $data = json_decode($body, true);
     if (json_last_error() !== JSON_ERROR_NONE) {
       $json_error = json_last_error_msg();
       Logger::error("JSON Error: $json_error");
-      throw new \Exception(sprintf('Invalid JSON response: %s', esc_html($json_error)));
+      /* translators: %s: JSON decoding error message */
+      throw new \Exception(sprintf(__('Invalid JSON response: %s', 'carbonfooter'), esc_html($json_error)));
     }
 
     if (!isset($data['emissions']['emissionsPerVisit'])) {
-      throw new \Exception('No emissions data found in response');
+      throw new \Exception(__('No emissions data found in response', 'carbonfooter'));
     }
 
     // Log successful API response

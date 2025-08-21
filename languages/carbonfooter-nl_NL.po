@@ -3,103 +3,957 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: CarbonFooter\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/carbonfooter\n"
-"POT-Creation-Date: 2023-09-20 12:00:00+00:00\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/carbonfooter-"
+"plugin\n"
+"POT-Creation-Date: 2025-08-21T06:37:24+00:00\n"
 "PO-Revision-Date: 2023-09-20 12:00:00+00:00\n"
 "Last-Translator: Admin <admin@example.com>\n"
 "Language-Team: Dutch <nl@example.com>\n"
 "Language: nl_NL\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.0\n"
 
-#: inc/class-footer-emissions.php:163
-#: cf_minimal
+#. Plugin Name of the plugin
+#. Author of the plugin
+#: carbonfooter.php inc/class-admin-handler.php:102
+#: inc/class-admin-handler.php:103 src/views/AdminPage.js:106
+#: src/views/ResultsPage.js:88
+#, fuzzy
+msgid "Carbonfooter"
+msgstr "CO2-voetafdruk"
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+#: carbonfooter.php
+msgid "https://carbonfooter.nl"
+msgstr ""
+
+#. Description of the plugin
+#: carbonfooter.php
+msgid "Measure the carbon emissions of your website right inside WordPress"
+msgstr ""
+
+#: inc/class-admin-handler.php:113 inc/class-admin-handler.php:114
+msgid "Results"
+msgstr ""
+
+#: inc/class-admin-handler.php:122 inc/class-admin-handler.php:123
+#: inc/class-admin-handler.php:333 src/views/SettingsPage.js:338
+msgid "Settings"
+msgstr ""
+
+#: inc/class-admin-handler.php:248
+msgid "Measuring..."
+msgstr ""
+
+#: inc/class-admin-handler.php:249
+#, fuzzy
+msgid "Measure again"
+msgstr "Gemeten door"
+
+#: inc/class-admin-handler.php:250
+msgid "Failed to measure emissions. Please try again."
+msgstr ""
+
+#: inc/class-admin-handler.php:269
+msgid "Carbon Emissions Overview"
+msgstr ""
+
+#: inc/class-admin-handler.php:282
+#, fuzzy
+msgid "CO2 Emissions"
+msgstr "Uitstoot"
+
+#: inc/class-admin-handler.php:310
+msgid "No result yet"
+msgstr ""
+
+#: inc/class-admin-handler.php:314
+msgid "Visit page to get a result"
+msgstr ""
+
+#: inc/class-admin-handler.php:447
+msgid ""
+"The CarbonFooter plugin uses the carbonfooter.nl API service to calculate "
+"carbon emissions for your website pages."
+msgstr ""
+
+#: inc/class-admin-handler.php:448
+msgid "Data Shared with External Service"
+msgstr ""
+
+#: inc/class-admin-handler.php:449
+msgid "The following data is sent to carbonfooter.nl:"
+msgstr ""
+
+#: inc/class-admin-handler.php:450
+msgid "Page URLs for emissions calculation"
+msgstr ""
+
+#: inc/class-admin-handler.php:451
+msgid "Basic site information for analysis"
+msgstr ""
+
+#: inc/class-ajax-handler.php:118
+msgid "Invalid post ID"
+msgstr ""
+
+#: inc/class-ajax-handler.php:135
+msgid "Failed to measure emissions"
+msgstr ""
+
+#: inc/class-ajax-handler.php:155
+msgid "Failed to retrieve statistics"
+msgstr ""
+
+#: inc/class-ajax-handler.php:178
+msgid "Failed to retrieve heaviest pages"
+msgstr ""
+
+#: inc/class-ajax-handler.php:201
+msgid "Failed to retrieve untested pages"
+msgstr ""
+
+#: inc/class-ajax-handler.php:234 inc/class-rest-api-handler.php:220
+msgid "No valid settings provided"
+msgstr ""
+
+#. translators: %d is the number of deleted data entries.
+#: inc/class-ajax-handler.php:290
+#, php-format
+msgid ""
+"Successfully cleared %d data entries and cache. All emissions data has been "
+"removed."
+msgstr ""
+
+#: inc/class-ajax-handler.php:298
+msgid "Failed to clear data"
+msgstr ""
+
+#: inc/class-ajax-handler.php:334
+#, fuzzy
+msgid "No historical emissions data found to export."
+msgstr "Geen pagina's met uitstootgegevens gevonden."
+
+#. translators: %d is the number of exported posts.
+#: inc/class-ajax-handler.php:351
+#, php-format
+msgid "Successfully exported %d posts with historical emissions data."
+msgstr ""
+
+#: inc/class-ajax-handler.php:357
+msgid "Failed to export data"
+msgstr ""
+
+#: inc/class-ajax-handler.php:374
+msgid "Invalid security token"
+msgstr ""
+
+#: inc/class-ajax-handler.php:378
+msgid "Insufficient permissions"
+msgstr ""
+
+#: inc/class-emissions.php:67
+msgid "Data collection is disabled in privacy settings"
+msgstr ""
+
+#: inc/class-emissions.php:73
+msgid "Invalid post URL"
+msgstr ""
+
+#. translators: %s: API error message returned by the remote request
+#: inc/class-emissions.php:251
+#, php-format
+msgid "API Error: %s"
+msgstr ""
+
+#. translators: %s: HTTP response status code from the API
+#: inc/class-emissions.php:259
+#, php-format
+msgid "API Error: Status %s"
+msgstr ""
+
+#: inc/class-emissions.php:264
+msgid "Empty API response"
+msgstr ""
+
+#. translators: %s: JSON decoding error message
+#: inc/class-emissions.php:272
+#, php-format
+msgid "Invalid JSON response: %s"
+msgstr ""
+
+#: inc/class-emissions.php:276
+#, fuzzy
+msgid "No emissions data found in response"
+msgstr "Geen pagina's met uitstootgegevens gevonden."
+
+#: inc/class-rest-api-handler.php:121
+msgid "Widget background color in hex format"
+msgstr ""
+
+#: inc/class-rest-api-handler.php:127
+msgid "Widget text color in hex format"
+msgstr ""
+
+#: inc/class-rest-api-handler.php:133
+msgid "Widget display setting (auto, manual, disabled)"
+msgstr ""
+
+#: inc/class-rest-api-handler.php:139
+msgid "Widget style (minimal, detailed, compact)"
+msgstr ""
+
+#: inc/class-rest-api-handler.php:173
+msgid "Failed to retrieve settings"
+msgstr ""
+
+#: inc/class-rest-api-handler.php:240
+msgid "Failed to save settings"
+msgstr ""
+
+#. translators: %s is the parameter name that has an invalid hex color.
+#: inc/class-rest-api-handler.php:298
+#, php-format
+msgid "Invalid hex color format for %s"
+msgstr ""
+
+#. translators: %s is a comma-separated list of allowed display settings.
+#: inc/class-rest-api-handler.php:331
+#, php-format
+msgid "Invalid display setting. Must be one of: %s"
+msgstr ""
+
+#. translators: %s is a comma-separated list of allowed widget styles.
+#: inc/class-rest-api-handler.php:364
+#, php-format
+msgid "Invalid widget style. Must be one of: %s"
+msgstr ""
+
+#: inc/class-shortcodes.php:387 inc/class-shortcodes.php:429
+#: src/components/WidgetPreview.js:63 src/components/WidgetPreview.js:145
+#, fuzzy
+msgid "Carbonfooter.nl"
+msgstr "CO2-voetafdruk"
+
+#. translators: %1$s is the CO2 emissions HTML span, %2$s is the link HTML
+#: inc/class-shortcodes.php:393
 #, php-format
 msgid "This page produced %1$s per page view. Want to learn more? %2$s"
 msgstr "Deze webpagina stoot %1$s uit per bezoek. Meer weten? %2$s"
 
-#: inc/class-footer-emissions.php:203
-#: cf_sticker
+#. translators: %1$s is the CO2 emissions HTML span, %2$s is the link HTML
+#: inc/class-shortcodes.php:434
 #, php-format
 msgid "This page produced %1$s per page view."
 msgstr "Deze webpagina stoot %1$s uit per bezoek."
 
-#: inc/class-footer-emissions.php:220
-msgid "Carbon Footprint"
-msgstr "CO2-voetafdruk"
+#: inc/class-shortcodes.php:496 src/components/OverviewGreenhost.js:5
+#: src/components/WidgetPreview.js:104
+msgid "Yes!"
+msgstr ""
 
-#: inc/class-footer-emissions.php:224
-msgid "This page:"
-msgstr "Deze pagina:"
-
-#: inc/class-footer-emissions.php:229
-msgid "Site average:"
-msgstr "Sitegemiddelde:"
-
-#: inc/class-footer-emissions.php:235
-msgid "Green hosting:"
-msgstr "Groene hosting:"
-
-#: inc/class-footer-emissions.php:237
-msgid "Yes"
-msgstr "Ja"
-
-#: inc/class-footer-emissions.php:238
-msgid "No"
+#: inc/class-shortcodes.php:496
+#, fuzzy
+msgid "No!"
 msgstr "Nee"
 
-#: inc/class-footer-emissions.php:243
-msgid "Measured by"
+#: inc/class-shortcodes.php:499 src/components/WidgetPreview.js:105
+msgid "green energy"
+msgstr ""
+
+#: inc/class-shortcodes.php:499
+msgid "not green energy"
+msgstr ""
+
+#: inc/class-shortcodes.php:515 src/components/WidgetPreview.js:121
+msgid "pagesize"
+msgstr ""
+
+#. translators: %s: Emissions value in grams of CO2
+#: inc/class-shortcodes.php:527
+#, php-format
+msgid "%s gram CO<sub>2</sub>"
+msgstr ""
+
+#: inc/class-shortcodes.php:531 src/components/WidgetPreview.js:138
+msgid "per visit"
+msgstr ""
+
+#. translators: %s: amount in km car drive per year based on carbon emissions
+#: inc/class-shortcodes.php:549
+#, php-format
+msgid "= <strong>%s km.</strong></br>drive per year."
+msgstr ""
+
+#. translators: %s: trees needed to offset emissions per year
+#: inc/class-shortcodes.php:571
+#, php-format
+msgid "and <strong>%s trees</strong></br>offset per year."
+msgstr ""
+
+#: inc/class-shortcodes.php:586 src/components/WidgetPreview.js:143
+msgid "Want to learn more?"
+msgstr ""
+
+#: views/dashboard-widget.php:27
+#, fuzzy
+msgid "Average Emissions"
+msgstr "Uitstoot"
+
+#: views/dashboard-widget.php:32
+#, fuzzy
+msgid "Pages Measured"
 msgstr "Gemeten door"
 
-#: views/settings-page.php:15
-msgid "Caching Plugin Detected"
-msgstr "Cache-plugin gedetecteerd"
+#: views/dashboard-widget.php:38
+#, fuzzy
+msgid "Green Hosting"
+msgstr "Groene hosting:"
 
-#: views/settings-page.php:20
-#, php-format
-msgid "We detected the following caching plugin(s): %1$s."
-msgstr "We hebben de volgende cache-plugin(s) gedetecteerd: %1$s."
+#: views/dashboard-widget.php:43
+#, fuzzy
+msgid "Non-Green Hosting"
+msgstr "Groene hosting:"
 
-#: views/settings-page.php:24
-msgid "Caching plugins may interfere with accurate carbon emissions measurements. Please ensure your caching plugin is configured to exclude Carbonfooter measurement requests or consider temporarily disabling caching when measuring emissions."
-msgstr "Cache-plugins kunnen de nauwkeurige meting van CO2-uitstoot verstoren. Zorg ervoor dat je cache-plugin is geconfigureerd om Carbonfooter-meetverzoeken uit te sluiten of overweeg om caching tijdelijk uit te schakelen bij het meten van uitstoot."
-
-#: views/settings-page.php:28
-msgid "Caching plugin detection is active for testing purposes in local environment."
-msgstr "Cache-plugin detectie is actief voor testdoeleinden in lokale omgeving."
-
-#: views/dashboard-widget.php:35
+#: views/dashboard-widget.php:51
 msgid "Top 10 Highest Emission Pages"
 msgstr "Top 10 Pagina's met Hoogste Uitstoot"
 
-#: src/views/AdminPage.js:220
-msgid "Top 10 Heaviest Pages"
+#: views/dashboard-widget.php:67
+msgid "View Details"
+msgstr ""
+
+#: views/settings-page.php:23
+msgid "Caching Plugin Detected"
+msgstr "Cache-plugin gedetecteerd"
+
+#. translators: %s is a comma-separated list of detected caching plugins.
+#: views/settings-page.php:31
+#, fuzzy, php-format
+msgid "We detected the following caching plugin(s): <strong>%s</strong>."
+msgstr "We hebben de volgende cache-plugin(s) gedetecteerd: %1$s."
+
+#: views/settings-page.php:35
+msgid ""
+"Caching plugin detection is active for testing purposes in local environment."
+msgstr ""
+"Cache-plugin detectie is actief voor testdoeleinden in lokale omgeving."
+
+#: views/settings-page.php:40
+#, fuzzy
+msgid ""
+"Caching plugins may interfere with accurate carbon emissions measurements. "
+"Please make sure to clear your cache if your settings are not working or you "
+"are not seeing any emissions results. Note: if you are using LiteSpeed "
+"Cache, you need to clear the cache manually after every measurement for now."
+msgstr ""
+"Cache-plugins kunnen de nauwkeurige meting van CO2-uitstoot verstoren. Zorg "
+"ervoor dat je cache-plugin is geconfigureerd om Carbonfooter-meetverzoeken "
+"uit te sluiten of overweeg om caching tijdelijk uit te schakelen bij het "
+"meten van uitstoot."
+
+#: src/components/ExportData.js:22
+msgid "Export Historical Emissions Data"
+msgstr ""
+
+#: src/components/ExportData.js:41
+msgid ""
+"This is especially relevant if you want to use the carbon emissions from "
+"your website for another platform. You can export all historical emissions "
+"as a JSON file. This includes all pages with measurement history, including "
+"the serialized PHP arrays that contain the historical measurements. "
+msgstr ""
+
+#: src/components/ExportData.js:49
+msgid "The exported file will contain:"
+msgstr ""
+
+#: src/components/ExportData.js:56
+msgid "Post ID and title"
+msgstr ""
+
+#: src/components/ExportData.js:57
+msgid "Complete measurement history"
+msgstr ""
+
+#: src/components/ExportData.js:59
+msgid "Serialized PHP arrays with dates and values"
+msgstr ""
+
+#: src/components/ExportData.js:64
+#, fuzzy
+msgid "All pages with historical data"
+msgstr "Geen pagina's met uitstootgegevens gevonden."
+
+#: src/components/ExportData.js:76
+msgid "Exporting Data..."
+msgstr ""
+
+#: src/components/ExportData.js:77
+msgid "Export Historical Data"
+msgstr ""
+
+#: src/components/HowItWorks.js:20
+msgid "How Measurements Work"
+msgstr ""
+
+#: src/components/HowItWorks.js:25
+msgid "Carbonfooter automatically measures the carbon emission of your pages: "
+msgstr ""
+
+#: src/components/HowItWorks.js:32
+msgid ""
+"Measurements are taken when someone visits a page that hasn’t been measured "
+"in the last week."
+msgstr ""
+
+#: src/components/HowItWorks.js:38
+msgid ""
+"Each page stores up to 12 historical measurements, providing about 3 months "
+"of history"
+msgstr ""
+
+#: src/components/HowItWorks.js:44
+msgid ""
+"The process runs in the background and won’t affect your visitors’ "
+"experience (except ofcourse they see the carbon footprint in the footer!)"
+msgstr ""
+
+#: src/components/HowItWorks.js:50
+msgid ""
+"The methodology of the carbon calculation is based on the universal "
+"Sustainable Web Model version 4, improved for Dutch visitors."
+msgstr ""
+
+#: src/components/HowItWorks.js:67
+msgid "Read more about how it works"
+msgstr ""
+
+#: src/components/NotTestedPages.js:30
+msgid "Error loading data"
+msgstr ""
+
+#: src/components/NotTestedPages.js:50
+msgid "Failed to load untested pages"
+msgstr ""
+
+#: src/components/NotTestedPages.js:69
+#, fuzzy
+msgid "Failed to load heaviest pages"
 msgstr "Top 10 Zwaarste Pagina's"
 
-#: src/views/AdminPage.js:240
-msgid "Page Title"
+#: src/components/NotTestedPages.js:90
+#, fuzzy
+msgid "Title"
 msgstr "Paginatitel"
 
-#: src/views/AdminPage.js:250
-msgid "Emissions"
-msgstr "Uitstoot"
-
-#: src/views/AdminPage.js:260
+#: src/components/NotTestedPages.js:95 src/components/OverViewDirtyPages.js:30
 msgid "Actions"
 msgstr "Acties"
 
-#: src/views/AdminPage.js:290
+#: src/components/NotTestedPages.js:104 src/components/NotTestedPages.js:119
+msgid "Pages Overview"
+msgstr ""
+
+#: src/components/NotTestedPages.js:108
+msgid "Loading pages data..."
+msgstr ""
+
+#: src/components/NotTestedPages.js:130 src/components/NotTestedPages.js:133
+msgid "Untested Pages"
+msgstr ""
+
+#: src/components/NotTestedPages.js:170
+msgid "Visit & calculate emissions"
+msgstr ""
+
+#: src/components/NotTestedPages.js:194
+msgid "All pages have been tested for emissions!"
+msgstr ""
+
+#: src/components/Overview.js:39
+msgid ""
+"These statistics are based on 1,000 visitors per month, each viewing 2.5 "
+"average pages, over a 12-month period."
+msgstr ""
+
+#: src/components/OverViewDirtyPages.js:20
+#, fuzzy
+msgid "Page title"
+msgstr "Paginatitel"
+
+#: src/components/OverViewDirtyPages.js:25
+#: src/components/OverviewEmissions.js:12
+msgid "Emissions"
+msgstr "Uitstoot"
+
+#: src/components/OverViewDirtyPages.js:44
 msgid "Edit"
 msgstr "Bewerken"
 
-#: src/views/AdminPage.js:300
+#: src/components/OverViewDirtyPages.js:48
 msgid "View"
 msgstr "Bekijken"
 
-#: src/views/AdminPage.js:320
+#: src/components/OverViewDirtyPages.js:60
+msgid "Emissions per page - from dirty to clean"
+msgstr ""
+
+#: src/components/OverViewDirtyPages.js:78
 msgid "No pages with emissions data found."
-msgstr "Geen pagina's met uitstootgegevens gevonden." 
+msgstr "Geen pagina's met uitstootgegevens gevonden."
+
+#: src/components/OverviewDriving.js:16 src/components/OverviewGreenhost.js:20
+#: src/components/OverviewPageSize.js:12
+#, fuzzy
+msgid "Greenhost"
+msgstr "Groene hosting:"
+
+#: src/components/OverviewDriving.js:18
+msgid "Driving distance"
+msgstr ""
+
+#: src/components/OverviewDriving.js:25
+msgid "Per year."
+msgstr ""
+
+#: src/components/OverviewEmissions.js:14
+msgid "Average page emissions"
+msgstr ""
+
+#: src/components/OverviewEmissions.js:26
+#, fuzzy
+msgid "Emissions per year."
+msgstr "Uitstoot"
+
+#: src/components/OverviewGreenhost.js:6
+msgid "NO!"
+msgstr ""
+
+#: src/components/OverviewGreenhost.js:9
+msgid "Your website runs on green energy."
+msgstr ""
+
+#: src/components/OverviewGreenhost.js:10
+msgid "Your website does not run on green energy."
+msgstr ""
+
+#: src/components/OverviewGreenhost.js:22
+#, fuzzy
+msgid "Greenhost status"
+msgstr "Groene hosting:"
+
+#: src/components/OverviewPageSize.js:14 src/components/OverviewPageSize.js:27
+msgid "Average page size"
+msgstr ""
+
+#: src/components/OverviewResources.js:11
+msgid "Resource type"
+msgstr ""
+
+#: src/components/OverviewResources.js:16
+msgid "Avg. Requests per page"
+msgstr ""
+
+#: src/components/OverviewResources.js:21
+msgid "Avg. size of resources per page"
+msgstr ""
+
+#: src/components/OverviewResources.js:37
+msgid "Resource Statistics"
+msgstr ""
+
+#: src/components/OverviewResources.js:42
+msgid "Average resource usage across your posts and pages."
+msgstr ""
+
+#: src/components/OverviewTotalPageSize.js:10
+#: src/components/OverviewTotalPageSize.js:14
+#: src/components/OverviewTotalPageSize.js:23
+msgid "Total page size"
+msgstr ""
+
+#: src/components/OverviewTrees.js:8
+msgid "tree"
+msgstr ""
+
+#: src/components/OverviewTrees.js:8
+msgid "trees"
+msgstr ""
+
+#: src/components/OverviewTrees.js:17 src/components/OverviewTrees.js:19
+msgid "Trees"
+msgstr ""
+
+#. translators: 1: number of trees, 2: tree/trees label
+#: src/components/OverviewTrees.js:27
+msgid "Plant %1$s %2$s"
+msgstr "Plant %1$s %2$s"
+
+#: src/components/OverviewTrees.js:33
+msgid "To offset your emissions."
+msgstr ""
+
+#: src/components/StartModal.js:62
+msgid "Hang on while we are preparing your carbonfooter"
+msgstr ""
+
+#: src/components/StartModal.js:66
+msgid "The emissions for your home page have been calculated."
+msgstr ""
+
+#: src/components/StartModal.js:87 src/components/StartModal.js:103
+msgid "Close modal"
+msgstr ""
+
+#: src/components/StartModal.js:113
+msgid "We are measuring your carbon footprint"
+msgstr ""
+
+#: src/components/StartModal.js:122
+msgid ""
+"We are measuring the carbon footprint of your home page. This may take 30 "
+"seconds."
+msgstr ""
+
+#. translators: %s: formatted emissions amount (e.g., "1.23 g")
+#: src/components/StartModal.js:132
+msgid "Per visit it will emit %s of CO2."
+msgstr ""
+
+#: src/components/StartModal.js:135
+msgid ""
+"There was an error calculating the emissions for your home page. Please "
+"visit the page to trigger re-measurement."
+msgstr ""
+
+#: src/components/StartModal.js:160 src/components/StartModal.js:164
+msgid "Back to settings"
+msgstr ""
+
+#: src/components/StartModal.js:188
+msgid "Arrow right"
+msgstr ""
+
+#: src/components/StartModal.js:191 src/views/SettingsPage.js:584
+msgid "View your homepage"
+msgstr ""
+
+#: src/components/Troubleshooting.js:22
+msgid "Troubleshooting: not working?"
+msgstr ""
+
+#: src/components/Troubleshooting.js:29
+msgid "Don't see any data? Try these things:"
+msgstr ""
+
+#: src/components/Troubleshooting.js:40
+msgid ""
+"Visit your webpage: The measuring updates automatically when somebody visits "
+"the web page. So, visit your webpage, and wait a few minutes."
+msgstr ""
+
+#: src/components/Troubleshooting.js:46
+msgid ""
+"Clear your cache: Still not working after 30 minutes? This might be because "
+"you are using a caching plugin."
+msgstr ""
+
+#: src/components/Troubleshooting.js:53
+#, fuzzy
+msgid ""
+"We ran a check and detected that your website is using the following caching "
+"plugin(s):"
+msgstr "We hebben de volgende cache-plugin(s) gedetecteerd: %1$s."
+
+#: src/components/Troubleshooting.js:59
+msgid ""
+"Clear your cache, and refresh your webpage. If you are using LiteSpeed "
+"Cache, you need to clear the cache manually after every measurement."
+msgstr ""
+
+#: src/components/Troubleshooting.js:67
+msgid ""
+"We ran a check and detected that your website is not using any of the common "
+"caching plugins."
+msgstr ""
+
+#: src/components/Troubleshooting.js:72
+msgid "Clear your cache, and refresh your webpage."
+msgstr ""
+
+#: src/components/Troubleshooting.js:80
+msgid ""
+"Improve your website: possibly your web page is too heavy to go through our "
+"calculation. Go to"
+msgstr ""
+
+#: src/components/Troubleshooting.js:88
+msgid "check our tips, update your webpage and try again."
+msgstr ""
+
+#: src/components/Troubleshooting.js:98
+msgid ""
+"If that also doesn't work, it is possible that your web page is too heavy to "
+"go through our calculation. Go to carbonfooter.nl, check our tips, update "
+"your webpage and try again."
+msgstr ""
+
+#: src/components/Troubleshooting.js:109
+msgid "Visit Carbonfooter"
+msgstr ""
+
+#: src/components/WidgetPreview.js:57 src/components/WidgetPreview.js:75
+#, fuzzy
+msgid "This page produced"
+msgstr "Deze webpagina stoot %1$s uit per bezoek."
+
+#: src/components/WidgetPreview.js:61
+#, fuzzy
+msgid "per page view. Want to learn more?"
+msgstr "Deze webpagina stoot %1$s uit per bezoek. Meer weten? %2$s"
+
+#: src/components/WidgetPreview.js:79
+msgid "per page view."
+msgstr ""
+
+#: src/views/AdminPage.js:110 src/views/ResultsPage.js:92
+msgid "Last test on"
+msgstr ""
+
+#: src/views/AdminPage.js:116
+msgid "Overview"
+msgstr ""
+
+#: src/views/ResetAllData.js:22
+msgid "Danger zone - Reset all Carbonfooter data"
+msgstr ""
+
+#: src/views/ResetAllData.js:42
+msgid "This will permanently delete all CarbonFooter data including:"
+msgstr ""
+
+#: src/views/ResetAllData.js:53
+msgid "All emissions measurements"
+msgstr ""
+
+#: src/views/ResetAllData.js:54
+msgid "Resource usage data"
+msgstr ""
+
+#: src/views/ResetAllData.js:55
+#, fuzzy
+msgid "Measurement history"
+msgstr "Gemeten door"
+
+#: src/views/ResetAllData.js:56
+msgid "Page size data"
+msgstr ""
+
+#: src/views/ResetAllData.js:57
+#, fuzzy
+msgid "Green hosting status"
+msgstr "Groene hosting:"
+
+#: src/views/ResetAllData.js:70
+msgid "Clearing Data..."
+msgstr ""
+
+#: src/views/ResetAllData.js:71
+msgid "Clear All CarbonFooter Data"
+msgstr ""
+
+#: src/views/SettingsPage.js:179
+msgid "Carbonfooter widget settings have been saved."
+msgstr ""
+
+#: src/views/SettingsPage.js:186
+msgid "There was an error saving the carbonfooter widget settings."
+msgstr ""
+
+#: src/views/SettingsPage.js:195
+msgid "Failed to save display settings. Please try again."
+msgstr ""
+
+#: src/views/SettingsPage.js:204
+msgid "Failed to save widget style. Please try again."
+msgstr ""
+
+#: src/views/SettingsPage.js:213
+msgid "Failed to save settings. Please try again."
+msgstr ""
+
+#: src/views/SettingsPage.js:231
+msgid ""
+"Are you sure you want to clear all CarbonFooter data? This action cannot be "
+"undone and will remove all emissions measurements, resource data, and "
+"history. Your settings will be preserved."
+msgstr ""
+
+#: src/views/SettingsPage.js:262 src/views/SettingsPage.js:269
+msgid "Failed to clear data. Please try again."
+msgstr ""
+
+#: src/views/SettingsPage.js:312
+msgid "Data is exported successfully."
+msgstr ""
+
+#: src/views/SettingsPage.js:319 src/views/SettingsPage.js:326
+msgid "Failed to export data. Please try again."
+msgstr ""
+
+#: src/views/SettingsPage.js:340
+msgid ""
+"Thank you for joining us in our quest to make the internet more sustainable. "
+"With this plugin, you can calculate and display the carbon footprint of your "
+"website in the footprint. Follow these steps to set up your own "
+"carbonfooter! "
+msgstr ""
+
+#: src/views/SettingsPage.js:361
+msgid "Step 1 - Design your carbonfooter"
+msgstr ""
+
+#: src/views/SettingsPage.js:382
+msgid "Define your style"
+msgstr ""
+
+#: src/views/SettingsPage.js:384
+msgid "Layout"
+msgstr ""
+
+#: src/views/SettingsPage.js:393
+msgid "Minimal"
+msgstr ""
+
+#: src/views/SettingsPage.js:394
+msgid "Minimal: only one line of text showing the CO2 value of the web page."
+msgstr ""
+
+#: src/views/SettingsPage.js:401
+msgid "Full Banner"
+msgstr ""
+
+#: src/views/SettingsPage.js:402
+msgid ""
+"Full banner: shows 5 icons and more detailed information on the "
+"sustainability of the web page"
+msgstr ""
+
+#: src/views/SettingsPage.js:409
+msgid "Sticker"
+msgstr ""
+
+#: src/views/SettingsPage.js:410
+msgid ""
+"Sticker: compact sticker-style badge perfect to fit into a corner of your "
+"web page."
+msgstr ""
+
+#: src/views/SettingsPage.js:421
+msgid "Background color"
+msgstr ""
+
+#: src/views/SettingsPage.js:430
+msgid "Text color"
+msgstr ""
+
+#: src/views/SettingsPage.js:442
+msgid "Live Preview"
+msgstr ""
+
+#: src/views/SettingsPage.js:445
+msgid "This is what your carbonfooter will look like:"
+msgstr ""
+
+#: src/views/SettingsPage.js:471
+msgid "Save your design"
+msgstr ""
+
+#: src/views/SettingsPage.js:479
+msgid "Step 2. Show your carbonfooter"
+msgstr ""
+
+#: src/views/SettingsPage.js:496
+msgid ""
+"You can choose if you want to show your carbonfooter automatically or "
+"manually. Don’t know which one to choose? Start with the automatic display, "
+"and if that one doesn’t show in the proper place, switch to the manual mode."
+msgstr ""
+
+#: src/views/SettingsPage.js:508
+msgid "Display automatically"
+msgstr ""
+
+#: src/views/SettingsPage.js:509
+msgid ""
+"The carbonfooter will be shown automatically on all pages at the end of your "
+"footer. Works fine with most themes."
+msgstr ""
+
+#: src/views/SettingsPage.js:516
+msgid "Add manually"
+msgstr ""
+
+#: src/views/SettingsPage.js:517
+msgid ""
+"The carbonfooter will be shown after you added the shortcode to your footer "
+"(or any other widget or textfield)."
+msgstr ""
+
+#: src/views/SettingsPage.js:530
+msgid ""
+"Copy and paste the shortcode below, including the brackets, to your footer "
+"or any widget / textfield. The shortcode will automatically use the layout "
+"and colors you’ve configured above."
+msgstr ""
+
+#: src/views/SettingsPage.js:552
+msgid "Save Display Settings"
+msgstr ""
+
+#: src/views/SettingsPage.js:560
+msgid "Step 3. You're all set!"
+msgstr ""
+
+#: src/views/SettingsPage.js:567
+msgid ""
+"Great! Your homepage has already been measured. You can view the results on "
+"your homepage."
+msgstr ""
+
+#: src/views/SettingsPage.js:590
+msgid "You can start measuring, showing and reducing your footprint."
+msgstr ""
+
+#: src/views/SettingsPage.js:602
+msgid "Start measuring now"
+msgstr ""
+
+#: src/views/SettingsPage.js:608
+msgid ""
+"Besides showing the carbonfooterprint in the footer, you will now see an "
+"extra column behind each post and page that shows the carbon emissions "
+"generated when someone visits the page."
+msgstr ""
+
+#: src/views/SettingsPage.js:618
+msgid "Information & tools"
+msgstr ""
+
+#: src/views/SettingsPage.js:663
+msgid "Dismiss"
+msgstr ""
+
+#~ msgid "This page:"
+#~ msgstr "Deze pagina:"
+
+#~ msgid "Site average:"
+#~ msgstr "Sitegemiddelde:"
+
+#~ msgid "Yes"
+#~ msgstr "Ja"
