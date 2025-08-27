@@ -11,7 +11,11 @@
     "lint:js": "wp-scripts lint-js",
     "packages-update": "wp-scripts packages-update",
     "version-up": "bun scripts/bump-version.js",
-    "release": "bun run build && bun scripts/release.js"
+    "release": "bun run build && bun scripts/release.js",
+    "i18n:json": "wp i18n make-json languages --no-purge",
+    "i18n:merge": "node scripts/merge-i18n.js",
+    "i18n:copy": "cp -v languages/carbonfooter-nl_NL-carbonfooter-admin.json ../languages/plugins/carbonfooter-nl_NL-carbonfooter-admin.json",
+    "i18n:all": "bun run build && wp i18n make-json languages --no-purge && node scripts/merge-i18n.js && cp -v languages/carbonfooter-nl_NL-carbonfooter-admin.json ../languages/plugins/carbonfooter-nl_NL-carbonfooter-admin.json"
   },
   "devDependencies": {
     "@biomejs/biome": "2.0.5",
