@@ -252,7 +252,7 @@ class AdminHandler
     ];
 
     wp_localize_script('carbonfooter-admin', 'carbonfooterVars', $localization_data);
-    wp_set_script_translations('carbonfooter-admin', 'carbonfooter');
+    wp_set_script_translations('carbonfooter-admin', 'carbonfooter', CARBONFOOTER_PLUGIN_DIR . 'languages');
   }
 
   /**
