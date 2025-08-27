@@ -23,7 +23,7 @@ msgstr ""
 #: src/views/ResultsPage.js:88
 #, fuzzy
 msgid "Carbonfooter"
-msgstr "Carbon Footprint"
+msgstr "Carbonfooter"
 
 #. Plugin URI of the plugin
 #. Author URI of the plugin
