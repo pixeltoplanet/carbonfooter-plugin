@@ -8,6 +8,8 @@
 	<exclude-pattern>/node_modules/</exclude-pattern>
 	<exclude-pattern>/.git/</exclude-pattern>
 	<exclude-pattern>/assets/</exclude-pattern>
+	<exclude-pattern>/tests/</exclude-pattern>
+	<exclude-pattern>/coverage/</exclude-pattern>
 
 	<!-- How to scan -->
 	<!-- Usage instructions: https://github.com/squizlabs/PHP_CodeSniffer/wiki/Usage -->

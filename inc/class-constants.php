@@ -79,6 +79,17 @@ final class Constants
   public const CACHE_STATS_KEY = 'site_stats';
   public const CACHE_HEAVIEST_PAGES_KEY = 'heaviest_pages';
   public const CACHE_UNTESTED_PAGES_KEY = 'untested_pages';
+  
+  /**
+   * Per-post emissions cache configuration
+   *
+   * CACHE_POST_KEY_PREFIX: Prefix for per-post emissions cache keys.
+   * CACHE_PER_POST_TTL: Default TTL for per-post cache entries (24h) in seconds.
+   * CACHE_STALE_AFTER: Threshold in seconds after which cached data is considered stale and should be refreshed in background.
+   */
+  public const CACHE_POST_KEY_PREFIX = 'carbonfooter_emissions_';
+  public const CACHE_PER_POST_TTL = 86400; // 24 hours
+  public const CACHE_STALE_AFTER = 86400; // 24 hours
 
   /**
    * AJAX actions

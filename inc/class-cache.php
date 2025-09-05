@@ -20,11 +20,27 @@ if (!defined('ABSPATH')) {
 class Cache
 {
   /**
-   * Cache duration in seconds (1 hour).
+   * Structured per-post cache payload format
    *
-   * @var int
+   * [
+   *   'emissions'   => float|null,   // grams CO2e
+   *   'page_size'   => int|null,     // bytes
+   *   'updated_at'  => int,          // unix timestamp when measured
+   *   'source'      => string,       // 'api' | 'meta' | 'manual' | 'background'
+   *   'stale'       => bool          // true if should be refreshed
+   * ]
    */
-  private $cache_duration = 3600; // 1 hour
+  
+  /**
+   * Build the cache key for a post_id.
+   *
+   * @param int $post_id
+   * @return string
+   */
+  private function key_for(int $post_id): string
+  {
+    return Constants::CACHE_POST_KEY_PREFIX . $post_id;
+  }
 
   /**
    * Get emissions data from cache.
@@ -34,8 +50,23 @@ class Cache
    */
   public function get($post_id)
   {
-    $cache_key = 'carbonfooter_emissions_' . $post_id;
-    return wp_cache_get($cache_key, Constants::CACHE_GROUP);
+    // Back-compat: return whatever is stored (structured array or legacy scalar)
+    return wp_cache_get($this->key_for((int) $post_id), Constants::CACHE_GROUP);
+  }
+
+  /**
+   * Get structured payload for a post.
+   *
+   * @param int $post_id
+   * @return array|null Returns payload array or null if not found.
+   */
+  public function get_post_payload(int $post_id): ?array
+  {
+    $value = wp_cache_get($this->key_for($post_id), Constants::CACHE_GROUP);
+    if ($value === false) {
+      return null;
+    }
+    return is_array($value) ? $value : null;
   }
 
   /**
@@ -47,8 +78,30 @@ class Cache
    */
   public function set($post_id, $value)
   {
-    $cache_key = 'carbonfooter_emissions_' . $post_id;
-    return wp_cache_set($cache_key, $value, Constants::CACHE_GROUP, $this->cache_duration);
+    // Back-compat setter
+    return wp_cache_set(
+      $this->key_for((int) $post_id),
+      $value,
+      Constants::CACHE_GROUP,
+      Constants::CACHE_PER_POST_TTL
+    );
+  }
+
+  /**
+   * Set structured payload for a post.
+   *
+   * @param int   $post_id
+   * @param array $payload See class docblock for format.
+   * @return bool
+   */
+  public function set_post_payload(int $post_id, array $payload): bool
+  {
+    return wp_cache_set(
+      $this->key_for($post_id),
+      $payload,
+      Constants::CACHE_GROUP,
+      Constants::CACHE_PER_POST_TTL
+    );
   }
 
   /**
@@ -59,8 +112,45 @@ class Cache
    */
   public function delete($post_id)
   {
-    $cache_key = 'carbonfooter_emissions_' . $post_id;
-    return wp_cache_delete($cache_key, Constants::CACHE_GROUP);
+    return wp_cache_delete($this->key_for((int) $post_id), Constants::CACHE_GROUP);
+  }
+
+  /**
+   * Determine if a cached payload is stale based on timestamp and explicit flag.
+   *
+   * @param array|null $payload
+   * @return bool True if payload is considered stale or missing.
+   */
+  public function is_stale(?array $payload): bool
+  {
+    if (!$payload) {
+      return true;
+    }
+    if (!empty($payload['stale'])) {
+      return true;
+    }
+    $updated = isset($payload['updated_at']) ? (int) $payload['updated_at'] : 0;
+    if ($updated <= 0) {
+      return true;
+    }
+    return (time() - $updated) >= Constants::CACHE_STALE_AFTER;
+  }
+
+  /**
+   * Mark an existing payload as stale without deleting it.
+   *
+   * @param int $post_id
+   * @return void
+   */
+  public function mark_stale(int $post_id): void
+  {
+    $payload = $this->get_post_payload($post_id);
+    if (!$payload) {
+      return;
+    }
+    $payload['stale'] = true;
+    // Preserve original updated_at; only mark as stale
+    $this->set_post_payload($post_id, $payload);
   }
 
   /**
@@ -75,6 +165,8 @@ class Cache
   {
     // Site stats
     wp_cache_delete(Constants::CACHE_STATS_KEY, Constants::CACHE_GROUP);
+    // Also clear transient mirror for stats
+    delete_transient(Constants::TRANSIENT_STATS_CACHE);
 
     // Common list caches
     wp_cache_delete(Constants::CACHE_HEAVIEST_PAGES_KEY . ':10', Constants::CACHE_GROUP);

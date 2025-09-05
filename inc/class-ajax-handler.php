@@ -119,20 +119,45 @@ class AjaxHandler
       return;
     }
 
-    Logger::info('Starting emissions processing for post: ' . $post_id);
-    $result = $this->emissions_handler->process_post($post_id);
-    Logger::info('Emissions processing result: ' . ($result ? $result : 'false'));
+    // Prevent duplicate processing via transient lock
+    $lock_key = 'carbonfooter_processing_' . $post_id;
+    if (get_transient($lock_key)) {
+      Logger::log('Measurement already in progress (locked)', ['post_id' => $post_id]);
+      // Try to return current cached value, if any
+      $payload = $this->cache_manager->get_post_payload($post_id);
+      $emissions = ($payload && isset($payload['emissions'])) ? (float) $payload['emissions'] : null;
+      $this->send_success_response([
+        'status' => 'in_progress',
+        'emissions' => $emissions,
+        'formatted' => is_null($emissions) ? null : number_format($emissions, 2) . 'g CO2',
+        'message' => __('A refresh is already running. Please wait a moment.', 'carbonfooter')
+      ]);
+      return;
+    }
 
-    if ($result) {
-      $response_data = [
-        'emissions' => $result,
-        'formatted' => number_format($result, 2) . 'g CO2'
-      ];
-      Logger::info('Sending success response: ' . wp_json_encode($response_data));
-      $this->send_success_response($response_data);
-    } else {
-      Logger::error('Emissions processing failed for post: ' . $post_id);
-      $this->send_error_response(__('Failed to measure emissions', 'carbonfooter'));
+    // Set lock with short TTL to dedupe rapid clicks
+    set_transient($lock_key, true, 5 * MINUTE_IN_SECONDS);
+    Logger::info('Starting emissions processing for post: ' . $post_id);
+
+    try {
+      $result = $this->emissions_handler->process_post($post_id);
+      Logger::info('Emissions processing result: ' . ($result ? $result : 'false'));
+
+      if ($result) {
+        $response_data = [
+          'status' => 'completed',
+          'emissions' => $result,
+          'formatted' => number_format($result, 2) . 'g CO2'
+        ];
+        Logger::info('Sending success response: ' . wp_json_encode($response_data));
+        $this->send_success_response($response_data);
+      } else {
+        Logger::error('Emissions processing failed for post: ' . $post_id);
+        $this->send_error_response(__('Failed to measure emissions', 'carbonfooter'));
+      }
+    } finally {
+      // Clear lock
+      delete_transient($lock_key);
     }
   }
 

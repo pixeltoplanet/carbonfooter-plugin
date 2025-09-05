@@ -628,15 +628,13 @@ class Shortcodes
       error_log('CarbonFooter Debug - Query Object: ' . print_r(get_queried_object(), true));
     }
 
-    // If we have a valid post ID, try to get its emissions
+    // If we have a valid post ID, try to get its emissions (cache-first)
     if ($post_id) {
-      $emissions = get_post_meta($post_id, '_carbon_emissions', true);
-      $page_size = get_post_meta($post_id, '_carbon_page_size', true);
-
-      // If we have emissions data, return it
-      if (!empty($emissions)) {
+      $payload = $this->emissions->get_post_payload((int) $post_id);
+      if (is_array($payload) && isset($payload['emissions'])) {
+        $page_size = $payload['page_size'] ?? null;
         return array(
-          'emissions' => number_format($emissions, 2),
+          'emissions' => number_format((float) $payload['emissions'], 2),
           'page_size' => $page_size
         );
       }

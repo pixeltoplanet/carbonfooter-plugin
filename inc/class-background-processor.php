@@ -38,6 +38,13 @@ class Background_Processor
   private $emissions;
 
   /**
+   * Cache instance.
+   *
+   * @var Cache
+   */
+  private $cache;
+
+  /**
    * Constructor.
    *
    * Hooks:
@@ -47,6 +54,7 @@ class Background_Processor
   public function __construct()
   {
     $this->emissions = new Emissions();
+    $this->cache = new Cache();
 
     // Hook into post view to schedule processing
     add_action('wp', array($this, 'maybe_schedule_processing'));
@@ -72,16 +80,55 @@ class Background_Processor
     }
 
     $post_id = get_the_ID();
+    if (!$post_id) {
+      return;
+    }
 
     // Check if we need to update
     if ($this->should_update_emissions($post_id)) {
-      // Check if already scheduled or processing
-      if (!wp_next_scheduled('carbonfooter_process_emissions', array($post_id)) && !get_transient('carbonfooter_processing_' . $post_id)) {
+      $lock_key = 'carbonfooter_processing_' . $post_id;
+      $is_locked = (bool) get_transient($lock_key);
+
+      // If WP-Cron is disabled, provide a safe inline fallback for authorized users
+      if ((defined('DISABLE_WP_CRON') && DISABLE_WP_CRON) && current_user_can('edit_post', $post_id)) {
+        if (!$is_locked) {
+          set_transient($lock_key, true, 5 * MINUTE_IN_SECONDS);
+          Logger::log('WP-Cron disabled: running inline refresh for authorized user', ['post_id' => $post_id]);
+          // Inline processing (guarded by transient lock)
+          $this->process_emissions($post_id);
+        }
+        return; // Do not attempt to schedule when cron is disabled
+      }
+
+      // If WP-Cron is disabled and user is NOT authorized, trigger a fire-and-forget cron ping
+      if (defined('DISABLE_WP_CRON') && DISABLE_WP_CRON) {
+        if (!$is_locked) {
+          set_transient($lock_key, true, 5 * MINUTE_IN_SECONDS);
+          $cron_url = add_query_arg(
+            'doing_wp_cron',
+            urlencode(microtime(true)),
+            site_url('wp-cron.php')
+          );
+          // Non-blocking ping with tiny timeout to avoid impacting visitor
+          $args = [
+            'timeout' => 0.01,
+            'blocking' => false,
+            'sslverify' => apply_filters('https_local_ssl_verify', false),
+          ];
+          wp_remote_get($cron_url, $args);
+          Logger::log('WP-Cron disabled: triggered fire-and-forget cron ping', ['post_id' => $post_id]);
+        }
+        return;
+      }
+
+      // Normal path: schedule via wp-cron if not already scheduled/locked
+      if (!wp_next_scheduled('carbonfooter_process_emissions', array($post_id)) && !$is_locked) {
         // Set a transient to prevent duplicate processing
-        set_transient('carbonfooter_processing_' . $post_id, true, 5 * MINUTE_IN_SECONDS);
+        set_transient($lock_key, true, 5 * MINUTE_IN_SECONDS);
 
         // Schedule immediate processing using wp-cron
         wp_schedule_single_event(time(), 'carbonfooter_process_emissions', array($post_id));
+        Logger::log('Scheduled background emissions refresh', ['post_id' => $post_id]);
       }
     }
   }
@@ -97,12 +144,27 @@ class Background_Processor
    */
   private function should_update_emissions($post_id)
   {
-    // Get last update time
-    $last_update = get_post_meta($post_id, '_carbon_emissions_updated', true);
+    $post_id = (int) $post_id;
 
-    // If never calculated or older than 1 week
-    if (empty($last_update) || (strtotime($last_update) < (time() - WEEK_IN_SECONDS))) {
+    // 1) Prefer cache-aware policy
+    $payload = $this->cache->get_post_payload($post_id);
+    if ($this->cache->is_stale($payload)) {
       return true;
+    }
+
+    // 2) Weekly fallback policy when payload exists but not considered stale
+    if (is_array($payload) && isset($payload['updated_at'])) {
+      if ((time() - (int) $payload['updated_at']) > WEEK_IN_SECONDS) {
+        return true;
+      }
+    }
+
+    // 3) Legacy fallback to meta timestamp if no payload
+    if (!$payload) {
+      $last_update = get_post_meta($post_id, '_carbon_emissions_updated', true);
+      if (empty($last_update) || (strtotime($last_update) < (time() - WEEK_IN_SECONDS))) {
+        return true;
+      }
     }
 
     return false;

@@ -8,3 +8,18 @@ releases
 node_modules
 /node_modules
 build
+
+# PHPUnit / test artifacts
+.phpunit.result.cache
+coverage/
+junit.xml
+coverage.xml
+
+# PHPCS cache (if generated)
+.phpcs-cache
+.phpcs-cache
+
+# Debug logs
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*

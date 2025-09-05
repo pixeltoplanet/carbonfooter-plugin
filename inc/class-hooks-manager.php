@@ -93,6 +93,10 @@ class HooksManager
     // URL check hook for manual measurements
     add_action('admin_init', [$this, 'handle_url_check']);
 
+    // Invalidate per-post cache on save and status changes
+    add_action('save_post', [$this, 'invalidate_post_cache_on_save'], 10, 2);
+    add_action('transition_post_status', [$this, 'invalidate_post_cache_on_status_change'], 10, 3);
+
     Logger::log('Registered general plugin hooks');
   }
 
@@ -147,5 +151,64 @@ class HooksManager
         exit;
       }
     }
+  }
+
+  /**
+   * Invalidate per-post cache when a post is saved.
+   *
+   * Skips autosaves and revisions. Marks the structured payload as stale so UI can
+   * still render quickly while background refresh can be scheduled.
+   * Also clears site-level caches and invalidates DB-optimizer cache for the post.
+   *
+   * @param int        $post_id
+   * @param \WP_Post  $post
+   * @return void
+   */
+  public function invalidate_post_cache_on_save(int $post_id, $post): void
+  {
+    // Guard: autosave or revision
+    if (wp_is_post_autosave($post_id) || wp_is_post_revision($post_id)) {
+      return;
+    }
+
+    // Only for public post types
+    $post_type = get_post_type($post_id);
+    if (!$post_type || $post_type === 'revision') {
+      return;
+    }
+
+    $cache = new Cache();
+    $cache->mark_stale($post_id);
+    Database_Optimizer::invalidate_post_cache($post_id);
+    $cache->clear_all();
+
+    Logger::log('Invalidated cache on save_post', ['post_id' => $post_id, 'post_type' => $post_type]);
+  }
+
+  /**
+   * Invalidate per-post cache when a post status changes.
+   *
+   * @param string   $new_status
+   * @param string   $old_status
+   * @param \WP_Post $post
+   * @return void
+   */
+  public function invalidate_post_cache_on_status_change(string $new_status, string $old_status, $post): void
+  {
+    if (!$post || empty($post->ID)) {
+      return;
+    }
+
+    $post_id = (int) $post->ID;
+    $cache = new Cache();
+    $cache->mark_stale($post_id);
+    Database_Optimizer::invalidate_post_cache($post_id);
+    $cache->clear_all();
+
+    Logger::log('Invalidated cache on transition_post_status', [
+      'post_id' => $post_id,
+      'old' => $old_status,
+      'new' => $new_status,
+    ]);
   }
 }
