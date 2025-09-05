@@ -100,7 +100,78 @@ class Emissions
    */
   public function get_post_emissions($post_id)
   {
-    return Database_Optimizer::get_post_emissions($post_id);
+    $post_id = (int) $post_id;
+    // 1) Try structured cache first
+    $payload = $this->cache->get_post_payload($post_id);
+    if (is_array($payload) && isset($payload['emissions'])) {
+      $stale = $this->cache->is_stale($payload);
+      Logger::info('Per-post cache hit', [
+        'post_id' => $post_id,
+        'stale' => $stale,
+        'source' => $payload['source'] ?? 'cache'
+      ]);
+      // If stale, background processor will schedule refresh; still return for fast path
+      return $payload['emissions'];
+    }
+
+    // 2) Fallback to DB-optimized path to get value quickly
+    $value = Database_Optimizer::get_post_emissions($post_id);
+    if ($value !== false && $value !== null) {
+      // Build payload from meta (populate page_size and updated_at if available)
+      $payload_from_meta = $this->build_payload_from_meta($post_id, (float) $value);
+      $this->cache->set_post_payload($post_id, $payload_from_meta);
+      Logger::info('Per-post cache miss, DB optimizer hit', ['post_id' => $post_id]);
+      return (float) $value;
+    }
+
+    // 3) Fallback directly to post meta if Database_Optimizer had nothing
+    $meta_val = get_post_meta($post_id, Constants::META_EMISSIONS, true);
+    if ($meta_val !== '' && $meta_val !== null) {
+      $payload_from_meta = $this->build_payload_from_meta($post_id, (float) $meta_val);
+      $this->cache->set_post_payload($post_id, $payload_from_meta);
+      Logger::info('Per-post cache miss, meta hit', ['post_id' => $post_id]);
+      return (float) $meta_val;
+    }
+
+    Logger::info('Per-post cache miss, no data found', ['post_id' => $post_id]);
+    return false;
+  }
+
+  /**
+   * Get structured per-post emissions payload (cache-first, fallback to meta/optimizer).
+   *
+   * @param int $post_id
+   * @return array|null Payload or null if not found.
+   */
+  public function get_post_payload(int $post_id): ?array
+  {
+    $payload = $this->cache->get_post_payload($post_id);
+    if (is_array($payload)) {
+      Logger::info('Payload cache hit', [
+        'post_id' => $post_id,
+        'stale' => $this->cache->is_stale($payload)
+      ]);
+      return $payload;
+    }
+
+    $value = Database_Optimizer::get_post_emissions($post_id);
+    if ($value !== false && $value !== null) {
+      $payload_from_meta = $this->build_payload_from_meta($post_id, (float) $value);
+      $this->cache->set_post_payload($post_id, $payload_from_meta);
+      Logger::info('Payload cache miss, DB optimizer hit', ['post_id' => $post_id]);
+      return $payload_from_meta;
+    }
+
+    $meta_val = get_post_meta($post_id, Constants::META_EMISSIONS, true);
+    if ($meta_val !== '' && $meta_val !== null) {
+      $payload_from_meta = $this->build_payload_from_meta($post_id, (float) $meta_val);
+      $this->cache->set_post_payload($post_id, $payload_from_meta);
+      Logger::info('Payload cache miss, meta hit', ['post_id' => $post_id]);
+      return $payload_from_meta;
+    }
+
+    Logger::info('Payload cache miss, no data found', ['post_id' => $post_id]);
+    return null;
   }
 
   /**
@@ -344,8 +415,15 @@ class Emissions
     // Store update time
     update_post_meta($post_id, Constants::META_EMISSIONS_UPDATED, current_time('mysql'));
 
-    // Update cache
-    $this->cache->set($post_id, $data['emissions']);
+    // Update per-post cache with structured payload
+    $payload = [
+      'emissions' => (float) $data['emissions'],
+      'page_size' => isset($data['page_size']) ? (float) $data['page_size'] : null,
+      'updated_at' => time(),
+      'source' => 'api',
+      'stale' => false,
+    ];
+    $this->cache->set_post_payload((int) $post_id, $payload);
 
     // Invalidate optimized cache
     Database_Optimizer::invalidate_post_cache($post_id);
@@ -357,8 +435,34 @@ class Emissions
     wp_cache_delete(Constants::CACHE_HEAVIEST_PAGES_KEY . ':10', Constants::CACHE_GROUP);
     wp_cache_delete(Constants::CACHE_UNTESTED_PAGES_KEY, Constants::CACHE_GROUP);
 
+    // Warm site stats object cache from DB after clearing caches
+    // This keeps admin and frontend views responsive after updates
+    $this->get_site_stats_cached();
+
     // Store in history
     $this->update_emissions_history($post_id, $data['emissions']);
+  }
+
+  /**
+   * Build structured payload from meta and an emissions value.
+   *
+   * @param int   $post_id
+   * @param float $emissions
+   * @return array
+   */
+  private function build_payload_from_meta(int $post_id, float $emissions): array
+  {
+    $page_size = get_post_meta($post_id, Constants::META_PAGE_SIZE, true);
+    $updated_mysql = get_post_meta($post_id, Constants::META_EMISSIONS_UPDATED, true);
+    $updated_ts = $updated_mysql ? strtotime($updated_mysql) : time();
+
+    return [
+      'emissions' => (float) $emissions,
+      'page_size' => ($page_size !== '' && $page_size !== null) ? (float) $page_size : null,
+      'updated_at' => $updated_ts ?: time(),
+      'source' => 'meta',
+      'stale' => false,
+    ];
   }
 
   /**
