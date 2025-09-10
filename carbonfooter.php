@@ -4,7 +4,7 @@
  * Plugin Name: Carbonfooter
  * Plugin URI: https://carbonfooter.nl
  * Description: Measure the carbon emissions of your website right inside WordPress
- * Version: 0.16.2
+ * Version: 0.16.3
  * Requires PHP: 8.0
  * Requires at least: 5.6
  * Tested up to: 6.7
@@ -22,7 +22,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Define basic plugin constants first (needed for autoloader)
-define('CARBONFOOTER_VERSION', '0.16.2');
+define('CARBONFOOTER_VERSION', '0.16.3');
 define('CARBONFOOTER_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('CARBONFOOTER_PLUGIN_URL', plugin_dir_url(__FILE__));
 

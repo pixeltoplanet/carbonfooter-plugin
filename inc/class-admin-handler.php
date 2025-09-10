@@ -525,6 +525,23 @@ class AdminHandler
 
   public function render_dashboard_widget(): void
   {
+    // Get emissions data to pass to the view
+    $average_emissions = $this->emissions_handler->get_average_emissions();
+    $total_measured = $this->emissions_handler->get_total_measured_posts();
+    $is_green_host = get_option('carbonfooter_greenhost', false);
+
+    // Get top 10 highest emission pages
+    global $wpdb;
+    $high_emission_pages = $wpdb->get_results("
+        SELECT p.ID, p.post_title, pm.meta_value as emissions
+        FROM {$wpdb->posts} p
+        JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id
+        WHERE pm.meta_key = '_carbon_emissions'
+        AND pm.meta_value REGEXP '^[0-9]+(.[0-9]+)?$'
+        ORDER BY CAST(pm.meta_value AS DECIMAL(10,2)) DESC
+        LIMIT 10
+    ");
+
     include CARBONFOOTER_PLUGIN_DIR . 'views/dashboard-widget.php';
   }
 }
