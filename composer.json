@@ -3,7 +3,7 @@
   "description": "Measure the carbon emissions of your website right inside WordPress",
   "type": "wordpress-plugin",
   "license": "GPL-2.0-or-later",
-  "version": "0.16.2",
+  "version": "0.16.3",
   "require": {
     "php": ">=8.0"
   },
