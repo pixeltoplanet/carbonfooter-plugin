@@ -9,7 +9,9 @@ Carbonfooter helps you understand and showcase the carbon emissions of your webs
 ## Features
 
 - **Automatic Emissions Measurement**: Measures emissions per page and aggregates site-wide stats
-- **Background Processing**: Runs API requests asynchronously to avoid impacting page performance
+- **Smart Cache System**: Structured per-post cache with 24-hour TTL and intelligent stale data detection
+- **Automatic Cache Invalidation**: Cache automatically refreshes on post updates and status changes
+- **Background Processing**: Runs API requests asynchronously to avoid impacting page performance with improved background refresh for stale data
 - **Automatic Refresh**: Emissions data is refreshed automatically (weekly by default)
 - **Admin Columns**: Displays CO₂ emissions for each post/page in the admin list view
 - **Flexible Display**: One shortcode with multiple styles (minimal, sticker, full) configurable in Settings
@@ -57,12 +59,59 @@ You can add the shortcodes to your theme templates using WordPress's `do_shortco
 <?php echo do_shortcode('[carbonfooter]'); ?>
 ```
 
+## Performance & Caching
+
+The plugin implements a sophisticated caching system to optimize performance and reduce API calls:
+
+### Smart Cache System
+- **Structured Payload**: Each post's cache contains emissions data, page size, timestamp, source, and staleness flag
+- **24-Hour TTL**: Cache entries expire after 24 hours but can be marked stale earlier
+- **Stale Detection**: Automatic detection of outdated data based on configurable thresholds
+- **Memory Efficiency**: Reduced database queries and improved response times
+
+### Automatic Cache Invalidation
+- **Post Updates**: Cache automatically invalidates when posts are saved or updated
+- **Status Changes**: Cache refreshes when post status changes (draft, published, etc.)
+- **Background Refresh**: Stale data is refreshed in the background without blocking user requests
+- **Site-wide Clearing**: Statistics and listing caches are cleared when data changes
+
+### Cache Structure
+```php
+[
+  'emissions'   => 10.5,        // grams CO2e
+  'page_size'   => 12345,       // bytes
+  'updated_at'  => 1694789123,  // unix timestamp
+  'source'      => 'api',       // 'api' | 'meta' | 'manual' | 'background'
+  'stale'       => false        // staleness flag
+]
+```
+
 ## How it works
 
 - The `[carbonfooter]` shortcode dispatches to one of three renderers (minimal, sticker, full) based on the configured widget style.
 - When Display is set to Auto, the plugin adds the widget to the frontend footer via `wp_footer`.
-- Emissions are fetched per page (or fall back to the site average) and formatted for display. The full style includes additional comparisons like estimated annual driving distance and trees needed for offsetting.
+- Emissions are fetched per page with cache-first approach (or fall back to the site average) and formatted for display. The full style includes additional comparisons like estimated annual driving distance and trees needed for offsetting.
+- **Cache Integration**: All data fetching prioritizes cached values, with automatic background refresh for stale data
 - Admin pages (Results, Settings) are available under Carbonfooter in the WP admin menu.
+
+## Testing
+
+The plugin includes comprehensive test coverage to ensure reliability:
+
+- **9 Tests, 31 Assertions**: Complete test suite covering cache operations, AJAX handlers, and background processing
+- **PHPUnit Integration**: Uses PHPUnit with Brain Monkey for WordPress function mocking
+- **Cache Testing**: Validates cache roundtrip operations, TTL behavior, and staleness detection
+- **Background Processing Tests**: Ensures proper scheduling and execution of background tasks
+- **AJAX Handler Tests**: Verifies API endpoint functionality and error handling
+
+### Running Tests
+```bash
+# Install dependencies
+composer install
+
+# Run test suite
+vendor/bin/phpunit
+```
 
 ## Developer Documentation
 
@@ -72,6 +121,8 @@ The plugin follows WordPress coding standards. For developers who want to contri
 - **Security Guidelines**: Security considerations for plugin development
 - **Linting Configuration**: How to set up and use linting tools
 - **REST API**: Settings endpoints under `carbonfooter/v1` (see `inc/class-rest-api-handler.php`)
+- **Cache System**: Advanced caching implementation in `inc/class-cache.php`
+- **Hook Management**: Centralized hook registration in `inc/class-hooks-manager.php`
 
 ## License
 
