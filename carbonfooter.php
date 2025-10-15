@@ -2,13 +2,12 @@
 
 /**
  * Plugin Name: Carbonfooter
- * Plugin URI: https://carbonfooter.nl
  * Description: Measure the carbon emissions of your website right inside WordPress
  * Version: 0.17.0
  * Requires PHP: 8.0
  * Requires at least: 5.6
- * Tested up to: 6.7
- * Author: Carbonfooter
+ * Tested up to: 6.8
+ * Author: Pixel to Planet
  * Author URI: https://carbonfooter.nl
  * License: GPLv2 or later
  * License URI: http://www.gnu.org/licenses/gpl-2.0.txt
@@ -49,7 +48,7 @@ add_action('plugins_loaded', 'carbonfooter_init');
  * Load plugin textdomain for translations
  */
 add_action('plugins_loaded', function (): void {
-    load_plugin_textdomain('carbonfooter', false, dirname(plugin_basename(__FILE__)) . '/languages');
+	load_plugin_textdomain('carbonfooter', false, dirname(plugin_basename(__FILE__)) . '/languages');
 });
 
 /**
