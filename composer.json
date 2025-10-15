@@ -21,7 +21,7 @@
     "lint": "phpcs --standard=.phpcs.xml.dist .",
     "fix": "phpcbf --standard=.phpcs.xml.dist .",
     "fix-file": "phpcbf --standard=.phpcs.xml.dist",
-    "test": "vendor/bin/phpunit"
+    "test": "vendor/bin/phpunit --configuration=.dev/phpunit.xml.dist"
   },
   "config": {
     "allow-plugins": {
