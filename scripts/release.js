@@ -117,6 +117,9 @@ function main() {
 		"Thumbs.db",
 		"*.tmp",
 		"*.bak",
+		".dev",
+		".cursor",
+		"tests/",
 	];
 
 	if (!cmdExists("rsync")) {
