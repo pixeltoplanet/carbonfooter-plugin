@@ -4,7 +4,7 @@ Tags: carbon footprint, sustainability, emissions, eco-friendly, sustainable web
 Requires at least: 5.6
 Tested up to: 6.8
 Requires PHP: 8.0
-Stable tag: 0.16.3
+Stable tag: 0.17.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -73,6 +73,10 @@ Yes, the plugin is GDPR compliant. It does not collect or store any personal dat
 3-Settings page. screenshot-3.png
 
 == Changelog ==
+
+= 0.17.0 =
+* Release plugin version 0.17.0 with minior improvements.
+
 
 = 0.16.3 =
 * Fix get_avarage_emissions() is null on dashboard widget
