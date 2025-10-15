@@ -45,13 +45,6 @@ function carbonfooter_init(): void
 add_action('plugins_loaded', 'carbonfooter_init');
 
 /**
- * Load plugin textdomain for translations
- */
-add_action('plugins_loaded', function (): void {
-	load_plugin_textdomain('carbonfooter', false, dirname(plugin_basename(__FILE__)) . '/languages');
-});
-
-/**
  * Plugin activation hook
  */
 register_activation_hook(__FILE__, function (): void {

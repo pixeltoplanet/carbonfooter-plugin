@@ -13,4 +13,15 @@
     <ini name="error_reporting" value="E_ALL"/>
     <ini name="display_errors" value="1"/>
   </php>
+  <filter>
+    <whitelist>
+      <directory suffix=".php">inc</directory>
+      <exclude>
+        <directory>tests</directory>
+        <directory>vendor</directory>
+        <directory>node_modules</directory>
+        <directory>build</directory>
+      </exclude>
+    </whitelist>
+  </filter>
 </phpunit>
