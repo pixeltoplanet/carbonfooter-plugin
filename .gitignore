@@ -15,6 +15,9 @@ coverage/
 junit.xml
 coverage.xml
 
+# Development files
+.dev/
+
 # PHPCS cache (if generated)
 .phpcs-cache
 .phpcs-cache
