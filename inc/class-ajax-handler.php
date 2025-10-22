@@ -421,7 +421,7 @@ class AjaxHandler
       return $default;
     }
 
-    $value = $_POST[$key];
+    $value = wp_unslash($_POST[$key]);
 
     switch ($type) {
       case 'int':
@@ -516,7 +516,7 @@ class AjaxHandler
   private function generate_export_filename(): string
   {
     $site_name = sanitize_title(get_bloginfo('name'));
-    return date('Y-m-d') . '-carbon-emissions-' . $site_name . '.json';
+    return gmdate('Y-m-d') . '-carbon-emissions-' . $site_name . '.json';
   }
 
   /**

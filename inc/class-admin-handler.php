@@ -84,7 +84,7 @@ class AdminHandler
     add_action('admin_init', [$this, 'register_privacy_policy_content']);
 
     // Frontend styles
-    add_action('wp_head', [$this, 'output_frontend_widget_styles']);
+    add_action('wp_enqueue_scripts', [$this, 'enqueue_frontend_styles']);
   }
 
   /**
@@ -163,13 +163,84 @@ class AdminHandler
   }
 
   /**
-   * Enqueue React build assets.
+   * Enqueue dashboard widget styles.
    *
-   * Uses `build/index.asset.php` when available for dependency and version
-   * metadata; otherwise enqueues with safe defaults for development.
+   * Enqueues styles specifically for the dashboard widget.
    *
+   * @param string $hook_suffix Current admin page hook suffix (unused, kept for compatibility)
    * @return void
    */
+  public function enqueue_dashboard_widget_styles(string $hook_suffix = ''): void
+  {
+    // Use admin stylesheet as base for inline styles
+    wp_enqueue_style('wp-admin');
+
+    // Add dashboard widget styles as inline styles
+    $dashboard_css = "
+      .carbonfooter-dashboard-widget {
+        margin: -12px;
+        padding: 12px;
+      }
+      .carbonfooter-dashboard-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 15px;
+        margin-bottom: 20px;
+      }
+      .carbonfooter-dashboard-stat {
+        text-align: center;
+      }
+      .carbonfooter-dashboard-stat .stat-label {
+        display: block;
+        font-size: 12px;
+        color: #646970;
+        margin-bottom: 5px;
+      }
+      .carbonfooter-dashboard-stat .stat-value {
+        display: block;
+        font-size: 18px;
+        font-weight: 600;
+        color: #2271b1;
+      }
+      .carbonfooter-dashboard-stat .stat-value.green {
+        color: #46b450;
+      }
+      .carbonfooter-dashboard-stat .stat-value.red {
+        color: #d63638;
+      }
+      .carbonfooter-dashboard-pages {
+        margin-top: 20px;
+      }
+      .carbonfooter-dashboard-pages h4 {
+        margin: 0 0 10px;
+        color: #1d2327;
+      }
+      .carbonfooter-dashboard-pages ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+      .carbonfooter-dashboard-pages li {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 0;
+        border-bottom: 1px solid #f0f0f1;
+      }
+      .carbonfooter-dashboard-pages li:last-child {
+        border-bottom: none;
+      }
+      .carbonfooter-dashboard-pages .emissions {
+        font-size: 12px;
+        color: #646970;
+      }
+      .carbonfooter-dashboard-links {
+        margin: 20px 0 0;
+        text-align: right;
+      }
+    ";
+    wp_add_inline_style('wp-admin', $dashboard_css);
+  }
   private function enqueue_react_assets(): void
   {
     $asset_file_path = CARBONFOOTER_PLUGIN_DIR . 'build/index.asset.php';
@@ -269,6 +340,9 @@ class AdminHandler
       __('Carbon Emissions Overview', 'carbonfooter'),
       [$this, 'render_dashboard_widget']
     );
+
+    // Enqueue dashboard widget styles when dashboard widget is registered
+    $this->enqueue_dashboard_widget_styles('index.php');
   }
 
   /**
@@ -390,7 +464,8 @@ class AdminHandler
             'type' => $setting_config['type'],
             'format' => str_contains($setting_name, 'color') ? 'hex-color' : null
           ]
-        ]
+        ],
+        'sanitize_callback' => $setting_config['sanitize_callback']
       ]));
     }
   }
@@ -424,7 +499,8 @@ class AdminHandler
           'schema' => [
             'type' => $setting_config['type']
           ]
-        ]
+        ],
+        'sanitize_callback' => $setting_config['sanitize_callback']
       ]));
     }
   }
@@ -458,23 +534,35 @@ class AdminHandler
   }
 
   /**
-   * Output frontend widget styles.
+   * Enqueue frontend widget styles with CSS variables.
    *
-   * Emits CSS variables for background/text colors so frontend widgets can
-   * consume site-configured appearance without extra network requests.
+   * Properly enqueues frontend styles using wp_enqueue_style() and wp_add_inline_style()
+   * to inject CSS custom properties for widget colors.
    *
    * @return void
    */
-  public function output_frontend_widget_styles(): void
+  public function enqueue_frontend_styles(): void
   {
+    // Register and enqueue the main frontend stylesheet
+    wp_enqueue_style(
+      'carbonfooter-frontend',
+      CARBONFOOTER_PLUGIN_URL . 'assets/css/carbonfooter.css',
+      [],
+      CARBONFOOTER_VERSION
+    );
+
+    // Get color options
     $background_color = get_option(Constants::OPTION_WIDGET_BACKGROUND_COLOR, Constants::DEFAULT_BACKGROUND_COLOR);
     $text_color = get_option(Constants::OPTION_WIDGET_TEXT_COLOR, Constants::DEFAULT_TEXT_COLOR);
 
-    printf(
-      '<style>:root{--cf-color-background:%s;--cf-color-foreground:%s;}</style>',
+    // Add CSS variables as inline styles
+    $css_variables = sprintf(
+      ':root{--cf-color-background:%s;--cf-color-foreground:%s;}',
       esc_attr($background_color),
       esc_attr($text_color)
     );
+
+    wp_add_inline_style('carbonfooter-frontend', $css_variables);
   }
 
   /**
@@ -482,13 +570,13 @@ class AdminHandler
    *
    * Why:
    * - Provides a redirect mechanism even when early admin_init hooks
-   *   are bypassed; uses inline JS to navigate to the Settings page.
+   *   are bypassed; uses wp_add_inline_script() to navigate to the Settings page.
    *
    * @return void
    */
   public function handle_activation_redirect_fallback(): void
   {
-    $current_page = $_GET['page'] ?? '';
+    $current_page = isset($_GET['page']) ? sanitize_text_field(wp_unslash($_GET['page'])) : '';
 
     if (in_array($current_page, ['carbonfooter', 'carbonfooter-settings'])) {
       return;
@@ -503,10 +591,16 @@ class AdminHandler
     delete_transient('carbonfooter_activation_redirect');
     Logger::log('Fallback redirect to settings page');
 
-    printf(
-      '<script>window.location.href = "%s";</script>',
+    // Enqueue a script handle for the redirect
+    wp_enqueue_script('carbonfooter-admin-redirect', '', [], CARBONFOOTER_VERSION, true);
+
+    // Add inline script for redirect
+    $redirect_script = sprintf(
+      'window.location.href = "%s";',
       esc_url(admin_url('admin.php?page=carbonfooter-settings'))
     );
+
+    wp_add_inline_script('carbonfooter-admin-redirect', $redirect_script);
   }
 
   /**

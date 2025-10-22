@@ -39,7 +39,7 @@ class Helpers
     }
 
     // Additional checks for common local development indicators
-    $host = $_SERVER['HTTP_HOST'] ?? '';
+    $host = isset($_SERVER['HTTP_HOST']) ? sanitize_text_field(wp_unslash($_SERVER['HTTP_HOST'])) : '';
 
     $local_patterns = array(
       'localhost',

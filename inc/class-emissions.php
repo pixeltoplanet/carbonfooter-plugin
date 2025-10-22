@@ -319,7 +319,8 @@ class Emissions
       $error_message = $response->get_error_message();
       Logger::error("API Error: $error_message");
       /* translators: %s: API error message returned by the remote request */
-      throw new \Exception(sprintf(__('API Error: %s', 'carbonfooter'), esc_html($error_message)));
+      $error_text = __('API Error: %s', 'carbonfooter');
+      throw new \Exception(sprintf(esc_html($error_text), esc_html($error_message)));
     }
 
     $response_code = wp_remote_retrieve_response_code($response);
@@ -327,12 +328,14 @@ class Emissions
       $error_message = wp_remote_retrieve_response_message($response);
       Logger::error("API Error: Status $response_code - $error_message");
       /* translators: %s: HTTP response status code from the API */
-      throw new \Exception(sprintf(__('API Error: Status %s', 'carbonfooter'), esc_html($response_code)));
+      $error_text = __('API Error: Status %s', 'carbonfooter');
+      throw new \Exception(sprintf(esc_html($error_text), esc_html($response_code)));
     }
 
     $body = wp_remote_retrieve_body($response);
     if (empty($body)) {
-      throw new \Exception(__('Empty API response', 'carbonfooter'));
+      $error_text = __('Empty API response', 'carbonfooter');
+      throw new \Exception(esc_html($error_text));
     }
 
     $data = json_decode($body, true);
@@ -340,11 +343,13 @@ class Emissions
       $json_error = json_last_error_msg();
       Logger::error("JSON Error: $json_error");
       /* translators: %s: JSON decoding error message */
-      throw new \Exception(sprintf(__('Invalid JSON response: %s', 'carbonfooter'), esc_html($json_error)));
+      $error_text = __('Invalid JSON response: %s', 'carbonfooter');
+      throw new \Exception(sprintf(esc_html($error_text), esc_html($json_error)));
     }
 
     if (!isset($data['emissions']['emissionsPerVisit'])) {
-      throw new \Exception(__('No emissions data found in response', 'carbonfooter'));
+      $error_text = __('No emissions data found in response', 'carbonfooter');
+      throw new \Exception(esc_html($error_text));
     }
 
     // Log successful API response

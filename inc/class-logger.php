@@ -160,7 +160,7 @@ class Logger
    */
   private static function format_log_entry(string $message, $data, string $level): string
   {
-    $timestamp = date('Y-m-d H:i:s');
+    $timestamp = gmdate('Y-m-d H:i:s');
     $formatted_level = strtoupper($level);
 
     $log_entry = "[CarbonFooter][{$formatted_level}][{$timestamp}] {$message}";
@@ -190,7 +190,11 @@ class Logger
     }
 
     // Only write non-error logs when WP_DEBUG is enabled; errors always log
-    error_log($formatted_message, 3, self::$log_file_path);
+    if (function_exists('wp_debug_log')) {
+      wp_debug_log($formatted_message);
+    } else {
+      error_log($formatted_message, 3, self::$log_file_path);
+    }
   }
 
   /**
@@ -214,7 +218,7 @@ class Logger
     }
 
     if (file_exists(self::$log_file_path)) {
-      return unlink(self::$log_file_path);
+      return wp_delete_file(self::$log_file_path);
     }
 
     return true;

@@ -4,7 +4,7 @@ Tags: carbon footprint, sustainability, emissions, eco-friendly, sustainable web
 Requires at least: 5.6
 Tested up to: 6.8
 Requires PHP: 8.0
-Stable tag: 0.17.0
+Stable tag: 0.18.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -73,6 +73,18 @@ Yes, the plugin is GDPR compliant. It does not collect or store any personal dat
 3-Settings page. screenshot-3.png
 
 == Changelog ==
+
+= 0.18.0 =
+* Convert all inline CSS to wp_add_inline_style() for WordPress compliance
+* Convert all inline JavaScript to wp_add_inline_script() for WordPress compliance
+* Fix sanitization callbacks in register_setting() calls for proper data validation
+* Update frontend widget styles to use proper WordPress enqueue methods
+* Convert shortcode styles (minimal, sticker, full) to wp_add_inline_style()
+* Move dashboard widget CSS from inline styles to wp_add_inline_style()
+* Fix activation redirect script to use wp_add_inline_script()
+* Resolve PHPUnit test configuration path issues
+* Achieve full WordPress repository compliance standards
+
 
 = 0.17.0 =
 * Release plugin version 0.17.0 with minior improvements.

@@ -100,16 +100,47 @@ class Shortcodes
   }
 
   /**
-   * Get minimal widget styles.
+   * Enqueue widget styles for a specific style type.
    *
-   * Inline CSS limited to the widget scope. Consumers are encouraged to
-   * override via CSS variables.
+   * Registers and enqueues styles for the widget shortcode using wp_add_inline_style().
    *
-   * @return string Style tag markup
+   * @param string $style_type The style type (minimal, sticker, full)
+   * @return void
    */
-  private function get_minimal_styles()
+  private function enqueue_widget_styles(string $style_type): void
   {
-    return "<style>
+    $handle = 'carbonfooter-widget-' . $style_type;
+
+    // Register style handle with empty source (inline-only styles)
+    wp_register_style($handle, '', [], CARBONFOOTER_VERSION);
+    wp_enqueue_style($handle);
+
+    // Get the appropriate styles based on type
+    $styles = '';
+    switch ($style_type) {
+      case 'minimal':
+        $styles = $this->get_minimal_styles_content();
+        break;
+      case 'sticker':
+        $styles = $this->get_sticker_styles_content();
+        break;
+      case 'full':
+        $styles = $this->get_full_styles_content();
+        break;
+    }
+
+    // Add inline styles
+    wp_add_inline_style($handle, $styles);
+  }
+
+  /**
+   * Get minimal widget styles content (without style tags).
+   *
+   * @return string CSS content
+   */
+  private function get_minimal_styles_content()
+  {
+    return "
       .cf-minimal {
         background-color: var(--cf-color-background);
         color: var(--cf-color-foreground);
@@ -146,17 +177,17 @@ class Shortcodes
         width: var(--icon-size);
         height: var(--icon-size);
       }
-    </style>";
+    ";
   }
 
   /**
-   * Get sticker widget styles.
+   * Get sticker widget styles content (without style tags).
    *
-   * @return string Style tag markup
+   * @return string CSS content
    */
-  private function get_sticker_styles()
+  private function get_sticker_styles_content()
   {
-    return "<style>
+    return "
       .cf-sticker {
         aspect-ratio: 1/1;
         width: 100%;
@@ -190,17 +221,17 @@ class Shortcodes
       .cf-sticker__value {
         font-weight: bold;
       }
-    </style>";
+    ";
   }
 
   /**
-   * Get full widget styles.
+   * Get full widget styles content (without style tags).
    *
-   * @return string Style tag markup
+   * @return string CSS content
    */
-  private function get_full_styles()
+  private function get_full_styles_content()
   {
-    return "<style>
+    return "
       .cf-full {
         background-color: var(--cf-color-background);
         color: var(--cf-color-foreground);
@@ -301,7 +332,7 @@ class Shortcodes
           height: 80px;
         }
       }
-    </style>";
+    ";
   }
 
   /**
@@ -365,6 +396,9 @@ class Shortcodes
    */
   public function render_minimal()
   {
+    // Enqueue styles for this widget type
+    $this->enqueue_widget_styles('minimal');
+
     $emissions = $this->get_current_page_emissions();
     $link = 'https://carbonfooter.nl/';
     $icon = '<svg class="cf-minimal__link-icon" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 995 768">
@@ -373,9 +407,9 @@ class Shortcodes
   </svg>';
 
     ob_start();
+    $css_vars = $this->get_common_css_vars();
 ?>
-    <div id="carbonfooter" style="<?php echo esc_attr($this->get_common_css_vars()); ?>">
-      <?php echo $this->get_minimal_styles(); ?>
+    <div id="carbonfooter" style="<?php echo esc_attr($css_vars); ?>">
       <div class="cf-minimal">
         <div class="cf-minimal__content">
           <p class="cf-minimal__text">
@@ -410,14 +444,17 @@ class Shortcodes
    */
   public function render_sticker()
   {
+    // Enqueue styles for this widget type
+    $this->enqueue_widget_styles('sticker');
+
     $emissions = $this->get_current_page_emissions();
     $link = 'https://carbonfooter.nl/';
     $icon = '<svg class="cf-sticker__cloud" xmlns="http://www.w3.org/2000/svg" fill="var(--cf-color-background)" viewBox="0 0 995 768"><path d="M841.11,279.51c20.9-26.96,31.38-60.17,29.63-93.85-1.75-33.68-15.63-65.7-39.22-90.49C748.06-.49,627.65,55.4,627.65,55.4h0c-17.13-19.23-39.17-33.76-63.9-42.15-24.74-8.39-51.31-10.35-77.08-5.68-27.11,3.63-52.79,13.96-74.6,30-21.8,16.03-38.98,37.23-49.89,61.56,0,0-71.19-67.65-165.66,27.33-94.46,94.98-17.76,176.42-17.76,176.42,0,0-116.31,47.7-72.46,165.76,12.02,33.28,34.39,62.13,64.04,82.56,29.64,20.44,65.1,31.46,101.48,31.54,0,0-5.5,157.7,121.81,177.65,34.61,6.59,70.49,2.17,102.29-12.6,31.81-14.78,57.84-39.11,74.22-69.39,0,0,56.39,122.99,188.77,48.79,132.38-74.2,83.46-143.9,83.46-143.9,0,0,134.07-14.62,145.07-134.06,10.99-119.43-146.32-169.72-146.34-169.73Z"/><path class="cls-1" d="M102.26,600.22s-31.43-47.8-67.16-27.24c-41.94,24.74-15.18,73.97-15.18,73.97,0,0-38.96,43.14,5.38,69.43,49.47,29.52,67.88-24.74,67.88-24.74h0s65.6,4.55,66.68-49.35c.84-47.8-57.6-42.07-57.6-42.07Z"/><path class="cls-1" d="M841.11,279.51c20.9-26.96,31.38-60.17,29.63-93.85-1.75-33.68-15.63-65.7-39.22-90.49C748.06-.49,627.65,55.4,627.65,55.4h0c-17.13-19.23-39.17-33.76-63.9-42.15-24.74-8.39-51.31-10.35-77.08-5.68-27.11,3.63-52.79,13.96-74.6,30-21.8,16.03-38.98,37.23-49.89,61.56,0,0-71.19-67.65-165.66,27.33-94.46,94.98-17.76,176.42-17.76,176.42,0,0-116.31,47.7-72.46,165.76,12.02,33.28,34.39,62.13,64.04,82.56,29.64,20.44,65.1,31.46,101.48,31.54,0,0-5.5,157.7,121.81,177.65,34.61,6.59,70.49,2.17,102.29-12.6,31.81-14.78,57.84-39.11,74.22-69.39,0,0,56.39,122.99,188.77,48.79,132.38-74.2,83.46-143.9,83.46-143.9,0,0,134.07-14.62,145.07-134.06,10.99-119.43-146.32-169.72-146.34-169.73Z"/></svg>';
 
     ob_start();
+    $css_vars = $this->get_common_css_vars();
   ?>
-    <div id="carbonfooter" style="<?php echo esc_attr($this->get_common_css_vars()); ?>">
-      <?php echo $this->get_sticker_styles(); ?>
+    <div id="carbonfooter" style="<?php echo esc_attr($css_vars); ?>">
       <div class="cf-sticker">
         <?php echo wp_kses_post($icon); ?>
         <p class="cf-sticker__text">
@@ -450,6 +487,9 @@ class Shortcodes
    */
   public function render_full()
   {
+    // Enqueue styles for this widget type
+    $this->enqueue_widget_styles('full');
+
     $emissions = $this->get_current_page_emissions();
     $average = get_option('carbonfooter_average_emissions', 0);
     $link = 'https://carbonfooter.nl/';
@@ -475,8 +515,6 @@ class Shortcodes
   </svg>';
 
     ob_start();
-
-    echo $this->get_full_styles();
   ?>
 
     <div id="carbonfooter" class="cf-full">
