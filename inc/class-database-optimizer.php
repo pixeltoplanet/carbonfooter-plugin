@@ -181,7 +181,7 @@ class Database_Optimizer
     $placeholders = implode(',', array_fill(0, count($post_types), '%s'));
 
     // Prepare the query with dynamic post types
-    $query = $wpdb->prepare("
+    $results = $wpdb->get_results($wpdb->prepare("
       SELECT
         p.ID,
         p.post_title,
@@ -191,13 +191,11 @@ class Database_Optimizer
       FROM {$wpdb->posts} p
       LEFT JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id AND pm.meta_key = '_carbon_emissions'
       WHERE p.post_status = 'publish'
-      AND p.post_type IN ({$placeholders})
+      AND p.post_type IN ($placeholders)
       AND pm.meta_value IS NULL
       ORDER BY p.post_type ASC, p.post_date DESC
       LIMIT %d
-    ", array_merge($post_types, [$limit]));
-
-    $results = $wpdb->get_results($query);
+    ", array_merge($post_types, [$limit])));
 
     // Group by post type
     $grouped_pages = array();
