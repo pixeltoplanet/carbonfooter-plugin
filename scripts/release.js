@@ -87,6 +87,18 @@ function main() {
 
 	// Copy with exclusions via rsync for speed/filters
 	const exclude = [
+		"assets/banner-1544x500.png",
+		"assets/banner-1544x500-nl-NL.png",
+		"assets/banner-772x250.png",
+		"assets/banner-772x250-nl-NL.png",
+		"assets/icon-128x128.png",
+		"assets/icon-256x256.png",
+		"assets/icon.svg",
+		"assets/screenshots/",
+		"assets/banner-1544x500-rtl.png",
+		"assets/icon-128x128-rtl.png",
+		"assets/banner-772x250-rtl.png",
+		"assets/icon-256x256-rtl.png",
 		"releases/",
 		"ideas/",
 		"contributing/",
