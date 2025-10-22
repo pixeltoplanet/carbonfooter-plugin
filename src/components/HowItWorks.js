@@ -9,7 +9,7 @@ import {
 	RadioControl,
 } from "@wordpress/components";
 
-import Text from "../components/Text";
+import Text from "./Text";
 
 import { __ } from "@wordpress/i18n";
 

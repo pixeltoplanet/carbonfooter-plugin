@@ -8,7 +8,7 @@ import {
 
 import { __ } from "@wordpress/i18n";
 
-import Text from "../components/Text";
+import Text from "./Text";
 
 const ExportData = ({
 	exportHistoricalData,
