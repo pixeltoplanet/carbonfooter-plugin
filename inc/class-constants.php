@@ -28,7 +28,7 @@ final class Constants
   /**
    * Plugin version
    */
-  public const VERSION = '0.17.0';
+  public const VERSION = '0.18.0';
 
   /**
    * Plugin text domain
