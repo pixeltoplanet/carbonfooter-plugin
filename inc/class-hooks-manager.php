@@ -128,7 +128,7 @@ class HooksManager
       }
 
       // Verify nonce from URL `_wpnonce` tied to action + post
-      $nonce = isset($_REQUEST['_wpnonce']) ? sanitize_text_field((string) $_REQUEST['_wpnonce']) : '';
+      $nonce = isset($_REQUEST['_wpnonce']) ? sanitize_text_field(wp_unslash($_REQUEST['_wpnonce'])) : '';
       if (!$nonce || !wp_verify_nonce($nonce, 'carbonfooter-measure-' . $post_id)) {
         Logger::warning('Blocked manual measure: invalid nonce', ['post_id' => $post_id]);
         return;

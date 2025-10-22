@@ -48,7 +48,7 @@ class Plugin
    *
    * @var string
    */
-  public const VERSION = '0.17.0';
+  public const VERSION = '0.18.0';
 
   /**
    * Core components
@@ -187,7 +187,7 @@ class Plugin
     delete_transient('carbonfooter_activation_redirect');
     Logger::log('Deleting activation redirect transient');
 
-    $current_page = $_GET['page'] ?? '';
+    $current_page = isset($_GET['page']) ? sanitize_text_field(wp_unslash($_GET['page'])) : '';
     Logger::log("Current page: $current_page");
 
     if (!in_array($current_page, ['carbonfooter', 'carbonfooter-settings'])) {
