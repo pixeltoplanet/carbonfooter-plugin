@@ -69,12 +69,18 @@ function main() {
 	const releasesDir = path.join(ROOT, "releases");
 	ensureDir(releasesDir);
 
-	const zipName = `carbonfooter-v${version}.zip`;
-	const zipPath = path.join(releasesDir, zipName);
+	const zipNameVersioned = `carbonfooter-v${version}.zip`;
+	const zipPathVersioned = path.join(releasesDir, zipNameVersioned);
+	const zipNamePlain = "carbonfooter.zip";
+	const zipPathPlain = path.join(releasesDir, zipNamePlain);
 
-	if (fs.existsSync(zipPath)) {
-		warn(`Removing existing zip: ${zipName}`);
-		fs.unlinkSync(zipPath);
+	if (fs.existsSync(zipPathVersioned)) {
+		warn(`Removing existing zip: ${zipNameVersioned}`);
+		fs.unlinkSync(zipPathVersioned);
+	}
+	if (fs.existsSync(zipPathPlain)) {
+		warn(`Removing existing zip: ${zipNamePlain}`);
+		fs.unlinkSync(zipPathPlain);
 	}
 
 	// Create staging dir
@@ -102,7 +108,7 @@ function main() {
 		"releases/",
 		"ideas/",
 		"contributing/",
-		"src/",
+		// NOTE: do not exclude src/ — WP requires non-versioned zip to include it
 		"vendor/",
 		"node_modules/",
 		".git/",
@@ -175,31 +181,48 @@ function main() {
 		);
 	}
 
-	// Zip staging dir
+	// Zip staging dir — versioned
 	if (!cmdExists("zip")) {
 		throw new Error("zip command not found. Please install zip.");
 	}
-	log(`Creating zip: ${zipName}`);
-	execSync(`cd "${tempDir}" && zip -r "${zipPath}" carbonfooter/ > /dev/null`, {
-		stdio: "inherit",
-		shell: "/bin/bash",
-	});
+	log(`Creating zip: ${zipNameVersioned}`);
+	execSync(
+		`cd "${tempDir}" && zip -r "${zipPathVersioned}" carbonfooter/ > /dev/null`,
+		{
+			stdio: "inherit",
+			shell: "/bin/bash",
+		},
+	);
+
+	// Zip staging dir — plain (non-versioned) for WP upload
+	log(`Creating zip: ${zipNamePlain}`);
+	execSync(
+		`cd "${tempDir}" && zip -r "${zipPathPlain}" carbonfooter/ > /dev/null`,
+		{
+			stdio: "inherit",
+			shell: "/bin/bash",
+		},
+	);
 
 	// Cleanup
 	fs.rmSync(tempDir, { recursive: true, force: true });
 
 	// Summary
-	const sizeBytes = fs.statSync(zipPath).size;
-	const sizeKb = (sizeBytes / 1024).toFixed(1);
+	const sizeBytesVersioned = fs.statSync(zipPathVersioned).size;
+	const sizeKbVersioned = (sizeBytesVersioned / 1024).toFixed(1);
+	const sizeBytesPlain = fs.statSync(zipPathPlain).size;
+	const sizeKbPlain = (sizeBytesPlain / 1024).toFixed(1);
 	log("Release created successfully");
-	console.log(`  File: ${zipPath}`);
-	console.log(`  Size: ${sizeKb} KB`);
+	console.log(`  File: ${zipPathVersioned}`);
+	console.log(`  Size: ${sizeKbVersioned} KB`);
+	console.log(`  File: ${zipPathPlain}`);
+	console.log(`  Size: ${sizeKbPlain} KB`);
 
 	// Optional: list zip contents (first ~20 entries) if unzip exists
 	if (cmdExists("unzip")) {
 		try {
-			log("Archive contents (head):");
-			execSync(`unzip -l "${zipPath}" | head -20`, {
+			log("Archive contents (head) of plain zip:");
+			execSync(`unzip -l "${zipPathPlain}" | head -20`, {
 				stdio: "inherit",
 				shell: "/bin/bash",
 			});
