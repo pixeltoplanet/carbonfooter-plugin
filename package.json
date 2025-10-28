@@ -1,6 +1,6 @@
 {
   "name": "carbonfooter",
-  "version": "0.18.0",
+  "version": "0.19.0",
   "description": "Measure the carbon emissions of your website right inside WordPress",
   "main": "build/index.js",
   "scripts": {

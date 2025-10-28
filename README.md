@@ -131,3 +131,10 @@ This project is licensed under the GPL v2 or later - see the LICENSE file for de
 ## Credits
 
 CarbonFooter is developed and maintained by [Carbonfooter](https://carbonfooter.nl).
+
+## External services
+
+This plugin connects to the Carbonfooter API (operated by the same developer/owner as this plugin) to calculate page-level emissions. Data sent may include the page URL, site URL, post ID, plugin version, and a timestamp, when you trigger a measurement, when background refresh runs, or when a page view schedules a refresh.
+
+- See the WordPress readme (readme.txt) “External services” section for full details
+- Privacy Policy: https://carbonfooter.nl/privacy
