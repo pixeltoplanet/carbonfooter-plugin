@@ -11,8 +11,8 @@
 namespace CarbonfooterPlugin;
 
 // Exit if accessed directly
-if (!defined('ABSPATH')) {
-  exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
 }
 
 /**
@@ -31,317 +31,317 @@ if (!defined('ABSPATH')) {
  *   required capability for the action
  * - All outputs are JSON and nonces are required on requests
  */
-class AjaxHandler
-{
+class AjaxHandler {
 
-  /**
-   * Emissions handler instance
-   *
-   * @var Emissions
-   */
-  private Emissions $emissions_handler;
 
-  /**
-   * Cache manager instance
-   *
-   * @var Cache
-   */
-  private Cache $cache_manager;
+	/**
+	 * Emissions handler instance
+	 *
+	 * @var Emissions
+	 */
+	private Emissions $emissions_handler;
 
-  /**
-   * AJAX nonce action
-   *
-   * @var string
-   */
-  private const NONCE_ACTION = Constants::NONCE_ACTION;
+	/**
+	 * Cache manager instance
+	 *
+	 * @var Cache
+	 */
+	private Cache $cache_manager;
 
-  /**
-   * Constructor
-   *
-   * @param Emissions $emissions_handler Emissions handler instance
-   * @param Cache $cache_manager Cache manager instance
-   */
-  public function __construct(Emissions $emissions_handler, Cache $cache_manager)
-  {
-    $this->emissions_handler = $emissions_handler;
-    $this->cache_manager = $cache_manager;
-  }
+	/**
+	 * AJAX nonce action
+	 *
+	 * @var string
+	 */
+	private const NONCE_ACTION = Constants::NONCE_ACTION;
 
-  /**
-   * Register AJAX hooks.
-   *
-   * Attaches wp_ajax_* actions for measurement, stats, and settings/data ops.
-   *
-   * @return void
-   */
-  public function register_hooks(): void
-  {
-    // Measurement actions
-    add_action('wp_ajax_' . Constants::AJAX_MEASURE, [$this, 'handle_measure_request']);
+	/**
+	 * Constructor
+	 *
+	 * @param Emissions $emissions_handler Emissions handler instance
+	 * @param Cache     $cache_manager Cache manager instance
+	 */
+	public function __construct( Emissions $emissions_handler, Cache $cache_manager ) {
+		$this->emissions_handler = $emissions_handler;
+		$this->cache_manager     = $cache_manager;
+	}
 
-    // Statistics actions
-    add_action('wp_ajax_' . Constants::AJAX_GET_STATS, [$this, 'handle_get_stats_request']);
-    add_action('wp_ajax_' . Constants::AJAX_GET_HEAVIEST_PAGES, [$this, 'handle_get_heaviest_pages_request']);
-    add_action('wp_ajax_' . Constants::AJAX_GET_UNTESTED_PAGES, [$this, 'handle_get_untested_pages_request']);
+	/**
+	 * Register AJAX hooks.
+	 *
+	 * Attaches wp_ajax_* actions for measurement, stats, and settings/data ops.
+	 *
+	 * @return void
+	 */
+	public function register_hooks(): void {
+		// Measurement actions
+		add_action( 'wp_ajax_' . Constants::AJAX_MEASURE, array( $this, 'handle_measure_request' ) );
 
-    // Settings actions
-    add_action('wp_ajax_' . Constants::AJAX_SAVE_SETTINGS, [$this, 'handle_save_settings_request']);
+		// Statistics actions
+		add_action( 'wp_ajax_' . Constants::AJAX_GET_STATS, array( $this, 'handle_get_stats_request' ) );
+		add_action( 'wp_ajax_' . Constants::AJAX_GET_HEAVIEST_PAGES, array( $this, 'handle_get_heaviest_pages_request' ) );
+		add_action( 'wp_ajax_' . Constants::AJAX_GET_UNTESTED_PAGES, array( $this, 'handle_get_untested_pages_request' ) );
 
-    // Data management actions
-    add_action('wp_ajax_' . Constants::AJAX_CLEAR_DATA, [$this, 'handle_clear_data_request']);
-    add_action('wp_ajax_' . Constants::AJAX_EXPORT_DATA, [$this, 'handle_export_data_request']);
-  }
+		// Settings actions
+		add_action( 'wp_ajax_' . Constants::AJAX_SAVE_SETTINGS, array( $this, 'handle_save_settings_request' ) );
 
-  /**
-   * Handle emissions measurement request.
-   *
-   * Structure:
-   * - Capability: `edit_posts`
-   * - Input: POST `post_id` (int)
-   * - Delegates to Emissions->process_post()
-   * - Returns: `{ emissions: float, formatted: string }` on success
-   *
-   * @return void
-   */
-  public function handle_measure_request(): void
-  {
-    Logger::info('AJAX measure request started');
+		// Data management actions
+		add_action( 'wp_ajax_' . Constants::AJAX_CLEAR_DATA, array( $this, 'handle_clear_data_request' ) );
+		add_action( 'wp_ajax_' . Constants::AJAX_EXPORT_DATA, array( $this, 'handle_export_data_request' ) );
+	}
 
-    $this->verify_nonce_and_permissions('edit_posts');
-    Logger::info('Nonce and permissions verified');
+	/**
+	 * Handle emissions measurement request.
+	 *
+	 * Structure:
+	 * - Capability: `edit_posts`
+	 * - Input: POST `post_id` (int)
+	 * - Delegates to Emissions->process_post()
+	 * - Returns: `{ emissions: float, formatted: string }` on success
+	 *
+	 * @return void
+	 */
+	public function handle_measure_request(): void {
+		Logger::info( 'AJAX measure request started' );
 
-    $post_id = $this->get_sanitized_post_parameter('post_id', 'int');
-    Logger::info('Post ID received: ' . $post_id);
+		$this->verify_nonce_and_permissions( 'edit_posts' );
+		Logger::info( 'Nonce and permissions verified' );
 
-    if (!$post_id) {
-      Logger::error('Invalid post ID provided');
-      $this->send_error_response(__('Invalid post ID', 'carbonfooter'));
-      return;
-    }
+		$post_id = $this->get_sanitized_post_parameter( 'post_id', 'int' );
+		Logger::info( 'Post ID received: ' . $post_id );
 
-    // Prevent duplicate processing via transient lock
-    $lock_key = 'carbonfooter_processing_' . $post_id;
-    if (get_transient($lock_key)) {
-      Logger::log('Measurement already in progress (locked)', ['post_id' => $post_id]);
-      // Try to return current cached value, if any
-      $payload = $this->cache_manager->get_post_payload($post_id);
-      $emissions = ($payload && isset($payload['emissions'])) ? (float) $payload['emissions'] : null;
-      $this->send_success_response([
-        'status' => 'in_progress',
-        'emissions' => $emissions,
-        'formatted' => is_null($emissions) ? null : number_format($emissions, 2) . 'g CO2',
-        'message' => __('A refresh is already running. Please wait a moment.', 'carbonfooter')
-      ]);
-      return;
-    }
+		if ( ! $post_id ) {
+			Logger::error( 'Invalid post ID provided' );
+			$this->send_error_response( __( 'Invalid post ID', 'carbonfooter' ) );
+			return;
+		}
 
-    // Set lock with short TTL to dedupe rapid clicks
-    set_transient($lock_key, true, 5 * MINUTE_IN_SECONDS);
-    Logger::info('Starting emissions processing for post: ' . $post_id);
+		// Prevent duplicate processing via transient lock
+		$lock_key = 'carbonfooter_processing_' . $post_id;
+		if ( get_transient( $lock_key ) ) {
+			Logger::log( 'Measurement already in progress (locked)', array( 'post_id' => $post_id ) );
+			// Try to return current cached value, if any
+			$payload   = $this->cache_manager->get_post_payload( $post_id );
+			$emissions = ( $payload && isset( $payload['emissions'] ) ) ? (float) $payload['emissions'] : null;
+			$this->send_success_response(
+				array(
+					'status'    => 'in_progress',
+					'emissions' => $emissions,
+					'formatted' => is_null( $emissions ) ? null : number_format( $emissions, 2 ) . 'g CO2',
+					'message'   => __( 'A refresh is already running. Please wait a moment.', 'carbonfooter' ),
+				)
+			);
+			return;
+		}
 
-    try {
-      $result = $this->emissions_handler->process_post($post_id);
-      Logger::info('Emissions processing result: ' . ($result ? $result : 'false'));
+		// Set lock with short TTL to dedupe rapid clicks
+		set_transient( $lock_key, true, 5 * MINUTE_IN_SECONDS );
+		Logger::info( 'Starting emissions processing for post: ' . $post_id );
 
-      if ($result) {
-        $response_data = [
-          'status' => 'completed',
-          'emissions' => $result,
-          'formatted' => number_format($result, 2) . 'g CO2'
-        ];
-        Logger::info('Sending success response: ' . wp_json_encode($response_data));
-        $this->send_success_response($response_data);
-      } else {
-        Logger::error('Emissions processing failed for post: ' . $post_id);
-        $this->send_error_response(__('Failed to measure emissions', 'carbonfooter'));
-      }
-    } finally {
-      // Clear lock
-      delete_transient($lock_key);
-    }
-  }
+		try {
+			$result = $this->emissions_handler->process_post( $post_id );
+			Logger::info( 'Emissions processing result: ' . ( $result ? $result : 'false' ) );
 
-  /**
-   * Handle statistics request.
-   *
-   * Returns site-wide stats from Emissions->get_site_stats().
-   *
-   * @return void
-   */
-  public function handle_get_stats_request(): void
-  {
-    $this->verify_nonce_and_permissions();
+			if ( $result ) {
+				$response_data = array(
+					'status'    => 'completed',
+					'emissions' => $result,
+					'formatted' => number_format( $result, 2 ) . 'g CO2',
+				);
+				Logger::info( 'Sending success response: ' . wp_json_encode( $response_data ) );
+				$this->send_success_response( $response_data );
+			} else {
+				Logger::error( 'Emissions processing failed for post: ' . $post_id );
+				$this->send_error_response( __( 'Failed to measure emissions', 'carbonfooter' ) );
+			}
+		} finally {
+			// Clear lock
+			delete_transient( $lock_key );
+		}
+	}
 
-    try {
-      $stats = $this->emissions_handler->get_site_stats();
-      $this->send_success_response($stats);
-    } catch (\Exception $e) {
-      Logger::log('Error getting stats: ' . $e->getMessage(), 'error');
-      $this->send_error_response(__('Failed to retrieve statistics', 'carbonfooter'));
-    }
-  }
+	/**
+	 * Handle statistics request.
+	 *
+	 * Returns site-wide stats from Emissions->get_site_stats().
+	 *
+	 * @return void
+	 */
+	public function handle_get_stats_request(): void {
+		$this->verify_nonce_and_permissions();
 
-  /**
-   * Handle heaviest pages request.
-   *
-   * Input: POST `limit` (int, default 10). Returns an array of pages ordered by
-   * emissions descending.
-   *
-   * @return void
-   */
-  public function handle_get_heaviest_pages_request(): void
-  {
-    $this->verify_nonce_and_permissions();
+		try {
+			$stats = $this->emissions_handler->get_site_stats();
+			$this->send_success_response( $stats );
+		} catch ( \Exception $e ) {
+			Logger::log( 'Error getting stats: ' . $e->getMessage(), 'error' );
+			$this->send_error_response( __( 'Failed to retrieve statistics', 'carbonfooter' ) );
+		}
+	}
 
-    $limit = $this->get_sanitized_post_parameter('limit', 'int', 10);
+	/**
+	 * Handle heaviest pages request.
+	 *
+	 * Input: POST `limit` (int, default 10). Returns an array of pages ordered by
+	 * emissions descending.
+	 *
+	 * @return void
+	 */
+	public function handle_get_heaviest_pages_request(): void {
+		$this->verify_nonce_and_permissions();
 
-    try {
-      $pages = Database_Optimizer::get_heaviest_pages($limit);
-      $this->send_success_response($pages);
-    } catch (\Exception $e) {
-      Logger::log('Error getting heaviest pages: ' . $e->getMessage(), 'error');
-      $this->send_error_response(__('Failed to retrieve heaviest pages', 'carbonfooter'));
-    }
-  }
+		$limit = $this->get_sanitized_post_parameter( 'limit', 'int', 10 );
 
-  /**
-   * Handle untested pages request.
-   *
-   * Input: POST `limit` (int, default 20). Returns pages without measurements,
-   * grouped by post type.
-   *
-   * @return void
-   */
-  public function handle_get_untested_pages_request(): void
-  {
-    $this->verify_nonce_and_permissions();
+		try {
+			$pages = Database_Optimizer::get_heaviest_pages( $limit );
+			$this->send_success_response( $pages );
+		} catch ( \Exception $e ) {
+			Logger::log( 'Error getting heaviest pages: ' . $e->getMessage(), 'error' );
+			$this->send_error_response( __( 'Failed to retrieve heaviest pages', 'carbonfooter' ) );
+		}
+	}
 
-    $limit = $this->get_sanitized_post_parameter('limit', 'int', 20);
+	/**
+	 * Handle untested pages request.
+	 *
+	 * Input: POST `limit` (int, default 20). Returns pages without measurements,
+	 * grouped by post type.
+	 *
+	 * @return void
+	 */
+	public function handle_get_untested_pages_request(): void {
+		$this->verify_nonce_and_permissions();
 
-    try {
-      $pages = Database_Optimizer::get_untested_pages($limit);
-      $this->send_success_response($pages);
-    } catch (\Exception $e) {
-      Logger::log('Error getting untested pages: ' . $e->getMessage(), 'error');
-      $this->send_error_response(__('Failed to retrieve untested pages', 'carbonfooter'));
-    }
-  }
+		$limit = $this->get_sanitized_post_parameter( 'limit', 'int', 20 );
 
-  /**
-   * Handle save settings request.
-   *
-   * Capability: `manage_options`.
-   * Accepts color and appearance options; updates only provided keys and returns
-   * the set of updated values.
-   *
-   * @return void
-   */
-  public function handle_save_settings_request(): void
-  {
-    $this->verify_nonce_and_permissions('manage_options');
+		try {
+			$pages = Database_Optimizer::get_untested_pages( $limit );
+			$this->send_success_response( $pages );
+		} catch ( \Exception $e ) {
+			Logger::log( 'Error getting untested pages: ' . $e->getMessage(), 'error' );
+			$this->send_error_response( __( 'Failed to retrieve untested pages', 'carbonfooter' ) );
+		}
+	}
 
-    $background_color = $this->get_sanitized_post_parameter('background_color', 'hex_color');
-    $text_color = $this->get_sanitized_post_parameter('text_color', 'hex_color');
+	/**
+	 * Handle save settings request.
+	 *
+	 * Capability: `manage_options`.
+	 * Accepts color and appearance options; updates only provided keys and returns
+	 * the set of updated values.
+	 *
+	 * @return void
+	 */
+	public function handle_save_settings_request(): void {
+		$this->verify_nonce_and_permissions( 'manage_options' );
 
-    $updated_settings = [];
+		$background_color = $this->get_sanitized_post_parameter( 'background_color', 'hex_color' );
+		$text_color       = $this->get_sanitized_post_parameter( 'text_color', 'hex_color' );
 
-    if ($background_color) {
-      update_option(Constants::OPTION_WIDGET_BACKGROUND_COLOR, $background_color);
-      $updated_settings['background_color'] = $background_color;
-    }
+		$updated_settings = array();
 
-    if ($text_color) {
-      update_option(Constants::OPTION_WIDGET_TEXT_COLOR, $text_color);
-      $updated_settings['text_color'] = $text_color;
-    }
+		if ( $background_color ) {
+			update_option( Constants::OPTION_WIDGET_BACKGROUND_COLOR, $background_color );
+			$updated_settings['background_color'] = $background_color;
+		}
 
-    if (empty($updated_settings)) {
-      $this->send_error_response(__('No valid settings provided', 'carbonfooter'));
-    }
+		if ( $text_color ) {
+			update_option( Constants::OPTION_WIDGET_TEXT_COLOR, $text_color );
+			$updated_settings['text_color'] = $text_color;
+		}
 
-    Logger::log('Settings updated via AJAX', $updated_settings);
-    $this->send_success_response($updated_settings);
-  }
+		if ( empty( $updated_settings ) ) {
+			$this->send_error_response( __( 'No valid settings provided', 'carbonfooter' ) );
+		}
 
-  /**
-   * Handle clear data request.
-   *
-   * Capability: `manage_options`.
-   * Clears plugin post meta, transients, cache, and green host option.
-   * Returns counts for transparency.
-   *
-   * @return void
-   */
-  public function handle_clear_data_request(): void
-  {
-    $this->verify_nonce_and_permissions('manage_options');
+		Logger::log( 'Settings updated via AJAX', $updated_settings );
+		$this->send_success_response( $updated_settings );
+	}
 
-    global $wpdb;
+	/**
+	 * Handle clear data request.
+	 *
+	 * Capability: `manage_options`.
+	 * Clears plugin post meta, transients, cache, and green host option.
+	 * Returns counts for transparency.
+	 *
+	 * @return void
+	 */
+	public function handle_clear_data_request(): void {
+		$this->verify_nonce_and_permissions( 'manage_options' );
 
-    try {
-      // Clear all CarbonFooter-related post meta
-      $meta_keys_to_delete = Constants::get_meta_keys();
+		global $wpdb;
 
-      $deleted_count = 0;
-      foreach ($meta_keys_to_delete as $meta_key) {
-        $result = $wpdb->delete(
-          $wpdb->postmeta,
-          ['meta_key' => $meta_key],
-          ['%s']
-        );
-        if ($result !== false) {
-          $deleted_count += $result;
-        }
-      }
+		try {
+			// Clear all CarbonFooter-related post meta
+			$meta_keys_to_delete = Constants::get_meta_keys();
 
-      // Clear cache
-      $this->cache_manager->clear_all();
+			$deleted_count = 0;
+			foreach ( $meta_keys_to_delete as $meta_key ) {
+				$result = $wpdb->delete(
+					$wpdb->postmeta,
+					array( 'meta_key' => $meta_key ),
+					array( '%s' )
+				);
+				if ( $result !== false ) {
+						$deleted_count += $result;
+				}
+			}
 
-      // Clear WordPress transients
-      $cache_keys_cleared = $this->clear_carbonfooter_transients();
+			// Clear cache
+			$this->cache_manager->clear_all();
 
-      // Clear green host status
-      delete_option(Constants::OPTION_GREEN_HOST);
+			// Clear WordPress transients
+			$cache_keys_cleared = $this->clear_carbonfooter_transients();
 
-      Logger::log('All CarbonFooter data cleared by user', [
-        'deleted_meta_count' => $deleted_count,
-        'cache_keys_cleared' => $cache_keys_cleared,
-        'user_id' => get_current_user_id()
-      ]);
+			// Clear green host status
+			delete_option( Constants::OPTION_GREEN_HOST );
 
-      $this->send_success_response([
-        'message' => sprintf(
-          /* translators: %d is the number of deleted data entries. */
-          __('Successfully cleared %d data entries and cache. All emissions data has been removed.', 'carbonfooter'),
-          $deleted_count
-        ),
-        'deleted_count' => $deleted_count,
-        'cache_cleared' => $cache_keys_cleared
-      ]);
-    } catch (\Exception $e) {
-      Logger::log('Error clearing data: ' . $e->getMessage(), 'error');
-      $this->send_error_response(__('Failed to clear data', 'carbonfooter'));
-    }
-  }
+			Logger::log(
+				'All CarbonFooter data cleared by user',
+				array(
+					'deleted_meta_count' => $deleted_count,
+					'cache_keys_cleared' => $cache_keys_cleared,
+					'user_id'            => get_current_user_id(),
+				)
+			);
 
-  /**
-   * Handle export data request.
-   *
-   * Capability: `manage_options`.
-   * Gathers historical emissions and current values for posts with history,
-   * returning JSON data and a suggested filename.
-   *
-   * @return void
-   */
-  public function handle_export_data_request(): void
-  {
-    $this->verify_nonce_and_permissions('manage_options');
+			$this->send_success_response(
+				array(
+					'message'       => sprintf(
+					/* translators: %d is the number of deleted data entries. */
+						__( 'Successfully cleared %d data entries and cache. All emissions data has been removed.', 'carbonfooter' ),
+						$deleted_count
+					),
+					'deleted_count' => $deleted_count,
+					'cache_cleared' => $cache_keys_cleared,
+				)
+			);
+		} catch ( \Exception $e ) {
+			Logger::log( 'Error clearing data: ' . $e->getMessage(), 'error' );
+			$this->send_error_response( __( 'Failed to clear data', 'carbonfooter' ) );
+		}
+	}
 
-    global $wpdb;
+	/**
+	 * Handle export data request.
+	 *
+	 * Capability: `manage_options`.
+	 * Gathers historical emissions and current values for posts with history,
+	 * returning JSON data and a suggested filename.
+	 *
+	 * @return void
+	 */
+	public function handle_export_data_request(): void {
+		$this->verify_nonce_and_permissions( 'manage_options' );
 
-    try {
-      // Get all posts with emissions history data and current emissions
-      $results = $wpdb->get_results($wpdb->prepare("
+		global $wpdb;
+
+		try {
+			// Get all posts with emissions history data and current emissions
+			$results = $wpdb->get_results(
+				$wpdb->prepare(
+					"
 				SELECT
 					p.ID,
 					p.post_title,
@@ -353,197 +353,207 @@ class AjaxHandler
 				WHERE pm_history.meta_key = %s
 				AND pm_history.meta_value != ''
 				ORDER BY p.post_title ASC
-			", Constants::META_EMISSIONS, Constants::META_EMISSIONS_HISTORY));
+			",
+					Constants::META_EMISSIONS,
+					Constants::META_EMISSIONS_HISTORY
+				)
+			);
 
-      if (empty($results)) {
-        $this->send_error_response(__('No historical emissions data found to export.', 'carbonfooter'));
-      }
+			if ( empty( $results ) ) {
+					$this->send_error_response( __( 'No historical emissions data found to export.', 'carbonfooter' ) );
+			}
 
-      $export_data = $this->prepare_export_data($results);
-      $filename = $this->generate_export_filename();
+			$export_data = $this->prepare_export_data( $results );
+			$filename    = $this->generate_export_filename();
 
-      Logger::log('Emissions data exported by user', [
-        'exported_posts' => count($export_data),
-        'user_id' => get_current_user_id(),
-        'filename' => $filename
-      ]);
+			Logger::log(
+				'Emissions data exported by user',
+				array(
+					'exported_posts' => count( $export_data ),
+					'user_id'        => get_current_user_id(),
+					'filename'       => $filename,
+				)
+			);
 
-      $this->send_success_response([
-        'data' => $export_data,
-        'filename' => $filename,
-        'message' => sprintf(
-          /* translators: %d is the number of exported posts. */
-          __('Successfully exported %d posts with historical emissions data.', 'carbonfooter'),
-          count($export_data)
-        )
-      ]);
-    } catch (\Exception $e) {
-      Logger::log('Error exporting data: ' . $e->getMessage(), 'error');
-      $this->send_error_response(__('Failed to export data', 'carbonfooter'));
-    }
-  }
+			$this->send_success_response(
+				array(
+					'data'     => $export_data,
+					'filename' => $filename,
+					'message'  => sprintf(
+					/* translators: %d is the number of exported posts. */
+						__( 'Successfully exported %d posts with historical emissions data.', 'carbonfooter' ),
+						count( $export_data )
+					),
+				)
+			);
+		} catch ( \Exception $e ) {
+			Logger::log( 'Error exporting data: ' . $e->getMessage(), 'error' );
+			$this->send_error_response( __( 'Failed to export data', 'carbonfooter' ) );
+		}
+	}
 
-  /**
-   * Verify nonce and user permissions.
-   *
-   * Security:
-   * - Verifies AJAX nonce in `$_POST['nonce']`
-   * - Ensures current user has required capability
-   *
-   * @param string $capability Required capability (default 'manage_options')
-   * @return void
-   */
-  private function verify_nonce_and_permissions(string $capability = 'manage_options'): void
-  {
-    if (!check_ajax_referer(self::NONCE_ACTION, 'nonce', false)) {
-      $this->send_error_response(__('Invalid security token', 'carbonfooter'), 403);
-    }
+	/**
+	 * Verify nonce and user permissions.
+	 *
+	 * Security:
+	 * - Verifies AJAX nonce in `$_POST['nonce']`
+	 * - Ensures current user has required capability
+	 *
+	 * @param string $capability Required capability (default 'manage_options')
+	 * @return void
+	 */
+	private function verify_nonce_and_permissions( string $capability = 'manage_options' ): void {
+		if ( ! check_ajax_referer( self::NONCE_ACTION, 'nonce', false ) ) {
+			$this->send_error_response( __( 'Invalid security token', 'carbonfooter' ), 403 );
+		}
 
-    if (!current_user_can($capability)) {
-      $this->send_error_response(__('Insufficient permissions', 'carbonfooter'), 403);
-    }
-  }
+		if ( ! current_user_can( $capability ) ) {
+			$this->send_error_response( __( 'Insufficient permissions', 'carbonfooter' ), 403 );
+		}
+	}
 
-  /**
-   * Get sanitized POST parameter.
-   *
-   * Supported types: 'int', 'string', 'hex_color'. Returns default when
-   * key is missing or fails validation.
-   *
-   * @param string $key     Parameter key
-   * @param string $type    Parameter type (int|string|hex_color)
-   * @param mixed  $default Default value
-   * @return mixed Sanitized value or default
-   */
-  private function get_sanitized_post_parameter(string $key, string $type = 'string', $default = null)
-  {
-    if (!isset($_POST[$key])) {
-      return $default;
-    }
+	/**
+	 * Get sanitized POST parameter.
+	 *
+	 * Supported types: 'int', 'string', 'hex_color'. Returns default when
+	 * key is missing or fails validation.
+	 *
+	 * @param string $key     Parameter key
+	 * @param string $type    Parameter type (int|string|hex_color)
+	 * @param mixed  $default Default value
+	 * @return mixed Sanitized value or default
+	 */
+	private function get_sanitized_post_parameter( string $key, string $type = 'string', $default = null ) {
+		if ( ! isset( $_POST[ $key ] ) ) {
+			return $default;
+		}
 
-    $value = wp_unslash($_POST[$key]);
+		$value = $_POST[ $key ];
+		if ( function_exists( 'wp_unslash' ) ) {
+			$value = \wp_unslash( $value );
+		}
 
-    switch ($type) {
-      case 'int':
-        return intval($value);
+		switch ( $type ) {
+			case 'int':
+				return intval( $value );
 
-      case 'hex_color':
-        return sanitize_hex_color($value) ?: $default;
+			case 'hex_color':
+				return sanitize_hex_color( $value ) ?: $default;
 
-      case 'string':
-      default:
-        return sanitize_text_field($value);
-    }
-  }
+			case 'string':
+			default:
+				return sanitize_text_field( $value );
+		}
+	}
 
-  /**
-   * Clear CarbonFooter-related transients.
-   *
-   * Scans options table for keys like `_transient_carbonfooter_%` and deletes
-   * the corresponding transients.
-   *
-   * @return int Number of transients cleared
-   */
-  private function clear_carbonfooter_transients(): int
-  {
-    global $wpdb;
+	/**
+	 * Clear CarbonFooter-related transients.
+	 *
+	 * Scans options table for keys like `_transient_carbonfooter_%` and deletes
+	 * the corresponding transients.
+	 *
+	 * @return int Number of transients cleared
+	 */
+	private function clear_carbonfooter_transients(): int {
+		global $wpdb;
 
-    $cache_keys = $wpdb->get_col($wpdb->prepare("
+		$cache_keys = $wpdb->get_col(
+			$wpdb->prepare(
+				"
 			SELECT option_name
 			FROM {$wpdb->options}
 			WHERE option_name LIKE %s
-		", '_transient_carbonfooter_%'));
+		",
+				'_transient_carbonfooter_%'
+			)
+		);
 
-    $cleared_count = 0;
-    foreach ($cache_keys as $cache_key) {
-      $key = str_replace('_transient_', '', $cache_key);
-      if (delete_transient($key)) {
-        $cleared_count++;
-      }
-    }
+		$cleared_count = 0;
+		foreach ( $cache_keys as $cache_key ) {
+			$key = str_replace( '_transient_', '', $cache_key );
+			if ( delete_transient( $key ) ) {
+				++$cleared_count;
+			}
+		}
 
-    return $cleared_count;
-  }
+		return $cleared_count;
+	}
 
-  /**
-   * Prepare export data from database results.
-   *
-   * Normalizes history to an array of `{ date, value }` entries and includes
-   * current emissions when available.
-   *
-   * @param array $results Database results
-   * @return array Formatted export data
-   */
-  private function prepare_export_data(array $results): array
-  {
-    $export_data = [];
+	/**
+	 * Prepare export data from database results.
+	 *
+	 * Normalizes history to an array of `{ date, value }` entries and includes
+	 * current emissions when available.
+	 *
+	 * @param array $results Database results
+	 * @return array Formatted export data
+	 */
+	private function prepare_export_data( array $results ): array {
+		$export_data = array();
 
-    foreach ($results as $result) {
-      $history = maybe_unserialize($result->history);
+		foreach ( $results as $result ) {
+			$history = maybe_unserialize( $result->history );
 
-      if (!is_array($history)) {
-        continue;
-      }
+			if ( ! is_array( $history ) ) {
+				continue;
+			}
 
-      $formatted_history = [];
-      foreach ($history as $entry) {
-        if (isset($entry['date']) && isset($entry['value'])) {
-          $formatted_history[] = [
-            'date' => $entry['date'],
-            'value' => (float) $entry['value']
-          ];
-        }
-      }
+			$formatted_history = array();
+			foreach ( $history as $entry ) {
+				if ( isset( $entry['date'] ) && isset( $entry['value'] ) ) {
+					$formatted_history[] = array(
+						'date'  => $entry['date'],
+						'value' => (float) $entry['value'],
+					);
+				}
+			}
 
-      $export_data[] = [
-        'ID' => $result->ID,
-        'post_title' => $result->post_title,
-        'emissions' => $result->current_emissions ? (float) $result->current_emissions : null,
-        'history' => $formatted_history
-      ];
-    }
+			$export_data[] = array(
+				'ID'         => $result->ID,
+				'post_title' => $result->post_title,
+				'emissions'  => $result->current_emissions ? (float) $result->current_emissions : null,
+				'history'    => $formatted_history,
+			);
+		}
 
-    return $export_data;
-  }
+		return $export_data;
+	}
 
-  /**
-   * Generate export filename.
-   *
-   * Uses current date and site name to produce a stable, shareable filename.
-   *
-   * @return string Generated filename
-   */
-  private function generate_export_filename(): string
-  {
-    $site_name = sanitize_title(get_bloginfo('name'));
-    return gmdate('Y-m-d') . '-carbon-emissions-' . $site_name . '.json';
-  }
+	/**
+	 * Generate export filename.
+	 *
+	 * Uses current date and site name to produce a stable, shareable filename.
+	 *
+	 * @return string Generated filename
+	 */
+	private function generate_export_filename(): string {
+		$site_name = sanitize_title( get_bloginfo( 'name' ) );
+		return gmdate( 'Y-m-d' ) . '-carbon-emissions-' . $site_name . '.json';
+	}
 
-  /**
-   * Send success response.
-   *
-   * Wraps `wp_send_json_success` for consistent API surface.
-   *
-   * @param mixed $data Response data
-   * @return void
-   */
-  private function send_success_response($data): void
-  {
-    wp_send_json_success($data);
-  }
+	/**
+	 * Send success response.
+	 *
+	 * Wraps `wp_send_json_success` for consistent API surface.
+	 *
+	 * @param mixed $data Response data
+	 * @return void
+	 */
+	private function send_success_response( $data ): void {
+		wp_send_json_success( $data );
+	}
 
-  /**
-   * Send error response.
-   *
-   * Sets status header and returns a standardized error payload.
-   *
-   * @param string $message     Error message
-   * @param int    $status_code HTTP status code
-   * @return void
-   */
-  private function send_error_response(string $message, int $status_code = 400): void
-  {
-    status_header($status_code);
-    wp_send_json_error($message);
-  }
+	/**
+	 * Send error response.
+	 *
+	 * Sets status header and returns a standardized error payload.
+	 *
+	 * @param string $message     Error message
+	 * @param int    $status_code HTTP status code
+	 * @return void
+	 */
+	private function send_error_response( string $message, int $status_code = 400 ): void {
+		status_header( $status_code );
+		wp_send_json_error( $message );
+	}
 }

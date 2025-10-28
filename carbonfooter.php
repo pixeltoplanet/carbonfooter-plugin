@@ -16,14 +16,14 @@
  */
 
 // Exit if accessed directly
-if (!defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
 // Define basic plugin constants first (needed for autoloader)
-define('CARBONFOOTER_VERSION', '0.19.0');
-define('CARBONFOOTER_PLUGIN_DIR', plugin_dir_path(__FILE__));
-define('CARBONFOOTER_PLUGIN_URL', plugin_dir_url(__FILE__));
+define( 'CARBONFOOTER_VERSION', '0.19.0' );
+define( 'CARBONFOOTER_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
+define( 'CARBONFOOTER_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
 // Register autoloader
 require_once CARBONFOOTER_PLUGIN_DIR . 'inc/class-autoloader.php';
@@ -38,18 +38,20 @@ require_once CARBONFOOTER_PLUGIN_DIR . 'inc/class-autoloader.php';
 /**
  * Initialize the plugin
  */
-function carbonfooter_init(): void
-{
+function carbonfooter_init(): void {
 	\CarbonfooterPlugin\Plugin::get_instance();
 }
-add_action('plugins_loaded', 'carbonfooter_init');
+add_action( 'plugins_loaded', 'carbonfooter_init' );
 
 /**
  * Plugin activation hook
  */
-register_activation_hook(__FILE__, function (): void {
-	// Set activation redirect transient
-	set_transient(\CarbonfooterPlugin\Constants::TRANSIENT_ACTIVATION_REDIRECT, true, 30);
+register_activation_hook(
+	__FILE__,
+	function (): void {
+		// Set activation redirect transient
+		set_transient( \CarbonfooterPlugin\Constants::TRANSIENT_ACTIVATION_REDIRECT, true, 30 );
 
-	\CarbonfooterPlugin\Logger::info('Plugin activated, setting redirect transient');
-});
+		\CarbonfooterPlugin\Logger::info( 'Plugin activated, setting redirect transient' );
+	}
+);
