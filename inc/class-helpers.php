@@ -22,6 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class Helpers {
 
+
 	/**
 	 * Check if we're in a local development environment.
 	 *
@@ -108,7 +109,8 @@ class Helpers {
 	public static function format_file_size( $bytes, $precision = 2 ) {
 		$units = array( 'B', 'KB', 'MB', 'GB', 'TB' );
 
-		for ( $i = 0; $bytes > 1024 && $i < count( $units ) - 1; $i++ ) {
+		$units_count = count( $units );
+		for ( $i = 0; $bytes > 1024 && $i < $units_count - 1; $i++ ) {
 			$bytes /= 1024;
 		}
 
@@ -273,7 +275,7 @@ class Helpers {
 
 		// Check regular plugins
 		foreach ( $caching_plugins as $plugin_file => $plugin_name ) {
-			if ( in_array( $plugin_file, $active_plugins ) ) {
+			if ( in_array( $plugin_file, $active_plugins, true ) ) {
 				$detected_plugins[] = $plugin_name;
 			}
 		}

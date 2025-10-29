@@ -28,6 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class Database_Optimizer {
 
+
 	/**
 	 * Get comprehensive site statistics with caching.
 	 *
@@ -183,7 +184,7 @@ class Database_Optimizer {
 		$post_types = array_filter(
 			$post_types,
 			function ( $post_type ) {
-				return ! in_array( $post_type, array( 'attachment' ) );
+				return ! in_array( $post_type, array( 'attachment' ), true );
 			}
 		);
 
@@ -203,7 +204,7 @@ class Database_Optimizer {
       FROM {$wpdb->posts} p
       LEFT JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id AND pm.meta_key = '_carbon_emissions'
       WHERE p.post_status = 'publish'
-      AND p.post_type IN ($placeholders)
+      AND p.post_type IN ($placeholders) -- phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- placeholders built via array_fill and used with $wpdb->prepare
       AND pm.meta_value IS NULL
       ORDER BY p.post_type ASC, p.post_date DESC
       LIMIT %d

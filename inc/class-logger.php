@@ -30,6 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Logger {
 
 
+
 	/**
 	 * Log levels
 	 */
@@ -183,9 +184,11 @@ class Logger {
 		// Only write non-error logs when WP_DEBUG is enabled; errors always log
 		if ( function_exists( 'wp_debug_log' ) ) {
 			wp_debug_log( $formatted_message );
-		} else {
-			error_log( $formatted_message, 3, self::$log_file_path );
+			return;
 		}
+
+		// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Local file logging when wp_debug_log is unavailable
+		error_log( $formatted_message, 3, self::$log_file_path );
 	}
 
 	/**
@@ -230,10 +233,13 @@ class Logger {
 		}
 
 		if ( $lines === 0 ) {
-			return file_get_contents( self::$log_file_path );
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Reading local plugin log file
+			$contents = file_get_contents( self::$log_file_path );
+			return is_string( $contents ) ? $contents : '';
 		}
 
 		// Get last N lines
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_file -- Reading local plugin log file lines
 		$file_lines  = file( self::$log_file_path );
 		$total_lines = count( $file_lines );
 		$start_line  = max( 0, $total_lines - $lines );
