@@ -36,6 +36,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 class AdminHandler {
 
 
+
+
 	/**
 	 * Emissions handler instance
 	 *
@@ -149,7 +151,7 @@ class AdminHandler {
 		// Only load on our plugin's admin pages
 		$plugin_pages = Constants::get_admin_page_hooks();
 
-		if ( ! in_array( $hook_suffix, $plugin_pages ) ) {
+		if ( ! in_array( $hook_suffix, $plugin_pages, true ) ) {
 			return;
 		}
 
@@ -235,6 +237,11 @@ class AdminHandler {
     ';
 		wp_add_inline_style( 'wp-admin', $dashboard_css );
 	}
+	/**
+	 * Enqueue React build assets or development fallbacks.
+	 *
+	 * @return void
+	 */
 	private function enqueue_react_assets(): void {
 		$asset_file_path = CARBONFOOTER_PLUGIN_DIR . 'build/index.asset.php';
 
@@ -572,13 +579,9 @@ class AdminHandler {
 	 * @return void
 	 */
 	public function handle_activation_redirect_fallback(): void {
-		$current_page_raw = isset( $_GET['page'] ) ? $_GET['page'] : '';
-		if ( $current_page_raw !== '' && function_exists( 'wp_unslash' ) ) {
-			$current_page_raw = \wp_unslash( $current_page_raw );
-		}
-		$current_page = $current_page_raw !== '' ? sanitize_text_field( $current_page_raw ) : '';
+		$current_page = isset( $_GET['page'] ) ? sanitize_text_field( \wp_unslash( $_GET['page'] ) ) : '';
 
-		if ( in_array( $current_page, array( 'carbonfooter', 'carbonfooter-settings' ) ) ) {
+		if ( in_array( $current_page, array( 'carbonfooter', 'carbonfooter-settings' ), true ) ) {
 			return;
 		}
 
@@ -604,16 +607,34 @@ class AdminHandler {
 	}
 
 	/**
-	 * Render admin pages
+	 * Render the results page view.
+	 *
+	 * @return void
 	 */
 	public function render_results_page(): void {
 		include CARBONFOOTER_PLUGIN_DIR . 'views/results-page.php';
 	}
 
+	/**
+	 * Render the settings page view.
+	 *
+	 * Outputs the plugin's settings page template with configuration options
+	 * for appearance, display settings, and privacy controls.
+	 *
+	 * @return void
+	 */
 	public function render_settings_page(): void {
 		include CARBONFOOTER_PLUGIN_DIR . 'views/settings-page.php';
 	}
 
+	/**
+	 * Render the dashboard widget view.
+	 *
+	 * Outputs the Carbon Emissions Overview dashboard widget with site-wide
+	 * statistics, average emissions, and top pages by emissions.
+	 *
+	 * @return void
+	 */
 	public function render_dashboard_widget(): void {
 		// Get emissions data to pass to the view
 		$average_emissions = $this->emissions_handler->get_average_emissions();
@@ -623,15 +644,19 @@ class AdminHandler {
 		// Get top 10 highest emission pages
 		global $wpdb;
 		$high_emission_pages = $wpdb->get_results(
-			"
-        SELECT p.ID, p.post_title, pm.meta_value as emissions
-        FROM {$wpdb->posts} p
-        JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id
-        WHERE pm.meta_key = '_carbon_emissions'
-        AND pm.meta_value REGEXP '^[0-9]+(.[0-9]+)?$'
-        ORDER BY CAST(pm.meta_value AS DECIMAL(10,2)) DESC
-        LIMIT 10
-    "
+			$wpdb->prepare(
+				"
+		        SELECT p.ID, p.post_title, pm.meta_value as emissions
+		        FROM {$wpdb->posts} p
+		        JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id
+		        WHERE pm.meta_key = %s
+		        AND pm.meta_value REGEXP '^[0-9]+(\.[0-9]+)?$'
+		        ORDER BY CAST(pm.meta_value AS DECIMAL(10,2)) DESC
+		        LIMIT %d
+		    ",
+				Constants::META_EMISSIONS,
+				10
+			)
 		);
 
 		include CARBONFOOTER_PLUGIN_DIR . 'views/dashboard-widget.php';

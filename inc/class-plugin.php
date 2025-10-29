@@ -36,6 +36,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Plugin {
 
 
+
 	/**
 	 * Single instance of the plugin
 	 *
@@ -183,7 +184,7 @@ class Plugin {
 		$current_page = isset( $_GET['page'] ) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : '';
 		Logger::log( "Current page: $current_page" );
 
-		if ( ! in_array( $current_page, array( 'carbonfooter', 'carbonfooter-settings' ) ) ) {
+		if ( ! in_array( $current_page, array( 'carbonfooter', 'carbonfooter-settings' ), true ) ) {
 			Logger::log( 'Redirecting to settings page' );
 			wp_safe_redirect( admin_url( 'admin.php?page=carbonfooter-settings' ) );
 			exit;

@@ -34,6 +34,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 class AjaxHandler {
 
 
+
+
 	/**
 	 * Emissions handler instance
 	 *
@@ -309,7 +311,7 @@ class AjaxHandler {
 			$this->send_success_response(
 				array(
 					'message'       => sprintf(
-					/* translators: %d is the number of deleted data entries. */
+						/* translators: %d is the number of deleted data entries. */
 						__( 'Successfully cleared %d data entries and cache. All emissions data has been removed.', 'carbonfooter' ),
 						$deleted_count
 					),
@@ -380,7 +382,7 @@ class AjaxHandler {
 					'data'     => $export_data,
 					'filename' => $filename,
 					'message'  => sprintf(
-					/* translators: %d is the number of exported posts. */
+						/* translators: %d is the number of exported posts. */
 						__( 'Successfully exported %d posts with historical emissions data.', 'carbonfooter' ),
 						count( $export_data )
 					),
@@ -418,27 +420,31 @@ class AjaxHandler {
 	 * Supported types: 'int', 'string', 'hex_color'. Returns default when
 	 * key is missing or fails validation.
 	 *
-	 * @param string $key     Parameter key
-	 * @param string $type    Parameter type (int|string|hex_color)
-	 * @param mixed  $default Default value
+	 * Note: Nonce/cap checks are enforced by calling endpoints via
+	 * {@see verify_nonce_and_permissions()}. This helper only reads values.
+	 *
+	 * @phpcsSuppress WordPress.Security.NonceVerification.Missing
+	 *
+	 * @param string $key           Parameter key
+	 * @param string $type          Parameter type (int|string|hex_color)
+	 * @param mixed  $default_value Default value
 	 * @return mixed Sanitized value or default
 	 */
-	private function get_sanitized_post_parameter( string $key, string $type = 'string', $default = null ) {
+	private function get_sanitized_post_parameter( string $key, string $type = 'string', $default_value = null ) {
+	  // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in calling endpoints
 		if ( ! isset( $_POST[ $key ] ) ) {
-			return $default;
+			return $default_value;
 		}
 
-		$value = $_POST[ $key ];
-		if ( function_exists( 'wp_unslash' ) ) {
-			$value = \wp_unslash( $value );
-		}
+	  // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash -- Nonce verified in calling endpoints; value is unslashed and sanitized below
+		$value = \wp_unslash( $_POST[ $key ] );
 
 		switch ( $type ) {
 			case 'int':
 				return intval( $value );
 
 			case 'hex_color':
-				return sanitize_hex_color( $value ) ?: $default;
+				return sanitize_hex_color( $value ) ?: $default_value;
 
 			case 'string':
 			default:

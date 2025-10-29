@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Cache utility for CarbonFooter.
+ *
+ * @package CarbonFooter
+ */
+
 namespace CarbonfooterPlugin;
 
 // Exit if accessed directly
@@ -18,6 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * - Clear coarse-grained caches for stats and listings
  */
 class Cache {
+
 
 	/**
 	 * Structured per-post cache payload format
