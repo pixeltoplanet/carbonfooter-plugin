@@ -25,9 +25,13 @@ class AjaxHandlerTest extends TestCase
         // WP helpers used inside handler
         when('__')->alias(function ($text) { return $text; });
         when('wp_json_encode')->alias(function ($data) { return json_encode($data); });
+        when('wp_unslash')->alias(function ($value) { return $value; });
+        when('sanitize_text_field')->alias(function ($str) { return $str; });
+        when('absint')->alias(function ($val) { return abs((int)$val); });
         // Error helpers
         when('status_header')->justReturn(null);
         when('wp_send_json_error')->justReturn(null);
+        when('add_action')->justReturn(true);
     }
 
     protected function tearDown(): void
@@ -118,5 +122,66 @@ class AjaxHandlerTest extends TestCase
         $this->assertEquals(50.0, $captured['emissions']);
         // Ensure lock cleared
         $this->assertFalse($locks['carbonfooter_processing_123'] ?? false);
+    }
+
+    /**
+     * Test handler instance creation
+     */
+    public function test_handler_instantiates(): void
+    {
+        $fakeEmissions = $this->createMock(Emissions::class);
+        $fakeCache = $this->createMock(Cache::class);
+        
+        $handler = new AjaxHandler($fakeEmissions, $fakeCache);
+        
+        $this->assertInstanceOf(AjaxHandler::class, $handler);
+    }
+
+    /**
+     * Test register_hooks runs
+     */
+    public function test_register_hooks_runs(): void
+    {
+        $fakeEmissions = $this->createMock(Emissions::class);
+        $fakeCache = $this->createMock(Cache::class);
+        
+        $handler = new AjaxHandler($fakeEmissions, $fakeCache);
+        $handler->register_hooks();
+        
+        // Should complete without error
+        $this->assertTrue(true);
+    }
+
+    /**
+     * Test handle_get_stats_request returns stats
+     */
+    public function test_handle_get_stats_request_returns_data(): void
+    {
+        when('check_ajax_referer')->justReturn(true);
+        when('current_user_can')->justReturn(true);
+        when('get_option')->justReturn(false);
+        when('wp_cache_get')->justReturn(false);
+        when('get_transient')->justReturn(false);
+        
+        $captured = null;
+        expect('wp_send_json_success')->once()->andReturnUsing(function ($data) use (&$captured) {
+            $captured = $data;
+            return null;
+        });
+        
+        $fakeEmissions = $this->createMock(Emissions::class);
+        $fakeEmissions->method('get_site_stats')->willReturn([
+            'total_measured' => 10,
+            'average_emissions' => 2.5,
+        ]);
+        
+        $fakeCache = $this->createMock(Cache::class);
+        
+        $_POST['nonce'] = 'ok';
+        
+        $handler = new AjaxHandler($fakeEmissions, $fakeCache);
+        $handler->handle_get_stats_request();
+        
+        $this->assertIsArray($captured);
     }
 }

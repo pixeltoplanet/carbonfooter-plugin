@@ -9,6 +9,10 @@
     "format": "wp-scripts format",
     "lint:css": "wp-scripts lint-style",
     "lint:js": "wp-scripts lint-js",
+    "test": "wp-scripts test-unit-js",
+    "test:watch": "wp-scripts test-unit-js --watch",
+    "test:coverage": "wp-scripts test-unit-js --coverage",
+    "test:update": "wp-scripts test-unit-js --updateSnapshot",
     "packages-update": "wp-scripts packages-update",
     "version-up": "bun scripts/bump-version.js",
     "release": "bun run build && bun scripts/release.js",
@@ -19,7 +23,11 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.0.5",
+    "@testing-library/jest-dom": "^6.4.0",
+    "@testing-library/react": "^14.2.0",
+    "@testing-library/user-event": "^14.5.0",
     "@types/bun": "latest",
+    "@wordpress/jest-console": "^7.0.0",
     "@wordpress/scripts": "^26.0.0"
   },
   "dependencies": {

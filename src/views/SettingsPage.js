@@ -62,8 +62,6 @@ const SettingsPage = () => {
 
 				const data = await response.json();
 				if (data.success) {
-					console.log("Homepage measurement completed:", data.data);
-					console.log("Emissions value:", data.data.emissions);
 					setMeasurementStatus({
 						type: "success",
 						message: `Homepage measurement completed: ${data.data.formatted}`,
@@ -123,7 +121,6 @@ const SettingsPage = () => {
 			if (data.success) {
 				// Check if homepage has emissions data
 				const homepageEmissions = data.data.homepage_emissions;
-				console.log("Homepage emissions check:", homepageEmissions);
 				setHomepageEmissions(homepageEmissions);
 			}
 		} catch (error) {

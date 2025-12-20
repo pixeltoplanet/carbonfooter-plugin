@@ -13,7 +13,9 @@
 		"phpcompatibility/phpcompatibility-wp": "^2.1",
 		"dealerdirect/phpcodesniffer-composer-installer": "^1.0",
 		"phpunit/phpunit": "^9.6",
-		"brain/monkey": "^2.6"
+		"brain/monkey": "^2.6",
+		"yoast/phpunit-polyfills": "^4.0",
+		"wp-phpunit/wp-phpunit": "^6.9"
 	},
 	"scripts": {
 		"phpcs": "phpcs",
@@ -21,7 +23,14 @@
 		"lint": "phpcs --standard=.phpcs.xml.dist",
 		"fix": "phpcbf --standard=.phpcs.xml.dist",
 		"fix-file": "phpcbf --standard=.phpcs.xml.dist",
-		"test": "vendor/bin/phpunit --configuration=.dev/phpunit.xml.dist"
+		"test": "vendor/bin/phpunit --configuration=phpunit.xml.dist",
+		"test:unit": "vendor/bin/phpunit --configuration=phpunit.xml.dist",
+		"test:integration": "vendor/bin/phpunit --configuration=phpunit-integration.xml.dist",
+		"test:all": [
+			"@test:unit",
+			"@test:integration"
+		],
+		"setup-wp-tests": "bin/install-wp-tests.sh"
 	},
 	"config": {
 		"allow-plugins": {
