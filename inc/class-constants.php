@@ -28,7 +28,7 @@ final class Constants {
 	/**
 	 * Plugin version
 	 */
-	public const VERSION = '0.19.0';
+	public const VERSION = '0.20.0';
 
 	/**
 	 * Plugin text domain
@@ -139,7 +139,7 @@ final class Constants {
 	/**
 	 * Widget styles
 	 */
-	public const WIDGET_STYLES = array( 'minimal', 'full', 'sticker' );
+	public const WIDGET_STYLES = array( 'minimal', 'full', 'sticker', 'label' );
 
 	/**
 	 * Display settings
