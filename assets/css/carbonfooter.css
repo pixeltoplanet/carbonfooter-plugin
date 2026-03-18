@@ -32,11 +32,11 @@
 }
 
 /* Hide trees column when container narrower than container width */
-@container cf-full (max-width: 1280px) {
+/* @container cf-full (max-width: 1280px) {
 	.cf-full__col.trees-offset {
 		display: none;
 	}
-}
+} */
 
 /* Switch to minimal layout when container gets smaller */
 @container cf-full (max-width: 1024px) {
@@ -57,7 +57,7 @@
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: start;
-	gap: 24px;
+	gap: 4px;
 	align-items: center;
 	height: 100%;
 	max-width: var(--cf-container-width);
@@ -69,7 +69,8 @@
 	align-items: center;
 	height: 100%;
 	gap: 12px;
-	width: 220px;
+	/* width: 220px; */
+	width: calc(20% - 4px);
 	text-wrap: balance;
 }
 
