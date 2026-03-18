@@ -4,7 +4,7 @@ Tags: carbon footprint, sustainability, emissions, eco-friendly, sustainable web
 Requires at least: 5.6
 Tested up to: 6.8
 Requires PHP: 8.0
-Stable tag: 0.19.0
+Stable tag: 0.20.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -113,6 +113,10 @@ Yes, the plugin is GDPR compliant. It does not collect or store any personal dat
 3-Settings page. screenshot-3.png
 
 == Changelog ==
+
+= 0.20.0 =
+* New footer designs
+
 
 = 0.19.0 =
 * Add “External services” section and expand Privacy with data sent and opt‑out controls

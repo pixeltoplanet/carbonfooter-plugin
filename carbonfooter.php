@@ -3,7 +3,7 @@
 /**
  * Plugin Name: Carbonfooter
  * Description: Measure the carbon emissions of your website right inside WordPress
- * Version: 0.19.0
+ * Version: 0.20.0
  * Requires PHP: 8.0
  * Requires at least: 5.6
  * Tested up to: 6.8
