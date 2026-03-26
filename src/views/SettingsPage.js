@@ -416,7 +416,7 @@ const SettingsPage = () => {
 											{
 												label: __("Label", "carbonfooter"),
 												description: __(
-													'Label: subtle badge. Shortcode only — use [carbonfooter style="label"] (not available for automatic display).',
+													'Label: subtle badge. Uses your selected style and is shown with [carbonfooter] (style="label" is not required).',
 													"carbonfooter",
 												),
 												value: "label",
@@ -550,9 +550,7 @@ const SettingsPage = () => {
 									borderRadius: "3px",
 								}}
 							>
-								{widgetStyle === "label"
-									? '[carbonfooter style="label"]'
-									: "[carbonfooter]"}
+								"[carbonfooter]"
 							</code>
 						</>
 					)}

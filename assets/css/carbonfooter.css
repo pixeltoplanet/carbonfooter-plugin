@@ -23,7 +23,7 @@
 .cf-full__header {
 	max-width: var(--cf-container-width);
 	margin: 0 auto;
-	margin-bottom: 48px;
+	margin-bottom: 20px;
 }
 
 .cf-full__intro {

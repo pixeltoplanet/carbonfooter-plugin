@@ -128,6 +128,39 @@ class Plugin {
 		// Plugin-level hooks
 		add_action( 'admin_init', array( $this, 'handle_database_setup' ) );
 		add_action( 'admin_init', array( $this, 'handle_activation_redirect' ) );
+		// Translation override sanitization runs directly in carbonfooter.php (before any hook),
+		// so incomplete site-level *.l10n.php packs are removed before WordPress loads translations.
+		// We only need the admin notice hook here.
+		add_action( 'admin_notices', array( $this, 'maybe_show_translation_override_notice' ) );
+	}
+
+	/**
+	 * Show an admin notice when bundled translations were synced to the override directory.
+	 *
+	 * @return void
+	 */
+	public function maybe_show_translation_override_notice(): void {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+
+		$locales = get_transient( 'carbonfooter_translations_synced' );
+		if ( ! is_array( $locales ) || empty( $locales ) ) {
+			return;
+		}
+
+		// Show once.
+		delete_transient( 'carbonfooter_translations_synced' );
+
+		echo '<div class="notice notice-success is-dismissible carbonfooter-translation-sync-notice"><p>'
+			. esc_html(
+				sprintf(
+					/* translators: %s: plugin version number */
+					__( 'Carbonfooter translations updated to v%s.', 'carbonfooter' ),
+					CARBONFOOTER_VERSION
+				)
+			)
+			. '</p></div>';
 	}
 
 	/**

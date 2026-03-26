@@ -304,8 +304,10 @@ class Shortcodes
 	/**
 	 * Render the carbonfooter shortcode based on widget style setting or shortcode attribute.
 	 *
-	 * Supports [carbonfooter style="minimal|full|sticker|label"]. The label style is
-	 * shortcode-only and not available for auto injection.
+	 * Supports [carbonfooter style="minimal|full|sticker|label"].
+	 *
+	 * When no `style` attribute is provided, the widget style is taken from
+	 * the saved settings (`carbonfooter_widget_style`).
 	 *
 	 * @param array $atts Shortcode attributes.
 	 * @return string The shortcode output.
@@ -317,11 +319,6 @@ class Shortcodes
 		$widget_style = ! empty($atts['style']) && in_array($atts['style'], $valid_styles, true)
 			? $atts['style']
 			: get_option('carbonfooter_widget_style', 'minimal');
-
-		// Label is shortcode-only: when called from auto injection (no atts), never use label.
-		if (empty($atts['style']) && 'label' === $widget_style) {
-			$widget_style = 'minimal';
-		}
 
 		switch ($widget_style) {
 			case 'label':
@@ -556,7 +553,7 @@ class Shortcodes
 										__('<span class="">%1$s</span><span class="cf-full__block cf-full__value"> = %2$s %3$s</span>', 'carbonfooter'),
 										esc_html__('this page', 'carbonfooter'),
 										esc_html($formatted_page_size),
-										esc_html('in size', 'carbonfooter')
+										esc_html__('in size', 'carbonfooter')
 									)
 								);
 								?></p>
