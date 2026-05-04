@@ -413,6 +413,14 @@ const SettingsPage = () => {
 												),
 												value: "sticker",
 											},
+											{
+												label: __("Label", "carbonfooter"),
+												description: __(
+													'Label: subtle badge. Uses your selected style and is shown with [carbonfooter] (style="label" is not required).',
+													"carbonfooter",
+												),
+												value: "label",
+											},
 										]}
 									/>
 								</PanelBody>
@@ -542,7 +550,7 @@ const SettingsPage = () => {
 									borderRadius: "3px",
 								}}
 							>
-								[carbonfooter]
+								"[carbonfooter]"
 							</code>
 						</>
 					)}

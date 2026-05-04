@@ -357,7 +357,7 @@ class RestApiHandler {
 			return true; // Allow empty values
 		}
 
-		$valid_styles = array( 'minimal', 'full', 'sticker' );
+		$valid_styles = array( 'minimal', 'full', 'sticker', 'label' );
 
 		if ( ! in_array( $value, $valid_styles, true ) ) {
 			return new \WP_Error(
