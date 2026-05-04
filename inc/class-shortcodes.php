@@ -578,7 +578,7 @@ class Shortcodes {
 						echo wp_kses_post(
 							sprintf(
 								/* translators: %s: amount in km car drive per year based on carbon emissions */
-								__( '= <strong>%s km.</strong></br>drive per year.', 'carbonfooter' ),
+								__( '= <strong>%s km.</strong><br>drive per year.', 'carbonfooter' ),
 								esc_html( $driving_distance )
 							)
 						);
@@ -602,7 +602,7 @@ class Shortcodes {
 						echo wp_kses_post(
 							sprintf(
 								/* translators: %s: trees needed to offset emissions per year */
-								__( 'and <strong>%s trees</strong></br>offset per year.', 'carbonfooter' ),
+								__( 'and <strong>%s trees</strong><br>offset per year.', 'carbonfooter' ),
 								esc_html( $trees_needed )
 							)
 						);
