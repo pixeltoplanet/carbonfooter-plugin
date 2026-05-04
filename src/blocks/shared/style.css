@@ -224,8 +224,8 @@
 	position: relative;
 	z-index: 1;
 	text-align: center;
-	padding: 80px;
-	margin-left: 20px;
+	padding: 25%;
+	color: #fff;
 }
 
 .cf-block-sticker__value {
@@ -236,9 +236,10 @@
    Label Block
    ======================================== */
 .cf-block-label {
-	display: inline-block;
+	display: block;
 	font-size: 14px;
 	line-height: 1.4;
+	text-align: center;
 }
 
 .cf-block-label__text {
