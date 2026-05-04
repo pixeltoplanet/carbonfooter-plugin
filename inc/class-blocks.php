@@ -59,6 +59,15 @@ class Blocks {
 	 * @return void
 	 */
 	public function register_blocks(): void {
+		// Register the shared front-end stylesheet for all blocks.
+		$style_path = CARBONFOOTER_PLUGIN_DIR . 'assets/css/carbonfooter-blocks.css';
+		wp_register_style(
+			'carbonfooter-blocks',
+			CARBONFOOTER_PLUGIN_URL . 'assets/css/carbonfooter-blocks.css',
+			array(),
+			file_exists( $style_path ) ? filemtime( $style_path ) : CARBONFOOTER_VERSION
+		);
+
 		foreach ( self::BLOCK_MAP as $block_dir => $render_method ) {
 			$block_path = CARBONFOOTER_PLUGIN_DIR . 'build/blocks/' . $block_dir;
 
@@ -75,6 +84,7 @@ class Blocks {
 				$block_path,
 				array(
 					'render_callback' => array( BlockRenderer::class, $render_method ),
+					'style'           => 'carbonfooter-blocks',
 				)
 			);
 
