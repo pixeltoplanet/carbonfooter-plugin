@@ -1,0 +1,19 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "carbonfooter/green-hosting",
+	"version": "0.19.0",
+	"title": "Carbonfooter Green Hosting",
+	"category": "carbonfooter",
+	"icon": "admin-site-alt3",
+	"description": "Display whether the site uses green energy hosting.",
+	"textdomain": "carbonfooter",
+	"editorScript": "file:./index.js",
+	"keywords": ["carbon", "green", "hosting", "energy", "sustainability"],
+	"supports": {
+		"html": false,
+		"spacing": { "margin": true, "padding": true },
+		"color": { "text": true, "background": true },
+		"border": { "radius": true }
+	}
+}

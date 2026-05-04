@@ -1,0 +1,19 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "carbonfooter/trees",
+	"version": "0.19.0",
+	"title": "Carbonfooter Trees",
+	"category": "carbonfooter",
+	"icon": "palmtree",
+	"description": "Display trees needed to offset annual emissions for the current page.",
+	"textdomain": "carbonfooter",
+	"editorScript": "file:./index.js",
+	"keywords": ["carbon", "trees", "offset", "sustainability"],
+	"supports": {
+		"html": false,
+		"spacing": { "margin": true, "padding": true },
+		"color": { "text": true, "background": true },
+		"border": { "radius": true }
+	}
+}

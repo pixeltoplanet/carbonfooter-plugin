@@ -279,14 +279,14 @@ msgstr "per bezoek"
 #. translators: %s: amount in km car drive per year based on carbon emissions
 #: inc/class-shortcodes.php:549
 #, php-format
-msgid "= <strong>%s km.</strong></br>drive per year."
-msgstr "= <strong>%s km.</strong></br>autorijden per jaar."
+msgid "= <strong>%s km.</strong><br>drive per year."
+msgstr "= <strong>%s km.</strong><br>autorijden per jaar."
 
 #. translators: %s: trees needed to offset emissions per year
 #: inc/class-shortcodes.php:571
 #, php-format
-msgid "and <strong>%s trees</strong></br>offset per year."
-msgstr "en <strong>%s bomen</strong></br>compensatie per jaar."
+msgid "and <strong>%s trees</strong><br>offset per year."
+msgstr "en <strong>%s bomen</strong><br>compensatie per jaar."
 
 #: inc/class-shortcodes.php:586 src/components/WidgetPreview.js:143
 msgid "Want to learn more?"
