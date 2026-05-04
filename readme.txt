@@ -115,8 +115,9 @@ Yes, the plugin is GDPR compliant. It does not collect or store any personal dat
 == Changelog ==
 
 = 0.20.0 =
-* New footer designs
-
+* Added new footer designs and improved shortcode/preview consistency.
+* Improved Dutch/English translation handling to avoid mixed-language output.
+* Improved release packaging so update zips include the latest translation files.
 
 = 0.19.0 =
 * Add “External services” section and expand Privacy with data sent and opt‑out controls
