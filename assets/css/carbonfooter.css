@@ -93,7 +93,6 @@
 	margin-bottom: 12px;
 	width: auto;
 	height: 40px;
-	color: var(--cf-color-foreground);
 
 	@media (min-width: 768px) {
 		height: 80px;

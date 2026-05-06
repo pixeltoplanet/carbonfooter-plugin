@@ -64,7 +64,7 @@ class Blocks {
 		wp_register_style(
 			'carbonfooter-blocks',
 			CARBONFOOTER_PLUGIN_URL . 'assets/css/carbonfooter-blocks.css',
-			array(),
+			array( 'carbonfooter-frontend' ),
 			file_exists( $style_path ) ? filemtime( $style_path ) : CARBONFOOTER_VERSION
 		);
 
