@@ -49,7 +49,7 @@ class Plugin {
 	 *
 	 * @var string
 	 */
-	public const VERSION = '0.20.0';
+	public const VERSION = '0.21.0';
 
 	/**
 	 * Core components
@@ -62,6 +62,7 @@ class Plugin {
 	private AjaxHandler $ajax_handler;
 	private RestApiHandler $rest_api_handler;
 	private HooksManager $hooks_manager;
+	private Blocks $blocks;
 
 	/**
 	 * Retrieve the singleton instance.
@@ -111,6 +112,9 @@ class Plugin {
 		$this->ajax_handler     = new AjaxHandler( $this->emissions_handler, $this->cache_manager );
 		$this->rest_api_handler = new RestApiHandler();
 		$this->hooks_manager    = new HooksManager( $this->get_all_handlers() );
+
+		// Gutenberg blocks
+		$this->blocks = new Blocks();
 	}
 
 	/**
@@ -124,6 +128,9 @@ class Plugin {
 	 */
 	private function setup_hooks(): void {
 		$this->hooks_manager->register_all_hooks();
+
+		// Gutenberg block registration
+		$this->blocks->register_hooks();
 
 		// Plugin-level hooks
 		add_action( 'admin_init', array( $this, 'handle_database_setup' ) );
