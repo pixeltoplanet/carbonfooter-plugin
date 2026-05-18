@@ -4,7 +4,7 @@ Tags: carbon footprint, sustainability, emissions, eco-friendly, sustainable web
 Requires at least: 5.6
 Tested up to: 6.8
 Requires PHP: 8.0
-Stable tag: 0.20.0
+Stable tag: 0.21.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -113,6 +113,13 @@ Yes, the plugin is GDPR compliant. It does not collect or store any personal dat
 3-Settings page. screenshot-3.png
 
 == Changelog ==
+
+= 0.21.0 =
+* Add native Gutenberg block support for Full Site Editing (FSE).
+* Introduces 9 blocks: carbonfooter/minimal, emissions, trees, driving, pageweight, green-hosting, full, sticker, label.
+* All blocks use server-side rendering via a new BlockRenderer class.
+* Centralises SVG icons into a shared SvgIcons class.
+* Adds a custom carbonfooter block category, multi-entry webpack config, and updated Dutch translations.
 
 = 0.20.0 =
 * Added new footer designs and improved shortcode/preview consistency.
