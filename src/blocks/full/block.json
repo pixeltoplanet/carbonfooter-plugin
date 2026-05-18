@@ -1,0 +1,20 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "carbonfooter/full",
+	"version": "0.19.0",
+	"title": "Carbonfooter Full",
+	"category": "carbonfooter",
+	"icon": "cloud",
+	"description": "A composable container block for building custom carbon emissions layouts using stat blocks.",
+	"textdomain": "carbonfooter",
+	"editorScript": "file:./index.js",
+	"keywords": ["carbon", "emissions", "full", "dashboard", "sustainability"],
+	"supports": {
+		"html": false,
+		"spacing": { "margin": true, "padding": true },
+		"color": { "text": true, "background": true },
+		"border": { "radius": true },
+		"typography": { "fontSize": true, "fontFamily": true }
+	}
+}

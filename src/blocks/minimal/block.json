@@ -1,0 +1,20 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "carbonfooter/minimal",
+	"version": "0.19.0",
+	"title": "Carbonfooter Minimal",
+	"category": "carbonfooter",
+	"icon": "cloud",
+	"description": "A lightweight single-line carbon emissions widget.",
+	"textdomain": "carbonfooter",
+	"editorScript": "file:./index.js",
+	"keywords": ["carbon", "emissions", "minimal", "footer", "sustainability"],
+	"supports": {
+		"html": false,
+		"spacing": { "margin": true, "padding": true },
+		"color": { "text": true, "background": true },
+		"border": { "radius": true },
+		"typography": { "fontSize": true, "fontFamily": true }
+	}
+}
