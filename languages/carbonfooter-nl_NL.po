@@ -1110,8 +1110,50 @@ msgstr "Gemiddelde paginagrootte"
 msgid "Total page size"
 msgstr "Totale paginagrootte"
 
-#~ msgid "No!"
-#~ msgstr "Nee!"
+#: inc/class-block-renderer.php:107
+#, php-format
+msgid "This page produced %1$s per page view. Want to learn more? %2$s"
+msgstr "Deze pagina produceerde %1$s per paginaweergave. Meer weten? %2$s"
+
+#: inc/class-block-renderer.php:166
+#, php-format
+msgid "and <strong>%s trees</strong><br>offset per year."
+msgstr "en <strong>%s bomen</strong><br>compensatie per jaar."
+
+#: inc/class-block-renderer.php:196
+#, php-format
+msgid "= <strong>%s km.</strong><br>drive per year."
+msgstr "= <strong>%s km.</strong><br>autorijden per jaar."
+
+#: inc/class-block-renderer.php:222
+msgid "pagesize"
+msgstr "paginagrootte"
+
+#: inc/class-block-renderer.php:243
+msgid "green energy"
+msgstr "op groene energie"
+
+#: inc/class-block-renderer.php:244
+msgid "not green energy"
+msgstr "niet op groene energie"
+
+#: inc/class-block-renderer.php:243
+msgid "No!"
+msgstr "Nee!"
+
+#: inc/class-block-renderer.php:265
+msgid "Want to learn more?"
+msgstr "Meer weten?"
+
+#: inc/class-block-renderer.php:308
+#, php-format
+msgid "This page produced %1$s per page view."
+msgstr "Deze pagina produceerde %1$s per paginaweergave."
+
+#: inc/class-block-renderer.php:338
+#, php-format
+msgid "%s g CO<sub>2</sub> per visit"
+msgstr "%s g CO<sub>2</sub> per bezoek"
 
 #~ msgid "Measure more?"
 #~ msgstr "Meer meten?"
