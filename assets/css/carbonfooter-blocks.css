@@ -201,3 +201,20 @@
 .cf-block-label__text {
 	display: inline;
 }
+
+/* ========================================
+   Icon color inheritance
+   Gutenberg applies textColor as `color` on the wrapper.
+   `.cf-full__icon` in carbonfooter.css hardcodes
+   `color: var(--cf-color-foreground)`, which breaks that
+   cascade inside blocks. Reset it to `inherit` so the
+   editor's text color choice reaches the SVG fill.
+   ======================================== */
+.cf-block-stat svg,
+.cf-block-minimal svg,
+.cf-block-full svg,
+.cf-block-sticker svg,
+.cf-block-label svg {
+	color: inherit;
+	fill: currentColor;
+}
