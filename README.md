@@ -15,6 +15,11 @@ Carbonfooter helps you understand and showcase the carbon emissions of your webs
 - **Automatic Refresh**: Emissions data is refreshed automatically (weekly by default)
 - **Admin Columns**: Displays CO₂ emissions for each post/page in the admin list view
 - **Flexible Display**: One shortcode with multiple styles (minimal, sticker, full) configurable in Settings
+- **Gutenberg Blocks (FSE)**: 9 native blocks in the "Carbonfooter" block category, compatible with Full Site Editing themes
+- **Block Patterns**: ready-made footer and stats layouts in the "Carbonfooter" pattern category
+- **Block Bindings**: the `carbonfooter/stats` source shows Carbonfooter values in core paragraphs, headings and buttons
+- **Editor Sidebar Panel**: page stats and a "Measure now" button in the block editor document sidebar
+- **Site Health**: checks for data collection, delayed WP-Cron measurements and API connectivity, plus a Site Health Info section
 
 ## Installation
 
@@ -24,7 +29,7 @@ Carbonfooter helps you understand and showcase the carbon emissions of your webs
 
 ## Requirements
 
-- WordPress 5.6 or higher
+- WordPress 6.6 or higher (tested up to 7.1)
 - PHP 8.0 or higher
 
 ## Configuration
@@ -58,6 +63,62 @@ You can add the shortcodes to your theme templates using WordPress's `do_shortco
 ```php
 <?php echo do_shortcode('[carbonfooter]'); ?>
 ```
+
+### Gutenberg Blocks
+
+The plugin registers 9 native Gutenberg blocks under the **"Carbonfooter"** block category, compatible with Full Site Editing (FSE) themes. All blocks use server-side rendering so emissions data is always up to date.
+
+Find them by searching "Carbonfooter" in the block inserter, or browse the dedicated category.
+
+| Block | Description |
+|---|---|
+| `carbonfooter/minimal` | A lightweight single-line carbon emissions widget |
+| `carbonfooter/sticker` | A compact badge-style carbon emissions sticker |
+| `carbonfooter/full` | A composable container for building custom layouts using the stat blocks below |
+| `carbonfooter/emissions` | Displays CO₂ emissions per visit for the current page |
+| `carbonfooter/trees` | Displays trees needed to offset annual emissions for the current page |
+| `carbonfooter/driving` | Displays equivalent driving distance from annual emissions for the current page |
+| `carbonfooter/pageweight` | Displays the page weight (transfer size) for the current page |
+| `carbonfooter/green-hosting` | Displays whether the site uses green energy hosting |
+| `carbonfooter/label` | A minimal inline carbon emissions label |
+
+All blocks support color, spacing, border-radius, and typography controls via the block editor sidebar.
+
+### Block Patterns
+
+Patterns are registered in the "Carbonfooter" pattern category (`inc/class-block-patterns.php`):
+
+| Pattern | Description |
+|---|---|
+| `carbonfooter/footer-bar` | Full-width bar with a short note and the emissions label |
+| `carbonfooter/footer-stats` | The `full` block with all five stat blocks |
+| `carbonfooter/footer-sticker` | Sticker aligned to the right |
+| `carbonfooter/bound-stats` | Three columns of core headings bound to Carbonfooter data |
+
+Footer patterns declare `blockTypes: core/template-part/footer`, so the Site Editor suggests them when editing a footer.
+
+### Block Bindings
+
+The `carbonfooter/stats` bindings source (WordPress 6.5+) resolves a value for the current post (via `postId` block context, or the queried object):
+
+```html
+<!-- wp:heading {"metadata":{"bindings":{"content":{"source":"carbonfooter/stats","args":{"key":"emissions"}}}}} -->
+<h2 class="wp-block-heading"></h2>
+<!-- /wp:heading -->
+```
+
+Keys: `emissions`, `page_size`, `trees`, `driving`, `green_hosting`, `last_measured`. In the editor, the fields are also listed in the block's Attributes panel.
+
+### Editor Sidebar Panel and REST API
+
+The document sidebar panel (`src/editor/`) uses two REST endpoints, both requiring `edit_post` for the given post:
+
+- `GET /wp-json/carbonfooter/v1/posts/<id>/stats`
+- `POST /wp-json/carbonfooter/v1/posts/<id>/measure` (published, public posts only)
+
+### Site Health
+
+`inc/class-site-health.php` adds three tests (data collection, overdue `carbonfooter_process_emissions` cron events, API reachability) and a "Carbonfooter" section on the Site Health Info tab.
 
 ## Performance & Caching
 

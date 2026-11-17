@@ -135,6 +135,7 @@ function main() {
 		"Thumbs.db",
 		"*.tmp",
 		"*.bak",
+		"*~",
 		".dev",
 		".cursor",
 		"tests/",

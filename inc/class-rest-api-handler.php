@@ -66,6 +66,136 @@ class RestApiHandler {
 	 */
 	public function register_rest_routes(): void {
 		$this->register_settings_routes();
+		$this->register_post_stats_routes();
+	}
+
+	/**
+	 * Register per-post stats routes used by the block editor sidebar panel.
+	 *
+	 * Routes:
+	 * - GET  `carbonfooter/v1/posts/<id>/stats`    Current stats for a post
+	 * - POST `carbonfooter/v1/posts/<id>/measure`  Measure the post now
+	 *
+	 * Security:
+	 * - Both routes require `edit_post` for the given post.
+	 *
+	 * @return void
+	 */
+	private function register_post_stats_routes(): void {
+		$id_arg = array(
+			'id' => array(
+				'type'              => 'integer',
+				'required'          => true,
+				'sanitize_callback' => 'absint',
+			),
+		);
+
+		register_rest_route(
+			self::API_NAMESPACE,
+			'/posts/(?P<id>\\d+)/stats',
+			array(
+				'methods'             => 'GET',
+				'callback'            => array( $this, 'handle_get_post_stats_request' ),
+				'permission_callback' => array( $this, 'check_edit_post_permission' ),
+				'args'                => $id_arg,
+			)
+		);
+
+		register_rest_route(
+			self::API_NAMESPACE,
+			'/posts/(?P<id>\\d+)/measure',
+			array(
+				'methods'             => 'POST',
+				'callback'            => array( $this, 'handle_measure_post_request' ),
+				'permission_callback' => array( $this, 'check_edit_post_permission' ),
+				'args'                => $id_arg,
+			)
+		);
+	}
+
+	/**
+	 * Permission callback for per-post routes.
+	 *
+	 * @param \WP_REST_Request $request Request with `id` param.
+	 * @return bool
+	 */
+	public function check_edit_post_permission( \WP_REST_Request $request ): bool {
+		$post_id = (int) $request['id'];
+		return $post_id > 0 && current_user_can( 'edit_post', $post_id );
+	}
+
+	/**
+	 * Build the REST response body for a post's stats.
+	 *
+	 * @param int $post_id Post ID.
+	 * @return array
+	 */
+	private function build_post_stats_response( int $post_id ): array {
+		$stats = Stats::for_post( $post_id );
+		$post  = get_post( $post_id );
+
+		$stats['formatted'] = array();
+		foreach ( Stats::BINDABLE_KEYS as $key ) {
+			$stats['formatted'][ $key ] = Stats::format_value( $stats, $key );
+		}
+		$stats['can_measure']     = $post && 'publish' === $post->post_status && is_post_publicly_viewable( $post );
+		$stats['data_collection'] = (bool) get_option( Constants::OPTION_DATA_COLLECTION_ENABLED, Constants::DEFAULT_DATA_COLLECTION_ENABLED );
+
+		return $stats;
+	}
+
+	/**
+	 * GET handler: return stats for a single post.
+	 *
+	 * @param \WP_REST_Request $request Request.
+	 * @return \WP_REST_Response|\WP_Error
+	 */
+	public function handle_get_post_stats_request( \WP_REST_Request $request ) {
+		$post_id = (int) $request['id'];
+		if ( ! get_post( $post_id ) ) {
+			return new \WP_Error( 'carbonfooter_not_found', __( 'Post not found', 'carbonfooter' ), array( 'status' => 404 ) );
+		}
+		return rest_ensure_response( $this->build_post_stats_response( $post_id ) );
+	}
+
+	/**
+	 * POST handler: measure a post now and return fresh stats.
+	 *
+	 * @param \WP_REST_Request $request Request.
+	 * @return \WP_REST_Response|\WP_Error
+	 */
+	public function handle_measure_post_request( \WP_REST_Request $request ) {
+		$post_id = (int) $request['id'];
+		$post    = get_post( $post_id );
+		if ( ! $post ) {
+			return new \WP_Error( 'carbonfooter_not_found', __( 'Post not found', 'carbonfooter' ), array( 'status' => 404 ) );
+		}
+
+		if ( ! get_option( Constants::OPTION_DATA_COLLECTION_ENABLED, Constants::DEFAULT_DATA_COLLECTION_ENABLED ) ) {
+			return new \WP_Error( 'carbonfooter_data_collection_disabled', __( 'Data collection is disabled in privacy settings', 'carbonfooter' ), array( 'status' => 409 ) );
+		}
+
+		if ( 'publish' !== $post->post_status || ! is_post_publicly_viewable( $post ) ) {
+			return new \WP_Error( 'carbonfooter_not_public', __( 'Only published, public pages can be measured.', 'carbonfooter' ), array( 'status' => 409 ) );
+		}
+
+		$lock_key = 'carbonfooter_processing_' . $post_id;
+		if ( get_transient( $lock_key ) ) {
+			return new \WP_Error( 'carbonfooter_in_progress', __( 'A refresh is already running. Please wait a moment.', 'carbonfooter' ), array( 'status' => 409 ) );
+		}
+
+		set_transient( $lock_key, true, 5 * MINUTE_IN_SECONDS );
+		try {
+			$result = ( new Emissions() )->process_post( $post_id );
+		} finally {
+			delete_transient( $lock_key );
+		}
+
+		if ( false === $result ) {
+			return new \WP_Error( 'carbonfooter_measure_failed', __( 'Failed to measure emissions', 'carbonfooter' ), array( 'status' => 502 ) );
+		}
+
+		return rest_ensure_response( $this->build_post_stats_response( $post_id ) );
 	}
 
 	/**

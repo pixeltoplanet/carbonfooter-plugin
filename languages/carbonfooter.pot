@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Carbonfooter 0.20.0\n"
+"Project-Id-Version: Carbonfooter 0.21.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/carbonfooter\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-03-25T11:18:20+00:00\n"
+"POT-Creation-Date: 2026-11-17T11:42:01+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: carbonfooter\n"
@@ -18,12 +18,14 @@ msgstr ""
 #: carbonfooter.php
 #: inc/class-admin-handler.php:101
 #: inc/class-admin-handler.php:102
-#: build/index.js:1654
-#: build/index.js:1848
-#: src/views/AdminPage.js:106
-#: src/views/ResultsPage.js:88
-#: build/index.js:1668
-#: build/index.js:1877
+#: inc/class-block-bindings.php:57
+#: inc/class-block-patterns.php:52
+#: inc/class-blocks.php:135
+#: inc/class-site-health.php:106
+#: inc/class-site-health.php:290
+#: build/editor/index.js:1
+#: build/index.js:2
+#: build/index.js:3
 msgid "Carbonfooter"
 msgstr ""
 
@@ -50,9 +52,7 @@ msgstr ""
 #: inc/class-admin-handler.php:121
 #: inc/class-admin-handler.php:122
 #: inc/class-admin-handler.php:403
-#: build/index.js:2177
-#: src/views/SettingsPage.js:338
-#: build/index.js:2252
+#: build/index.js:3
 msgid "Settings"
 msgstr ""
 
@@ -109,10 +109,12 @@ msgid "Invalid post ID"
 msgstr ""
 
 #: inc/class-ajax-handler.php:133
+#: inc/class-rest-api-handler.php:184
 msgid "A refresh is already running. Please wait a moment."
 msgstr ""
 
 #: inc/class-ajax-handler.php:157
+#: inc/class-rest-api-handler.php:195
 msgid "Failed to measure emissions"
 msgstr ""
 
@@ -129,7 +131,7 @@ msgid "Failed to retrieve untested pages"
 msgstr ""
 
 #: inc/class-ajax-handler.php:256
-#: inc/class-rest-api-handler.php:225
+#: inc/class-rest-api-handler.php:355
 msgid "No valid settings provided"
 msgstr ""
 
@@ -165,7 +167,134 @@ msgstr ""
 msgid "Insufficient permissions"
 msgstr ""
 
+#: inc/class-block-patterns.php:53
+msgid "Show the carbon footprint of your pages."
+msgstr ""
+
+#: inc/class-block-patterns.php:72
+msgid "Carbonfooter footer bar"
+msgstr ""
+
+#: inc/class-block-patterns.php:73
+msgid "A slim full-width bar with a short note and the page emissions label."
+msgstr ""
+
+#: inc/class-block-patterns.php:80
+msgid "Carbonfooter stats overview"
+msgstr ""
+
+#: inc/class-block-patterns.php:81
+msgid "All page stats in one row: hosting, page weight, emissions, driving and trees."
+msgstr ""
+
+#: inc/class-block-patterns.php:88
+msgid "Carbonfooter sticker, aligned right"
+msgstr ""
+
+#: inc/class-block-patterns.php:89
+msgid "The cloud sticker aligned to the right of the footer."
+msgstr ""
+
+#: inc/class-block-patterns.php:96
+msgid "Carbonfooter stats columns"
+msgstr ""
+
+#: inc/class-block-patterns.php:97
+msgid "Three columns using regular headings bound to Carbonfooter data, so they follow your theme typography."
+msgstr ""
+
+#: inc/class-block-patterns.php:113
+msgid "We measure the footprint of every page on this site."
+msgstr ""
+
+#: inc/class-block-patterns.php:157
+msgid "per page visit"
+msgstr ""
+
+#: inc/class-block-patterns.php:158
+msgid "page weight"
+msgstr ""
+
+#: inc/class-block-patterns.php:159
+msgid "hosting"
+msgstr ""
+
+#: inc/class-block-renderer.php:87
+#: inc/class-shortcodes.php:362
+#: inc/class-shortcodes.php:495
+#: build/index.js:2
+msgid "Carbonfooter.nl"
+msgstr ""
+
+#. translators: %1$s is the CO2 emissions HTML span, %2$s is the link HTML
+#: inc/class-block-renderer.php:94
+#, php-format
+msgid "This page produced %1$s per page view. Want to learn more? %2$s"
+msgstr ""
+
+#: inc/class-block-renderer.php:124
+#, php-format
+msgid "%s gram CO<sub>2</sub>"
+msgstr ""
+
+#: inc/class-block-renderer.php:125
+#: inc/class-shortcodes.php:576
+#: build/index.js:2
+msgid "per visit"
+msgstr ""
+
+#. translators: %s: trees needed to offset emissions per year
+#: inc/class-block-renderer.php:151
+#, php-format
+msgid "and <strong>%s trees</strong><br>offset per year."
+msgstr ""
+
+#. translators: %s: amount in km car drive per year based on carbon emissions
+#: inc/class-block-renderer.php:180
+#, php-format
+msgid "= <strong>%s km.</strong><br>drive per year."
+msgstr ""
+
+#: inc/class-block-renderer.php:206
+msgid "pagesize"
+msgstr ""
+
+#: inc/class-block-renderer.php:227
+#: build/index.js:1
+msgid "Yes!"
+msgstr ""
+
+#: inc/class-block-renderer.php:227
+msgid "No!"
+msgstr ""
+
+#: inc/class-block-renderer.php:228
+msgid "green energy"
+msgstr ""
+
+#: inc/class-block-renderer.php:228
+msgid "not green energy"
+msgstr ""
+
+#: inc/class-block-renderer.php:249
+#: build/blocks/full/index.js:1
+msgid "Want to learn more?"
+msgstr ""
+
+#. translators: %1$s is the CO2 emissions HTML span
+#: inc/class-block-renderer.php:292
+#, php-format
+msgid "This page produced %1$s per page view."
+msgstr ""
+
+#. translators: %s is the CO2 emissions value in grams
+#: inc/class-block-renderer.php:322
+#, php-format
+msgid "%s g CO<sub>2</sub> per visit"
+msgstr ""
+
 #: inc/class-emissions.php:65
+#: inc/class-rest-api-handler.php:175
 msgid "Data collection is disabled in privacy settings"
 msgstr ""
 
@@ -199,60 +328,61 @@ msgstr ""
 msgid "No emissions data found in response"
 msgstr ""
 
-#: inc/class-rest-api-handler.php:125
-msgid "Widget background color in hex format"
+#. translators: %s: plugin version number
+#: inc/class-plugin.php:175
+#, php-format
+msgid "Carbonfooter translations updated to v%s."
 msgstr ""
 
-#: inc/class-rest-api-handler.php:131
-msgid "Widget text color in hex format"
-msgstr ""
-
-#: inc/class-rest-api-handler.php:137
-msgid "Widget display setting (auto, manual, disabled)"
-msgstr ""
-
-#: inc/class-rest-api-handler.php:143
-msgid "Widget style (minimal, detailed, compact)"
+#: inc/class-rest-api-handler.php:156
+#: inc/class-rest-api-handler.php:171
+msgid "Post not found"
 msgstr ""
 
 #: inc/class-rest-api-handler.php:179
+msgid "Only published, public pages can be measured."
+msgstr ""
+
+#: inc/class-rest-api-handler.php:255
+msgid "Widget background color in hex format"
+msgstr ""
+
+#: inc/class-rest-api-handler.php:261
+msgid "Widget text color in hex format"
+msgstr ""
+
+#: inc/class-rest-api-handler.php:267
+msgid "Widget display setting (auto, manual, disabled)"
+msgstr ""
+
+#: inc/class-rest-api-handler.php:273
+msgid "Widget style (minimal, detailed, compact)"
+msgstr ""
+
+#: inc/class-rest-api-handler.php:309
 msgid "Failed to retrieve settings"
 msgstr ""
 
-#: inc/class-rest-api-handler.php:248
+#: inc/class-rest-api-handler.php:378
 msgid "Failed to save settings"
 msgstr ""
 
 #. translators: %s is the parameter name that has an invalid hex color.
-#: inc/class-rest-api-handler.php:303
+#: inc/class-rest-api-handler.php:433
 #, php-format
 msgid "Invalid hex color format for %s"
 msgstr ""
 
 #. translators: %s is a comma-separated list of allowed display settings.
-#: inc/class-rest-api-handler.php:335
+#: inc/class-rest-api-handler.php:465
 #, php-format
 msgid "Invalid display setting. Must be one of: %s"
 msgstr ""
 
 #. translators: %s is a comma-separated list of allowed widget styles.
-#: inc/class-rest-api-handler.php:367
+#: inc/class-rest-api-handler.php:497
 #, php-format
 msgid "Invalid widget style. Must be one of: %s"
-msgstr ""
-
-#: inc/class-shortcodes.php:362
-#: inc/class-shortcodes.php:495
-#: build/index.js:1249
-#: build/index.js:1254
-#: build/index.js:1268
-#: src/components/WidgetPreview.js:63
-#: src/components/WidgetPreview.js:75
-#: src/components/WidgetPreview.js:98
-#: build/index.js:1279
-#: build/index.js:1291
-#: build/index.js:1314
-msgid "Carbonfooter.nl"
 msgstr ""
 
 #. translators: %1$s is the CO2 emissions HTML span, %2$s is the Carbonfooter.nl link
@@ -276,9 +406,7 @@ msgid "This page produced %s per page view."
 msgstr ""
 
 #: inc/class-shortcodes.php:508
-#: build/index.js:1272
-#: src/components/WidgetPreview.js:102
-#: build/index.js:1318
+#: build/index.js:2
 msgid "How green is this webpage?"
 msgstr ""
 
@@ -293,9 +421,7 @@ msgid "<span class=\"cf-full__value\">%1$s</span> %2$s"
 msgstr ""
 
 #: inc/class-shortcodes.php:532
-#: build/index.js:1293
-#: src/components/WidgetPreview.js:128
-#: build/index.js:1344
+#: build/index.js:2
 msgid "YES"
 msgstr ""
 
@@ -304,9 +430,7 @@ msgid "NO"
 msgstr ""
 
 #: inc/class-shortcodes.php:533
-#: build/index.js:1293
-#: src/components/WidgetPreview.js:130
-#: build/index.js:1346
+#: build/index.js:2
 msgid "it runs on green energy"
 msgstr ""
 
@@ -324,17 +448,14 @@ msgstr ""
 msgid "this page"
 msgstr ""
 
+#: inc/class-shortcodes.php:556
+msgid "in size"
+msgstr ""
+
 #. translators: %1$s: emissions value in grams CO2, %2$s: per visit
 #: inc/class-shortcodes.php:574
 #, php-format
 msgid "emits <span class=\"cf-full__value\">%1$s g CO<sub>2</sub></span> %2$s"
-msgstr ""
-
-#: inc/class-shortcodes.php:576
-#: build/index.js:1325
-#: src/components/WidgetPreview.js:171
-#: build/index.js:1387
-msgid "per visit"
 msgstr ""
 
 #. translators: %s: km value for car drive equivalence
@@ -350,10 +471,174 @@ msgid "Takes <span class=\"cf-full__value\">%1$s trees</span> %2$s"
 msgstr ""
 
 #: inc/class-shortcodes.php:623
-#: build/index.js:1351
-#: src/components/WidgetPreview.js:207
-#: build/index.js:1423
+#: build/index.js:2
 msgid "to offset per year"
+msgstr ""
+
+#: inc/class-site-health.php:53
+msgid "Carbonfooter data collection"
+msgstr ""
+
+#: inc/class-site-health.php:58
+msgid "Carbonfooter background measurements"
+msgstr ""
+
+#: inc/class-site-health.php:63
+msgid "Carbonfooter API connection"
+msgstr ""
+
+#: inc/class-site-health.php:124
+msgid "Open Carbonfooter settings"
+msgstr ""
+
+#: inc/class-site-health.php:140
+msgid "Carbonfooter is measuring your pages"
+msgstr ""
+
+#: inc/class-site-health.php:141
+msgid "Page emissions are measured in the background and refreshed automatically."
+msgstr ""
+
+#: inc/class-site-health.php:148
+msgid "Carbonfooter data collection is turned off"
+msgstr ""
+
+#: inc/class-site-health.php:149
+msgid "No new measurements are made, so the emissions shown on your site may be outdated or based on the site average. Turn data collection back on if you want up-to-date numbers."
+msgstr ""
+
+#: inc/class-site-health.php:193
+msgid "Carbonfooter background measurements are running"
+msgstr ""
+
+#: inc/class-site-health.php:194
+msgid "No measurements are waiting in the WP-Cron queue."
+msgstr ""
+
+#. translators: %d: number of overdue scheduled measurements
+#: inc/class-site-health.php:201
+#, php-format
+msgid "%d page measurement has been waiting in WP-Cron for over an hour."
+msgid_plural "%d page measurements have been waiting in WP-Cron for over an hour."
+msgstr[0] ""
+msgstr[1] ""
+
+#: inc/class-site-health.php:212
+msgid "DISABLE_WP_CRON is set. Make sure a real cron job calls wp-cron.php regularly, otherwise emissions are only refreshed when an editor visits a page."
+msgstr ""
+
+#: inc/class-site-health.php:218
+msgid "Carbonfooter measurements are delayed"
+msgstr ""
+
+#: inc/class-site-health.php:236
+msgid "Carbonfooter API check skipped"
+msgstr ""
+
+#: inc/class-site-health.php:237
+msgid "Data collection is turned off, so the connection to carbonfooter.nl was not tested."
+msgstr ""
+
+#: inc/class-site-health.php:259
+msgid "Your site can reach the Carbonfooter API"
+msgstr ""
+
+#: inc/class-site-health.php:260
+msgid "Emissions can be measured through carbonfooter.nl."
+msgstr ""
+
+#. translators: %d: HTTP status code
+#: inc/class-site-health.php:267
+#, php-format
+msgid "HTTP status %d"
+msgstr ""
+
+#: inc/class-site-health.php:272
+msgid "Your site cannot reach the Carbonfooter API"
+msgstr ""
+
+#: inc/class-site-health.php:273
+msgid "New measurements will fail until the connection works. A firewall or outgoing-request block on your host is the most common cause."
+msgstr ""
+
+#: inc/class-site-health.php:286
+msgid "Yes"
+msgstr ""
+
+#: inc/class-site-health.php:287
+msgid "No"
+msgstr ""
+
+#: inc/class-site-health.php:293
+msgid "Version"
+msgstr ""
+
+#: inc/class-site-health.php:297
+msgid "Data collection enabled"
+msgstr ""
+
+#: inc/class-site-health.php:302
+msgid "Display"
+msgstr ""
+
+#: inc/class-site-health.php:306
+msgid "Widget style"
+msgstr ""
+
+#: inc/class-site-health.php:310
+msgid "Measured pages"
+msgstr ""
+
+#: inc/class-site-health.php:314
+msgid "Average emissions per visit"
+msgstr ""
+
+#: inc/class-site-health.php:318
+#: build/editor/index.js:1
+msgid "Green hosting"
+msgstr ""
+
+#: inc/class-site-health.php:322
+msgid "Last background measurement"
+msgstr ""
+
+#: inc/class-site-health.php:323
+msgid "Never"
+msgstr ""
+
+#: inc/class-site-health.php:326
+msgid "WP-Cron disabled"
+msgstr ""
+
+#. translators: %s: grams of CO2 per page visit
+#: inc/class-stats.php:157
+#, php-format
+msgid "%s g CO₂"
+msgstr ""
+
+#: inc/class-stats.php:159
+#: inc/class-stats.php:171
+msgid "Not measured yet"
+msgstr ""
+
+#. translators: %s: number of trees
+#: inc/class-stats.php:162
+#, php-format
+msgid "%s trees"
+msgstr ""
+
+#. translators: %s: kilometres
+#: inc/class-stats.php:165
+#, php-format
+msgid "%s km"
+msgstr ""
+
+#: inc/class-stats.php:167
+msgid "Green energy"
+msgstr ""
+
+#: inc/class-stats.php:167
+msgid "Not green energy"
 msgstr ""
 
 #: views/dashboard-widget.php:12
@@ -398,889 +683,834 @@ msgstr ""
 msgid "Caching plugins may interfere with accurate carbon emissions measurements. Please make sure to clear your cache if your settings are not working or you are not seeing any emissions results. Note: if you are using LiteSpeed Cache, you need to clear the cache manually after every measurement for now."
 msgstr ""
 
-#: build/index.js:57
-#: src/components/ExportData.js:22
-#: build/index.js:26
-msgid "Export Historical Emissions Data"
+#: build/blocks/driving/index.js:1
+#: build/blocks/emissions/index.js:1
+#: build/blocks/label/index.js:1
+#: build/blocks/minimal/index.js:1
+#: build/blocks/sticker/index.js:1
+#: build/blocks/trees/index.js:1
+msgid "No emissions data available."
 msgstr ""
 
-#: build/index.js:68
-#: src/components/ExportData.js:41
-#: build/index.js:45
-msgid "This is especially relevant if you want to use the carbon emissions from your website for another platform. You can export all historical emissions as a JSON file. This includes all pages with measurement history, including the serialized PHP arrays that contain the historical measurements. "
+#: build/blocks/green-hosting/index.js:1
+msgid "No hosting data available."
 msgstr ""
 
-#: build/index.js:73
-#: src/components/ExportData.js:49
-#: build/index.js:53
-msgid "The exported file will contain:"
+#: build/blocks/pageweight/index.js:1
+msgid "No page weight data available."
 msgstr ""
 
-#: build/index.js:78
-#: src/components/ExportData.js:56
-#: build/index.js:60
-msgid "Post ID and title"
+#: build/editor/index.js:1
+msgid "CO₂ per visit"
 msgstr ""
 
-#: build/index.js:78
-#: src/components/ExportData.js:57
-#: build/index.js:61
-msgid "Complete measurement history"
+#: build/editor/index.js:1
+msgid "Page weight"
 msgstr ""
 
-#: build/index.js:78
-#: src/components/ExportData.js:59
-#: build/index.js:63
-msgid "Serialized PHP arrays with dates and values"
+#: build/editor/index.js:1
+msgid "Trees to offset per year"
 msgstr ""
 
-#: build/index.js:78
-#: src/components/ExportData.js:64
-#: build/index.js:68
-msgid "All pages with historical data"
+#: build/editor/index.js:1
+msgid "Driving distance per year"
 msgstr ""
 
-#: build/index.js:84
-#: src/components/ExportData.js:76
-#: build/index.js:80
-msgid "Exporting Data..."
+#: build/editor/index.js:1
+msgid "Last measured"
 msgstr ""
 
-#: build/index.js:84
-#: src/components/ExportData.js:77
-#: build/index.js:81
-msgid "Export Historical Data"
+#: build/editor/index.js:1
+msgid "Data collection is turned off in Carbonfooter settings."
 msgstr ""
 
-#: build/index.js:113
-#: src/components/HowItWorks.js:20
-#: build/index.js:109
-msgid "How Measurements Work"
+#: build/editor/index.js:1
+msgid "Publish this page to measure it."
 msgstr ""
 
-#: build/index.js:116
-#: src/components/HowItWorks.js:25
-#: build/index.js:114
-msgid "Carbonfooter automatically measures the carbon emission of your pages: "
+#: build/editor/index.js:1
+msgid "This page has not been measured yet. Values below use the site average."
 msgstr ""
 
-#: build/index.js:121
-#: src/components/HowItWorks.js:32
-msgid "Measurements are taken when someone visits a page that hasn’t been measured in the last week."
+#: build/editor/index.js:1
+msgid "Measuring…"
 msgstr ""
 
-#: build/index.js:121
-#: src/components/HowItWorks.js:38
-#: build/index.js:127
-msgid "Each page stores up to 12 historical measurements, providing about 3 months of history"
+#: build/editor/index.js:1
+msgid "Measure now"
 msgstr ""
 
-#: build/index.js:121
-#: src/components/HowItWorks.js:44
-#: build/index.js:133
-msgid "The process runs in the background and won’t affect your visitors’ experience (except ofcourse they see the carbon footprint in the footer!)"
-msgstr ""
-
-#: build/index.js:121
-#: src/components/HowItWorks.js:50
-#: build/index.js:139
-msgid "The methodology of the carbon calculation is based on the universal Sustainable Web Model version 4, improved for Dutch visitors."
-msgstr ""
-
-#: build/index.js:126
-#: src/components/HowItWorks.js:67
-#: build/index.js:156
-msgid "Read more about how it works"
-msgstr ""
-
-#: build/index.js:170
-#: src/components/NotTestedPages.js:30
-#: build/index.js:194
-msgid "Error loading data"
-msgstr ""
-
-#: build/index.js:187
-#: src/components/NotTestedPages.js:50
-#: build/index.js:214
-msgid "Failed to load untested pages"
-msgstr ""
-
-#: build/index.js:204
-#: src/components/NotTestedPages.js:69
-#: build/index.js:233
-msgid "Failed to load heaviest pages"
-msgstr ""
-
-#: build/index.js:222
-#: src/components/NotTestedPages.js:90
-#: build/index.js:254
-msgid "Title"
-msgstr ""
-
-#: build/index.js:226
-#: build/index.js:338
-#: src/components/NotTestedPages.js:95
-#: src/components/OverViewDirtyPages.js:30
-#: build/index.js:259
-#: build/index.js:397
-msgid "Actions"
-msgstr ""
-
-#: build/index.js:232
-#: build/index.js:239
-#: src/components/NotTestedPages.js:104
-#: src/components/NotTestedPages.js:119
-#: build/index.js:268
-#: build/index.js:283
-msgid "Pages Overview"
-msgstr ""
-
-#: build/index.js:234
-#: src/components/NotTestedPages.js:108
-#: build/index.js:272
-msgid "Loading pages data..."
-msgstr ""
-
-#: build/index.js:244
-#: build/index.js:246
-#: src/components/NotTestedPages.js:130
-#: src/components/NotTestedPages.js:133
-#: build/index.js:294
-#: build/index.js:297
-msgid "Untested Pages"
-msgstr ""
-
-#: build/index.js:279
-#: src/components/NotTestedPages.js:170
-#: build/index.js:334
-msgid "Visit & calculate emissions"
-msgstr ""
-
-#: build/index.js:293
-#: src/components/NotTestedPages.js:194
-#: build/index.js:358
-msgid "All pages have been tested for emissions!"
-msgstr ""
-
-#: build/index.js:330
-#: src/components/OverViewDirtyPages.js:20
-#: build/index.js:387
-msgid "Page title"
-msgstr ""
-
-#: build/index.js:334
-#: build/index.js:521
-#: src/components/OverViewDirtyPages.js:25
-#: src/components/OverviewEmissions.js:12
-#: build/index.js:392
-#: build/index.js:547
-msgid "Emissions"
-msgstr ""
-
-#: build/index.js:349
-#: src/components/OverViewDirtyPages.js:44
-#: build/index.js:411
-msgid "Edit"
-msgstr ""
-
-#: build/index.js:352
-#: src/components/OverViewDirtyPages.js:48
-#: build/index.js:415
-msgid "View"
-msgstr ""
-
-#: build/index.js:359
-#: src/components/OverViewDirtyPages.js:60
-#: build/index.js:427
-msgid "Emissions per page - from dirty to clean"
-msgstr ""
-
-#: build/index.js:376
-#: src/components/OverViewDirtyPages.js:78
-#: build/index.js:445
-msgid "No pages with emissions data found."
-msgstr ""
-
-#: build/index.js:439
-#: src/components/Overview.js:39
-#: build/index.js:493
-msgid "These statistics are based on 1,000 visitors per month, each viewing 2.5 average pages, over a 12-month period."
-msgstr ""
-
-#: build/index.js:476
-#: build/index.js:572
-#: src/components/OverviewDriving.js:16
-#: src/components/OverviewGreenhost.js:20
-#: src/components/OverviewPageSize.js:12
-#: build/index.js:520
-#: build/index.js:588
-msgid "Greenhost"
-msgstr ""
-
-#: build/index.js:477
-#: src/components/OverviewDriving.js:18
-#: build/index.js:522
-msgid "Driving distance"
-msgstr ""
-
-#: build/index.js:487
-#: src/components/OverviewDriving.js:25
-#: build/index.js:529
-msgid "Per year."
-msgstr ""
-
-#: build/index.js:522
-#: src/components/OverviewEmissions.js:14
-#: build/index.js:549
-msgid "Average page emissions"
-msgstr ""
-
-#: build/index.js:536
-#: src/components/OverviewEmissions.js:26
-#: build/index.js:561
-msgid "Emissions per year."
-msgstr ""
-
-#: build/index.js:561
-#: src/components/OverviewGreenhost.js:5
-#: build/index.js:573
-msgid "Yes!"
-msgstr ""
-
-#: build/index.js:561
-#: src/components/OverviewGreenhost.js:6
-#: build/index.js:574
+#: build/index.js:1
 msgid "NO!"
 msgstr ""
 
-#: build/index.js:562
-#: src/components/OverviewGreenhost.js:9
-#: build/index.js:577
+#: build/index.js:1
 msgid "Your website runs on green energy."
 msgstr ""
 
-#: build/index.js:562
-#: src/components/OverviewGreenhost.js:10
-#: build/index.js:578
+#: build/index.js:1
 msgid "Your website does not run on green energy."
 msgstr ""
 
-#: build/index.js:573
-#: src/components/OverviewGreenhost.js:22
-#: build/index.js:590
+#: build/index.js:1
+msgid "Greenhost"
+msgstr ""
+
+#: build/index.js:1
 msgid "Greenhost status"
 msgstr ""
 
-#: build/index.js:627
-#: src/components/OverviewResources.js:11
-#: build/index.js:619
-msgid "Resource type"
+#: build/index.js:1
+#: build/index.js:2
+msgid "Emissions"
 msgstr ""
 
-#: build/index.js:631
-#: src/components/OverviewResources.js:16
-#: build/index.js:624
-msgid "Avg. Requests per page"
+#: build/index.js:1
+msgid "Average page emissions"
 msgstr ""
 
-#: build/index.js:635
-#: src/components/OverviewResources.js:21
-#: build/index.js:629
-msgid "Avg. size of resources per page"
+#: build/index.js:1
+msgid "Emissions per year."
 msgstr ""
 
-#: build/index.js:644
-#: src/components/OverviewResources.js:37
-#: build/index.js:645
-msgid "Resource Statistics"
+#: build/index.js:1
+msgid "Driving distance"
 msgstr ""
 
-#: build/index.js:647
-#: src/components/OverviewResources.js:42
-#: build/index.js:650
-msgid "Average resource usage across your posts and pages."
+#: build/index.js:1
+msgid "Per year."
 msgstr ""
 
-#: build/index.js:680
-#: src/components/OverviewTrees.js:8
-#: build/index.js:676
+#: build/index.js:1
 msgid "tree"
 msgstr ""
 
-#: build/index.js:680
-#: src/components/OverviewTrees.js:8
-#: build/index.js:676
+#: build/index.js:1
 msgid "trees"
 msgstr ""
 
-#: build/index.js:690
-#: build/index.js:691
-#: src/components/OverviewTrees.js:17
-#: src/components/OverviewTrees.js:19
-#: build/index.js:685
-#: build/index.js:687
+#: build/index.js:1
 msgid "Trees"
 msgstr ""
 
 #. translators: 1: number of trees, 2: tree/trees label
-#: build/index.js:696
-#: src/components/OverviewTrees.js:26
-#: build/index.js:694
+#: build/index.js:2
 #, js-format
 msgid "Plant %1$s %2$s"
 msgstr ""
 
-#: build/index.js:698
-#: src/components/OverviewTrees.js:32
-#: build/index.js:700
+#: build/index.js:2
 msgid "To offset your emissions."
 msgstr ""
 
-#: build/index.js:844
-#: src/components/StartModal.js:62
-#: build/index.js:803
+#: build/index.js:2
+msgid "These statistics are based on 1,000 visitors per month, each viewing 2.5 average pages, over a 12-month period."
+msgstr ""
+
+#: build/index.js:2
+msgid "Page title"
+msgstr ""
+
+#: build/index.js:2
+#: build/index.js:3
+msgid "Actions"
+msgstr ""
+
+#: build/index.js:2
+msgid "Edit"
+msgstr ""
+
+#: build/index.js:2
+msgid "View"
+msgstr ""
+
+#: build/index.js:2
+msgid "Emissions per page - from dirty to clean"
+msgstr ""
+
+#: build/index.js:2
+msgid "No pages with emissions data found."
+msgstr ""
+
+#: build/index.js:2
+msgid "Resource type"
+msgstr ""
+
+#: build/index.js:2
+msgid "Avg. Requests per page"
+msgstr ""
+
+#: build/index.js:2
+msgid "Avg. size of resources per page"
+msgstr ""
+
+#: build/index.js:2
+msgid "Resource Statistics"
+msgstr ""
+
+#: build/index.js:2
+msgid "Average resource usage across your posts and pages."
+msgstr ""
+
+#: build/index.js:2
+#: build/index.js:3
+msgid "Last test on"
+msgstr ""
+
+#: build/index.js:2
+msgid "Overview"
+msgstr ""
+
+#: build/index.js:2
+msgid "This page produced"
+msgstr ""
+
+#: build/index.js:2
+msgid "per page view. Measure more?"
+msgstr ""
+
+#: build/index.js:2
+msgid "Results are measured with"
+msgstr ""
+
+#: build/index.js:2
+msgid "carbonfooter"
+msgstr ""
+
+#: build/index.js:2
+msgid "page size"
+msgstr ""
+
+#: build/index.js:2
+msgid "emits"
+msgstr ""
+
+#: build/index.js:2
+msgid "= same as a"
+msgstr ""
+
+#: build/index.js:2
+msgid "drive"
+msgstr ""
+
+#: build/index.js:2
+msgid "Takes"
+msgstr ""
+
+#: build/index.js:2
+msgid "per page view."
+msgstr ""
+
+#: build/index.js:2
+msgid "g CO2 / visit —"
+msgstr ""
+
+#: build/index.js:2
+msgid "How Measurements Work"
+msgstr ""
+
+#: build/index.js:2
+msgid "Carbonfooter automatically measures the carbon emission of your pages: "
+msgstr ""
+
+#: build/index.js:2
+msgid "Measurements are taken when someone visits a page that hasn’t been measured in the last week."
+msgstr ""
+
+#: build/index.js:2
+msgid "Each page stores up to 12 historical measurements, providing about 3 months of history"
+msgstr ""
+
+#: build/index.js:2
+msgid "The process runs in the background and won’t affect your visitors’ experience (except ofcourse they see the carbon footprint in the footer!)"
+msgstr ""
+
+#: build/index.js:2
+msgid "The methodology of the carbon calculation is based on the universal Sustainable Web Model version 4, improved for Dutch visitors."
+msgstr ""
+
+#: build/index.js:2
+msgid "Read more about how it works"
+msgstr ""
+
+#: build/index.js:2
+msgid "Export Historical Emissions Data"
+msgstr ""
+
+#: build/index.js:2
+msgid "This is especially relevant if you want to use the carbon emissions from your website for another platform. You can export all historical emissions as a JSON file. This includes all pages with measurement history, including the serialized PHP arrays that contain the historical measurements. "
+msgstr ""
+
+#: build/index.js:2
+msgid "The exported file will contain:"
+msgstr ""
+
+#: build/index.js:2
+msgid "Post ID and title"
+msgstr ""
+
+#: build/index.js:2
+msgid "Complete measurement history"
+msgstr ""
+
+#: build/index.js:2
+msgid "Serialized PHP arrays with dates and values"
+msgstr ""
+
+#: build/index.js:2
+msgid "All pages with historical data"
+msgstr ""
+
+#: build/index.js:2
+msgid "Exporting Data..."
+msgstr ""
+
+#: build/index.js:2
+msgid "Export Historical Data"
+msgstr ""
+
+#: build/index.js:2
+msgid "Danger zone - Reset all Carbonfooter data"
+msgstr ""
+
+#: build/index.js:2
+msgid "This will permanently delete all CarbonFooter data including:"
+msgstr ""
+
+#: build/index.js:2
+msgid "All emissions measurements"
+msgstr ""
+
+#: build/index.js:2
+msgid "Resource usage data"
+msgstr ""
+
+#: build/index.js:2
+msgid "Measurement history"
+msgstr ""
+
+#: build/index.js:2
+msgid "Page size data"
+msgstr ""
+
+#: build/index.js:2
+msgid "Green hosting status"
+msgstr ""
+
+#: build/index.js:2
+msgid "Clearing Data..."
+msgstr ""
+
+#: build/index.js:2
+msgid "Clear All CarbonFooter Data"
+msgstr ""
+
+#: build/index.js:2
+msgid "Troubleshooting: not working?"
+msgstr ""
+
+#: build/index.js:2
+msgid "Don't see any data? Try these things:"
+msgstr ""
+
+#: build/index.js:2
+msgid "Visit your webpage: The measuring updates automatically when somebody visits the web page. So, visit your webpage, and wait a few minutes."
+msgstr ""
+
+#: build/index.js:2
+msgid "Clear your cache: Still not working after 30 minutes? This might be because you are using a caching plugin."
+msgstr ""
+
+#: build/index.js:2
+msgid "We ran a check and detected that your website is using the following caching plugin(s):"
+msgstr ""
+
+#: build/index.js:2
+msgid "Clear your cache, and refresh your webpage. If you are using LiteSpeed Cache, you need to clear the cache manually after every measurement."
+msgstr ""
+
+#: build/index.js:2
+msgid "We ran a check and detected that your website is not using any of the common caching plugins."
+msgstr ""
+
+#: build/index.js:2
+msgid "Clear your cache, and refresh your webpage."
+msgstr ""
+
+#: build/index.js:2
+msgid "Improve your website: possibly your web page is too heavy to go through our calculation. Go to"
+msgstr ""
+
+#: build/index.js:2
+msgid "check our tips, update your webpage and try again."
+msgstr ""
+
+#: build/index.js:2
+msgid "If that also doesn't work, it is possible that your web page is too heavy to go through our calculation. Go to carbonfooter.nl, check our tips, update your webpage and try again."
+msgstr ""
+
+#: build/index.js:2
+msgid "Visit Carbonfooter"
+msgstr ""
+
+#: build/index.js:2
 msgid "Hang on while we are preparing your carbonfooter"
 msgstr ""
 
-#: build/index.js:844
-#: src/components/StartModal.js:66
-#: build/index.js:807
+#: build/index.js:2
 msgid "The emissions for your home page have been calculated."
 msgstr ""
 
-#: build/index.js:856
-#: build/index.js:870
-#: src/components/StartModal.js:87
-#: src/components/StartModal.js:103
-#: build/index.js:828
-#: build/index.js:844
+#: build/index.js:2
 msgid "Close modal"
 msgstr ""
 
-#: build/index.js:877
-#: src/components/StartModal.js:113
-#: build/index.js:854
+#: build/index.js:2
 msgid "We are measuring your carbon footprint"
 msgstr ""
 
-#: build/index.js:880
-#: src/components/StartModal.js:122
-#: build/index.js:863
+#: build/index.js:2
 msgid "We are measuring the carbon footprint of your home page. This may take 30 seconds."
 msgstr ""
 
 #. translators: %s: formatted emissions amount (e.g., "1.23 g")
-#: build/index.js:881
-#: src/components/StartModal.js:132
-#: build/index.js:873
+#: build/index.js:3
 #, js-format
 msgid "Per visit it will emit %s of CO2."
 msgstr ""
 
-#: build/index.js:881
-#: src/components/StartModal.js:135
-#: build/index.js:876
+#: build/index.js:3
 msgid "There was an error calculating the emissions for your home page. Please visit the page to trigger re-measurement."
 msgstr ""
 
-#: build/index.js:900
-#: build/index.js:902
-#: src/components/StartModal.js:160
-#: src/components/StartModal.js:164
-#: build/index.js:901
-#: build/index.js:905
+#: build/index.js:3
 msgid "Back to settings"
 msgstr ""
 
-#: build/index.js:919
-#: src/components/StartModal.js:188
-#: build/index.js:929
+#: build/index.js:3
 msgid "Arrow right"
 msgstr ""
 
-#: build/index.js:921
-#: build/index.js:2319
-#: src/components/StartModal.js:191
-#: src/views/SettingsPage.js:592
-#: build/index.js:932
-#: build/index.js:2506
+#: build/index.js:3
 msgid "View your homepage"
 msgstr ""
 
-#: build/index.js:1140
-#: src/components/Troubleshooting.js:22
-#: build/index.js:1121
-msgid "Troubleshooting: not working?"
-msgstr ""
-
-#: build/index.js:1145
-#: src/components/Troubleshooting.js:29
-#: build/index.js:1128
-msgid "Don't see any data? Try these things:"
-msgstr ""
-
-#: build/index.js:1152
-#: src/components/Troubleshooting.js:40
-#: build/index.js:1139
-msgid "Visit your webpage: The measuring updates automatically when somebody visits the web page. So, visit your webpage, and wait a few minutes."
-msgstr ""
-
-#: build/index.js:1152
-#: src/components/Troubleshooting.js:46
-#: build/index.js:1145
-msgid "Clear your cache: Still not working after 30 minutes? This might be because you are using a caching plugin."
-msgstr ""
-
-#: build/index.js:1152
-#: src/components/Troubleshooting.js:53
-msgid "We ran a check and detected that your website is using the following caching plugin(s):"
-msgstr ""
-
-#: build/index.js:1152
-#: src/components/Troubleshooting.js:59
-#: build/index.js:1158
-msgid "Clear your cache, and refresh your webpage. If you are using LiteSpeed Cache, you need to clear the cache manually after every measurement."
-msgstr ""
-
-#: build/index.js:1152
-#: src/components/Troubleshooting.js:67
-#: build/index.js:1166
-msgid "We ran a check and detected that your website is not using any of the common caching plugins."
-msgstr ""
-
-#: build/index.js:1152
-#: src/components/Troubleshooting.js:72
-#: build/index.js:1171
-msgid "Clear your cache, and refresh your webpage."
-msgstr ""
-
-#: build/index.js:1152
-#: src/components/Troubleshooting.js:80
-#: build/index.js:1179
-msgid "Improve your website: possibly your web page is too heavy to go through our calculation. Go to"
-msgstr ""
-
-#: build/index.js:1156
-#: src/components/Troubleshooting.js:88
-#: build/index.js:1187
-msgid "check our tips, update your webpage and try again."
-msgstr ""
-
-#: build/index.js:1158
-#: src/components/Troubleshooting.js:98
-#: build/index.js:1197
-msgid "If that also doesn't work, it is possible that your web page is too heavy to go through our calculation. Go to carbonfooter.nl, check our tips, update your webpage and try again."
-msgstr ""
-
-#: build/index.js:1163
-#: src/components/Troubleshooting.js:109
-#: build/index.js:1208
-msgid "Visit Carbonfooter"
-msgstr ""
-
-#: build/index.js:1245
-#: build/index.js:1259
-#: build/index.js:1266
-#: src/components/WidgetPreview.js:57
-#: src/components/WidgetPreview.js:83
-#: src/components/WidgetPreview.js:95
-#: build/index.js:1273
-#: build/index.js:1299
-#: build/index.js:1311
-msgid "This page produced"
-msgstr ""
-
-#: build/index.js:1247
-#: build/index.js:1268
-#: src/components/WidgetPreview.js:61
-#: src/components/WidgetPreview.js:97
-#: build/index.js:1277
-#: build/index.js:1313
-msgid "per page view. Measure more?"
-msgstr ""
-
-#: build/index.js:1254
-#: src/components/WidgetPreview.js:74
-#: build/index.js:1290
-msgid "g CO2 / visit —"
-msgstr ""
-
-#: build/index.js:1261
-#: src/components/WidgetPreview.js:87
-#: build/index.js:1303
-msgid "per page view."
-msgstr ""
-
-#: build/index.js:1276
-#: src/components/WidgetPreview.js:106
-#: build/index.js:1322
-msgid "Results are measured with"
-msgstr ""
-
-#: build/index.js:1278
-#: src/components/WidgetPreview.js:108
-#: build/index.js:1324
-msgid "carbonfooter"
-msgstr ""
-
-#: build/index.js:1306
-#: src/components/WidgetPreview.js:147
-#: build/index.js:1363
-msgid "page size"
-msgstr ""
-
-#: build/index.js:1323
-#: src/components/WidgetPreview.js:167
-#: build/index.js:1383
-msgid "emits"
-msgstr ""
-
-#: build/index.js:1336
-#: src/components/WidgetPreview.js:187
-#: build/index.js:1403
-msgid "= same as a"
-msgstr ""
-
-#: build/index.js:1338
-#: src/components/WidgetPreview.js:189
-#: build/index.js:1405
-msgid "drive"
-msgstr ""
-
-#: build/index.js:1349
-#: src/components/WidgetPreview.js:205
-#: build/index.js:1421
-msgid "Takes"
-msgstr ""
-
-#: build/index.js:1658
-#: build/index.js:1849
-#: src/views/AdminPage.js:110
-#: src/views/ResultsPage.js:92
-#: build/index.js:1672
-#: build/index.js:1881
-msgid "Last test on"
-msgstr ""
-
-#: build/index.js:1661
-#: src/views/AdminPage.js:116
-#: build/index.js:1678
-msgid "Overview"
-msgstr ""
-
-#: build/index.js:1713
-#: src/views/ResetAllData.js:22
-#: build/index.js:1732
-msgid "Danger zone - Reset all Carbonfooter data"
-msgstr ""
-
-#: build/index.js:1727
-#: src/views/ResetAllData.js:42
-#: build/index.js:1752
-msgid "This will permanently delete all CarbonFooter data including:"
-msgstr ""
-
-#: build/index.js:1732
-#: src/views/ResetAllData.js:53
-#: build/index.js:1763
-msgid "All emissions measurements"
-msgstr ""
-
-#: build/index.js:1732
-#: src/views/ResetAllData.js:54
-#: build/index.js:1764
-msgid "Resource usage data"
-msgstr ""
-
-#: build/index.js:1732
-#: src/views/ResetAllData.js:55
-#: build/index.js:1765
-msgid "Measurement history"
-msgstr ""
-
-#: build/index.js:1732
-#: src/views/ResetAllData.js:56
-#: build/index.js:1766
-msgid "Page size data"
-msgstr ""
-
-#: build/index.js:1732
-#: src/views/ResetAllData.js:57
-#: build/index.js:1767
-msgid "Green hosting status"
-msgstr ""
-
-#: build/index.js:1741
-#: src/views/ResetAllData.js:70
-#: build/index.js:1780
-msgid "Clearing Data..."
-msgstr ""
-
-#: build/index.js:1741
-#: src/views/ResetAllData.js:71
-#: build/index.js:1781
-msgid "Clear All CarbonFooter Data"
-msgstr ""
-
-#: build/index.js:2056
-#: src/views/SettingsPage.js:179
-#: build/index.js:2093
+#: build/index.js:3
 msgid "Carbonfooter widget settings have been saved."
 msgstr ""
 
-#: build/index.js:2061
-#: src/views/SettingsPage.js:186
-#: build/index.js:2100
+#: build/index.js:3
 msgid "There was an error saving the carbonfooter widget settings."
 msgstr ""
 
-#: build/index.js:2066
-#: src/views/SettingsPage.js:195
-#: build/index.js:2109
+#: build/index.js:3
 msgid "Failed to save display settings. Please try again."
 msgstr ""
 
-#: build/index.js:2072
-#: src/views/SettingsPage.js:204
-#: build/index.js:2118
+#: build/index.js:3
 msgid "Failed to save widget style. Please try again."
 msgstr ""
 
-#: build/index.js:2078
-#: src/views/SettingsPage.js:213
-#: build/index.js:2127
+#: build/index.js:3
 msgid "Failed to save settings. Please try again."
 msgstr ""
 
-#: build/index.js:2090
-#: src/views/SettingsPage.js:231
-#: build/index.js:2145
-msgid "Are you sure you want to clear all CarbonFooter data? This action cannot be undone and will remove all emissions measurements, resource data, and history. Your settings will be preserved."
-msgstr ""
-
-#: build/index.js:2111
-#: build/index.js:2118
-#: src/views/SettingsPage.js:262
-#: src/views/SettingsPage.js:269
-#: build/index.js:2176
-#: build/index.js:2183
-msgid "Failed to clear data. Please try again."
-msgstr ""
-
-#: build/index.js:2153
-#: src/views/SettingsPage.js:312
-#: build/index.js:2226
-msgid "Data is exported successfully."
-msgstr ""
-
-#: build/index.js:2158
-#: build/index.js:2165
-#: src/views/SettingsPage.js:319
-#: src/views/SettingsPage.js:326
-#: build/index.js:2233
-#: build/index.js:2240
-msgid "Failed to export data. Please try again."
-msgstr ""
-
-#: build/index.js:2178
-#: src/views/SettingsPage.js:340
-#: build/index.js:2254
+#: build/index.js:3
 msgid "Thank you for joining us in our quest to make the internet more sustainable. With this plugin, you can calculate and display the carbon footprint of your website in the footprint. Follow these steps to set up your own carbonfooter! "
 msgstr ""
 
-#: build/index.js:2185
-#: src/views/SettingsPage.js:361
-#: build/index.js:2275
+#: build/index.js:3
 msgid "Step 1 - Design your carbonfooter"
 msgstr ""
 
-#: build/index.js:2199
-#: src/views/SettingsPage.js:382
-#: build/index.js:2296
+#: build/index.js:3
 msgid "Define your style"
 msgstr ""
 
-#: build/index.js:2201
-#: src/views/SettingsPage.js:384
-#: build/index.js:2298
+#: build/index.js:3
 msgid "Layout"
 msgstr ""
 
-#: build/index.js:2208
-#: src/views/SettingsPage.js:393
-#: build/index.js:2307
+#: build/index.js:3
 msgid "Minimal"
 msgstr ""
 
-#: build/index.js:2209
-#: src/views/SettingsPage.js:394
-#: build/index.js:2308
+#: build/index.js:3
 msgid "Minimal: only one line of text showing the CO2 value of the web page."
 msgstr ""
 
-#: build/index.js:2212
-#: src/views/SettingsPage.js:401
-#: build/index.js:2315
+#: build/index.js:3
 msgid "Full Banner"
 msgstr ""
 
-#: build/index.js:2213
-#: src/views/SettingsPage.js:402
-#: build/index.js:2316
+#: build/index.js:3
 msgid "Full banner: shows 5 icons and more detailed information on the sustainability of the web page"
 msgstr ""
 
-#: build/index.js:2216
-#: src/views/SettingsPage.js:409
-#: build/index.js:2323
+#: build/index.js:3
 msgid "Sticker"
 msgstr ""
 
-#: build/index.js:2217
-#: src/views/SettingsPage.js:410
-#: build/index.js:2324
+#: build/index.js:3
 msgid "Sticker: compact sticker-style badge perfect to fit into a corner of your web page."
 msgstr ""
 
-#: build/index.js:2220
-#: src/views/SettingsPage.js:417
-#: build/index.js:2331
+#: build/index.js:3
 msgid "Label"
 msgstr ""
 
-#: build/index.js:2221
-#: src/views/SettingsPage.js:418
-#: build/index.js:2332
+#: build/index.js:3
 msgid "Label: subtle badge. Uses your selected style and is shown with [carbonfooter] (style=\"label\" is not required)."
 msgstr ""
 
-#: build/index.js:2225
-#: src/views/SettingsPage.js:429
-#: build/index.js:2343
+#: build/index.js:3
 msgid "Background color"
 msgstr ""
 
-#: build/index.js:2231
-#: src/views/SettingsPage.js:438
-#: build/index.js:2352
+#: build/index.js:3
 msgid "Text color"
 msgstr ""
 
-#: build/index.js:2242
-#: src/views/SettingsPage.js:450
-#: build/index.js:2364
+#: build/index.js:3
 msgid "Live Preview"
 msgstr ""
 
-#: build/index.js:2242
-#: src/views/SettingsPage.js:453
-#: build/index.js:2367
+#: build/index.js:3
 msgid "This is what your carbonfooter will look like:"
 msgstr ""
 
-#: build/index.js:2260
-#: src/views/SettingsPage.js:479
-#: build/index.js:2393
+#: build/index.js:3
 msgid "Save your design"
 msgstr ""
 
-#: build/index.js:2263
-#: src/views/SettingsPage.js:487
-#: build/index.js:2401
+#: build/index.js:3
 msgid "Step 2. Show your carbonfooter"
 msgstr ""
 
-#: build/index.js:2272
-#: src/views/SettingsPage.js:504
-#: build/index.js:2418
+#: build/index.js:3
 msgid "You can choose if you want to show your carbonfooter automatically or manually. Don’t know which one to choose? Start with the automatic display, and if that one doesn’t show in the proper place, switch to the manual mode."
 msgstr ""
 
-#: build/index.js:2279
-#: src/views/SettingsPage.js:516
-#: build/index.js:2430
+#: build/index.js:3
 msgid "Display automatically"
 msgstr ""
 
-#: build/index.js:2280
-#: src/views/SettingsPage.js:517
-#: build/index.js:2431
+#: build/index.js:3
 msgid "The carbonfooter will be shown automatically on all pages at the end of your footer. Works fine with most themes."
 msgstr ""
 
-#: build/index.js:2283
-#: src/views/SettingsPage.js:524
-#: build/index.js:2438
+#: build/index.js:3
 msgid "Add manually"
 msgstr ""
 
-#: build/index.js:2284
-#: src/views/SettingsPage.js:525
-#: build/index.js:2439
+#: build/index.js:3
 msgid "The carbonfooter will be shown after you added the shortcode to your footer (or any other widget or textfield)."
 msgstr ""
 
-#: build/index.js:2289
-#: src/views/SettingsPage.js:538
-#: build/index.js:2452
+#: build/index.js:3
 msgid "Copy and paste the shortcode below, including the brackets, to your footer or any widget / textfield. The shortcode will automatically use the layout and colors you’ve configured above."
 msgstr ""
 
-#: build/index.js:2304
-#: src/views/SettingsPage.js:560
-#: build/index.js:2474
+#: build/index.js:3
 msgid "Save Display Settings"
 msgstr ""
 
-#: build/index.js:2307
-#: src/views/SettingsPage.js:568
-#: build/index.js:2482
+#: build/index.js:3
 msgid "Step 3. You're all set!"
 msgstr ""
 
-#: build/index.js:2310
-#: src/views/SettingsPage.js:575
-#: build/index.js:2489
+#: build/index.js:3
 msgid "Great! Your homepage has already been measured. You can view the results on your homepage."
 msgstr ""
 
-#: build/index.js:2319
-#: src/views/SettingsPage.js:598
-#: build/index.js:2512
+#: build/index.js:3
 msgid "You can start measuring, showing and reducing your footprint."
 msgstr ""
 
-#: build/index.js:2328
-#: src/views/SettingsPage.js:610
-#: build/index.js:2524
+#: build/index.js:3
 msgid "Start measuring now"
 msgstr ""
 
-#: build/index.js:2330
-#: src/views/SettingsPage.js:616
-#: build/index.js:2530
+#: build/index.js:3
 msgid "Besides showing the carbonfooterprint in the footer, you will now see an extra column behind each post and page that shows the carbon emissions generated when someone visits the page."
 msgstr ""
 
-#: build/index.js:2333
-#: src/views/SettingsPage.js:626
-#: build/index.js:2540
+#: build/index.js:3
 msgid "Information & tools"
 msgstr ""
 
-#: build/index.js:2369
-#: src/views/SettingsPage.js:671
-#: build/index.js:2585
+#: build/index.js:3
+msgid "Data is exported successfully."
+msgstr ""
+
+#: build/index.js:3
+msgid "Failed to export data. Please try again."
+msgstr ""
+
+#: build/index.js:3
+msgid "Are you sure you want to clear all CarbonFooter data? This action cannot be undone and will remove all emissions measurements, resource data, and history. Your settings will be preserved."
+msgstr ""
+
+#: build/index.js:3
+msgid "Failed to clear data. Please try again."
+msgstr ""
+
+#: build/index.js:3
 msgid "Dismiss"
 msgstr ""
 
-#: src/components/OverviewPageSize.js:14
-#: src/components/OverviewPageSize.js:27
-msgid "Average page size"
+#: build/index.js:3
+msgid "Error loading data"
 msgstr ""
 
-#: src/components/OverviewTotalPageSize.js:10
-#: src/components/OverviewTotalPageSize.js:14
-#: src/components/OverviewTotalPageSize.js:23
-msgid "Total page size"
+#: build/index.js:3
+msgid "Failed to load untested pages"
+msgstr ""
+
+#: build/index.js:3
+msgid "Failed to load heaviest pages"
+msgstr ""
+
+#: build/index.js:3
+msgid "Title"
+msgstr ""
+
+#: build/index.js:3
+msgid "Pages Overview"
+msgstr ""
+
+#: build/index.js:3
+msgid "Loading pages data..."
+msgstr ""
+
+#: build/index.js:3
+msgid "Untested Pages"
+msgstr ""
+
+#: build/index.js:3
+msgid "Visit & calculate emissions"
+msgstr ""
+
+#: build/index.js:3
+msgid "All pages have been tested for emissions!"
+msgstr ""
+
+#: build/blocks/driving/block.json
+msgctxt "block title"
+msgid "Carbonfooter Driving"
+msgstr ""
+
+#: build/blocks/driving/block.json
+msgctxt "block description"
+msgid "Display equivalent driving distance from annual emissions for the current page."
+msgstr ""
+
+#: build/blocks/driving/block.json
+#: build/blocks/emissions/block.json
+#: build/blocks/full/block.json
+#: build/blocks/green-hosting/block.json
+#: build/blocks/label/block.json
+#: build/blocks/minimal/block.json
+#: build/blocks/pageweight/block.json
+#: build/blocks/sticker/block.json
+#: build/blocks/trees/block.json
+msgctxt "block keyword"
+msgid "carbon"
+msgstr ""
+
+#: build/blocks/driving/block.json
+msgctxt "block keyword"
+msgid "driving"
+msgstr ""
+
+#: build/blocks/driving/block.json
+msgctxt "block keyword"
+msgid "distance"
+msgstr ""
+
+#: build/blocks/driving/block.json
+#: build/blocks/emissions/block.json
+#: build/blocks/full/block.json
+#: build/blocks/green-hosting/block.json
+#: build/blocks/label/block.json
+#: build/blocks/minimal/block.json
+#: build/blocks/pageweight/block.json
+#: build/blocks/sticker/block.json
+#: build/blocks/trees/block.json
+msgctxt "block keyword"
+msgid "sustainability"
+msgstr ""
+
+#: build/blocks/emissions/block.json
+msgctxt "block title"
+msgid "Carbonfooter Emissions"
+msgstr ""
+
+#: build/blocks/emissions/block.json
+msgctxt "block description"
+msgid "Display CO₂ emissions per visit for the current page."
+msgstr ""
+
+#: build/blocks/emissions/block.json
+#: build/blocks/full/block.json
+#: build/blocks/label/block.json
+#: build/blocks/minimal/block.json
+#: build/blocks/sticker/block.json
+msgctxt "block keyword"
+msgid "emissions"
+msgstr ""
+
+#: build/blocks/emissions/block.json
+msgctxt "block keyword"
+msgid "co2"
+msgstr ""
+
+#: build/blocks/full/block.json
+msgctxt "block title"
+msgid "Carbonfooter Full"
+msgstr ""
+
+#: build/blocks/full/block.json
+msgctxt "block description"
+msgid "A composable container block for building custom carbon emissions layouts using stat blocks."
+msgstr ""
+
+#: build/blocks/full/block.json
+msgctxt "block keyword"
+msgid "full"
+msgstr ""
+
+#: build/blocks/full/block.json
+msgctxt "block keyword"
+msgid "dashboard"
+msgstr ""
+
+#: build/blocks/green-hosting/block.json
+msgctxt "block title"
+msgid "Carbonfooter Green Hosting"
+msgstr ""
+
+#: build/blocks/green-hosting/block.json
+msgctxt "block description"
+msgid "Display whether the site uses green energy hosting."
+msgstr ""
+
+#: build/blocks/green-hosting/block.json
+msgctxt "block keyword"
+msgid "green"
+msgstr ""
+
+#: build/blocks/green-hosting/block.json
+msgctxt "block keyword"
+msgid "hosting"
+msgstr ""
+
+#: build/blocks/green-hosting/block.json
+msgctxt "block keyword"
+msgid "energy"
+msgstr ""
+
+#: build/blocks/label/block.json
+msgctxt "block title"
+msgid "Carbonfooter Label"
+msgstr ""
+
+#: build/blocks/label/block.json
+msgctxt "block description"
+msgid "A minimal inline carbon emissions label."
+msgstr ""
+
+#: build/blocks/label/block.json
+msgctxt "block keyword"
+msgid "label"
+msgstr ""
+
+#: build/blocks/label/block.json
+msgctxt "block keyword"
+msgid "inline"
+msgstr ""
+
+#: build/blocks/minimal/block.json
+msgctxt "block title"
+msgid "Carbonfooter Minimal"
+msgstr ""
+
+#: build/blocks/minimal/block.json
+msgctxt "block description"
+msgid "A lightweight single-line carbon emissions widget."
+msgstr ""
+
+#: build/blocks/minimal/block.json
+msgctxt "block keyword"
+msgid "minimal"
+msgstr ""
+
+#: build/blocks/minimal/block.json
+msgctxt "block keyword"
+msgid "footer"
+msgstr ""
+
+#: build/blocks/pageweight/block.json
+msgctxt "block title"
+msgid "Carbonfooter Page Weight"
+msgstr ""
+
+#: build/blocks/pageweight/block.json
+msgctxt "block description"
+msgid "Display the page weight (size) for the current page."
+msgstr ""
+
+#: build/blocks/pageweight/block.json
+msgctxt "block keyword"
+msgid "page"
+msgstr ""
+
+#: build/blocks/pageweight/block.json
+msgctxt "block keyword"
+msgid "weight"
+msgstr ""
+
+#: build/blocks/pageweight/block.json
+msgctxt "block keyword"
+msgid "size"
+msgstr ""
+
+#: build/blocks/sticker/block.json
+msgctxt "block title"
+msgid "Carbonfooter Sticker"
+msgstr ""
+
+#: build/blocks/sticker/block.json
+msgctxt "block description"
+msgid "A compact badge-style carbon emissions sticker."
+msgstr ""
+
+#: build/blocks/sticker/block.json
+msgctxt "block keyword"
+msgid "sticker"
+msgstr ""
+
+#: build/blocks/sticker/block.json
+msgctxt "block keyword"
+msgid "badge"
+msgstr ""
+
+#: build/blocks/trees/block.json
+msgctxt "block title"
+msgid "Carbonfooter Trees"
+msgstr ""
+
+#: build/blocks/trees/block.json
+msgctxt "block description"
+msgid "Display trees needed to offset annual emissions for the current page."
+msgstr ""
+
+#: build/blocks/trees/block.json
+msgctxt "block keyword"
+msgid "trees"
+msgstr ""
+
+#: build/blocks/trees/block.json
+msgctxt "block keyword"
+msgid "offset"
 msgstr ""

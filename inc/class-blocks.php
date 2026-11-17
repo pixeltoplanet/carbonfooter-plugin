@@ -48,6 +48,31 @@ class Blocks {
 	public function register_hooks(): void {
 		add_action( 'init', array( $this, 'register_blocks' ) );
 		add_filter( 'block_categories_all', array( $this, 'register_block_category' ), 10, 2 );
+		add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_editor_assets' ) );
+	}
+
+	/**
+	 * Enqueue the editor integration script (sidebar panel + bindings source UI).
+	 *
+	 * @return void
+	 */
+	public function enqueue_editor_assets(): void {
+		$asset_path = CARBONFOOTER_PLUGIN_DIR . 'build/editor/index.asset.php';
+		if ( ! file_exists( $asset_path ) ) {
+			return;
+		}
+
+		$asset = include $asset_path;
+
+		wp_enqueue_script(
+			'carbonfooter-editor',
+			CARBONFOOTER_PLUGIN_URL . 'build/editor/index.js',
+			$asset['dependencies'] ?? array(),
+			$asset['version'] ?? CARBONFOOTER_VERSION,
+			true
+		);
+
+		wp_set_script_translations( 'carbonfooter-editor', 'carbonfooter', CARBONFOOTER_PLUGIN_DIR . 'languages' );
 	}
 
 	/**

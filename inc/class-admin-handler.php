@@ -83,7 +83,9 @@ class AdminHandler {
 		// Privacy policy
 		add_action( 'admin_init', array( $this, 'register_privacy_policy_content' ) );
 
-		// Frontend styles
+		// Frontend styles. Registered on init (before blocks) so the block
+		// stylesheet's dependency also exists inside the block editor.
+		add_action( 'init', array( $this, 'register_frontend_styles' ), 9 );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_frontend_styles' ) );
 	}
 
@@ -548,8 +550,19 @@ class AdminHandler {
 	 * @return void
 	 */
 	public function enqueue_frontend_styles(): void {
-		// Register and enqueue the main frontend stylesheet
-		wp_enqueue_style(
+		wp_enqueue_style( 'carbonfooter-frontend' );
+	}
+
+	/**
+	 * Register the shared frontend stylesheet and its color variables.
+	 *
+	 * Runs on init so it is available both on the frontend and in the block
+	 * editor, where `carbonfooter-blocks` depends on it.
+	 *
+	 * @return void
+	 */
+	public function register_frontend_styles(): void {
+		wp_register_style(
 			'carbonfooter-frontend',
 			CARBONFOOTER_PLUGIN_URL . 'assets/css/carbonfooter.css',
 			array(),
