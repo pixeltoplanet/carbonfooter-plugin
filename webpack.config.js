@@ -7,6 +7,9 @@ module.exports = {
 		// Existing admin entry
 		index: path.resolve( __dirname, 'src', 'index.js' ),
 
+		// Block editor integration (sidebar panel + bindings source)
+		'editor/index': path.resolve( __dirname, 'src/editor', 'index.js' ),
+
 		// Block entries
 		'blocks/minimal/index': path.resolve( __dirname, 'src/blocks/minimal', 'index.js' ),
 		'blocks/emissions/index': path.resolve( __dirname, 'src/blocks/emissions', 'index.js' ),

@@ -63,6 +63,9 @@ class Plugin {
 	private RestApiHandler $rest_api_handler;
 	private HooksManager $hooks_manager;
 	private Blocks $blocks;
+	private BlockBindings $block_bindings;
+	private BlockPatterns $block_patterns;
+	private SiteHealth $site_health;
 
 	/**
 	 * Retrieve the singleton instance.
@@ -113,8 +116,11 @@ class Plugin {
 		$this->rest_api_handler = new RestApiHandler();
 		$this->hooks_manager    = new HooksManager( $this->get_all_handlers() );
 
-		// Gutenberg blocks
-		$this->blocks = new Blocks();
+		// Gutenberg blocks and editor integrations
+		$this->blocks         = new Blocks();
+		$this->block_bindings = new BlockBindings();
+		$this->block_patterns = new BlockPatterns();
+		$this->site_health    = new SiteHealth();
 	}
 
 	/**
@@ -129,8 +135,11 @@ class Plugin {
 	private function setup_hooks(): void {
 		$this->hooks_manager->register_all_hooks();
 
-		// Gutenberg block registration
+		// Gutenberg blocks, bindings, patterns and Site Health
 		$this->blocks->register_hooks();
+		$this->block_bindings->register_hooks();
+		$this->block_patterns->register_hooks();
+		$this->site_health->register_hooks();
 
 		// Plugin-level hooks
 		add_action( 'admin_init', array( $this, 'handle_database_setup' ) );
