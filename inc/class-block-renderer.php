@@ -36,13 +36,7 @@ class BlockRenderer {
 	private static function get_emissions_data(): array {
 		$emissions_handler = new Emissions();
 
-		$post_id = get_queried_object_id();
-		if ( ! $post_id ) {
-			$post_id = get_the_ID();
-		}
-		if ( ! $post_id && isset( $_GET['p'] ) ) {
-			$post_id = absint( $_GET['p'] );
-		}
+		$post_id = Stats::resolve_current_post_id();
 
 		if ( $post_id ) {
 			$payload = $emissions_handler->get_post_payload( (int) $post_id );
@@ -68,14 +62,7 @@ class BlockRenderer {
 	 * @return string Formatted page size string.
 	 */
 	private static function format_page_size( $page_size ): string {
-		$size = (float) $page_size;
-		if ( $size >= 1024 * 1024 ) {
-			return round( $size / ( 1024 * 1024 ), 2 ) . ' MB';
-		}
-		if ( $size >= 1024 ) {
-			return round( $size / 1024, 0 ) . ' KB';
-		}
-		return $size . ' bytes';
+		return Stats::format_page_size( $page_size );
 	}
 
 
@@ -134,6 +121,7 @@ class BlockRenderer {
 			'<div %s>%s<p class="cf-block-stat__title">%s</p><p class="cf-block-stat__text">%s</p></div>',
 			$wrapper_attrs,
 			$icon,
+			/* translators: %s: grams of CO2 per visit */
 			wp_kses_post( sprintf( __( '%s gram CO<sub>2</sub>', 'carbonfooter' ), number_format( (float) $data['emissions'], 2 ) ) ),
 			esc_html__( 'per visit', 'carbonfooter' )
 		);
@@ -148,9 +136,7 @@ class BlockRenderer {
 	 */
 	public static function render_trees( array $attributes, string $content ): string {
 		$data             = self::get_emissions_data();
-		$annual_visitors  = 10000;
-		$annual_emissions = (float) $data['emissions'] * $annual_visitors;
-		$trees_needed     = number_format( $annual_emissions / 5900, 1 );
+		$trees_needed     = number_format( Stats::trees_needed( (float) $data['emissions'] ), 1 );
 
 		$wrapper_attrs = get_block_wrapper_attributes( array( 'class' => 'cf-block-stat cf-block-stat--trees' ) );
 
@@ -179,8 +165,7 @@ class BlockRenderer {
 	 */
 	public static function render_driving( array $attributes, string $content ): string {
 		$data             = self::get_emissions_data();
-		$annual_visitors  = 12000;
-		$driving_distance = number_format( ( (float) $data['emissions'] * 0.005 ) * $annual_visitors, 2 );
+		$driving_distance = number_format( Stats::driving_km( (float) $data['emissions'] ), 2 );
 
 		$wrapper_attrs = get_block_wrapper_attributes( array( 'class' => 'cf-block-stat cf-block-stat--driving' ) );
 
