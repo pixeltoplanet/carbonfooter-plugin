@@ -1,4 +1,4 @@
-import { useBlockProps, InnerBlocks } from '@wordpress/block-editor';
+import { useBlockProps, useInnerBlocksProps } from '@wordpress/block-editor';
 import { __ } from '@wordpress/i18n';
 import { STAT_BLOCK_NAMES } from '../shared/constants';
 
@@ -15,15 +15,21 @@ export default function Edit() {
 		className: 'cf-block-full',
 	} );
 
+	// Make the row element itself the inner blocks container, so the stat
+	// blocks are its direct children and the .cf-block-full__row grid applies
+	// in the editor exactly like on the frontend (no extra wrapper divs).
+	const innerBlocksProps = useInnerBlocksProps(
+		{ className: 'cf-block-full__row' },
+		{
+			allowedBlocks: STAT_BLOCK_NAMES,
+			template: TEMPLATE,
+			orientation: 'horizontal',
+		}
+	);
+
 	return (
 		<div { ...blockProps }>
-			<div className="cf-block-full__row">
-				<InnerBlocks
-					allowedBlocks={ STAT_BLOCK_NAMES }
-					template={ TEMPLATE }
-					orientation="horizontal"
-				/>
-			</div>
+			<div { ...innerBlocksProps } />
 			<div className="cf-block-full__cta">
 				<span>
 					{ __( 'Want to learn more?', 'carbonfooter' ) }{ ' ' }

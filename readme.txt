@@ -166,6 +166,7 @@ Yes, the plugin is GDPR compliant. It does not collect or store any personal dat
 * Improved: Complete Dutch translations, including block titles and descriptions.
 * Improved: Bundled JS translations are now synced so block editor strings appear translated.
 * Fix: Block styles were missing in the block editor (oversized icons) because the block stylesheet depended on a style that was only registered on the frontend.
+* Fix: The Carbonfooter Full block now shows its stat blocks side by side in the editor, matching the frontend.
 * Fix: Unit tests for the AJAX measure handler.
 
 
