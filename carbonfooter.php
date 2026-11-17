@@ -3,10 +3,10 @@
 /**
  * Plugin Name: Carbonfooter
  * Description: Measure the carbon emissions of your website right inside WordPress
- * Version: 0.21.0
+ * Version: 0.22.0
  * Requires PHP: 8.0
- * Requires at least: 5.6
- * Tested up to: 6.8
+ * Requires at least: 6.6
+ * Tested up to: 7.1
  * Author: Pixel to Planet
  * Author URI: https://carbonfooter.nl
  * License: GPLv2 or later
@@ -23,7 +23,7 @@ if (! defined('ABSPATH')) {
 }
 
 // Define basic plugin constants first (needed for autoloader)
-define('CARBONFOOTER_VERSION', '0.21.0');
+define('CARBONFOOTER_VERSION', '0.22.0');
 define('CARBONFOOTER_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('CARBONFOOTER_PLUGIN_URL', plugin_dir_url(__FILE__));
 
@@ -88,8 +88,17 @@ function carbonfooter_sync_translations(): void
 
 		// Remove the .l10n.php cache so WordPress uses our fresh .mo above.
 		if (file_exists($dest_l10n)) {
-			@unlink($dest_l10n);
+			wp_delete_file($dest_l10n);
 		}
+	}
+
+	// Also copy JS translation files: block editor scripts registered via block.json
+	// only look for their JSON translations in the site-level languages directory.
+	foreach (glob($plugin_lang_dir . 'carbonfooter-*-*.json') as $source_json) {
+		if (str_ends_with($source_json, '-carbonfooter-admin.json')) {
+			continue;
+		}
+		@copy($source_json, $override_dir . basename($source_json));
 	}
 
 	if (! empty($synced)) {

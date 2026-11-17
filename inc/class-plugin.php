@@ -49,7 +49,7 @@ class Plugin {
 	 *
 	 * @var string
 	 */
-	public const VERSION = '0.21.0';
+	public const VERSION = '0.22.0';
 
 	/**
 	 * Core components

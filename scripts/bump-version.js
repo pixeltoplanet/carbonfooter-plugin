@@ -15,6 +15,10 @@
  * - package.json (version)
  * - composer.json (version)
  * - readme.txt (Stable tag + prepend changelog entry)
+ * - carbonfooter.php + readme.txt ("Tested up to" and "Requires at least")
+ *
+ * "Tested up to" defaults to the latest stable WordPress major.minor from the
+ * WordPress.org version API, so it can't silently fall behind again.
  */
 
 const fs = require('fs');
@@ -69,7 +73,10 @@ function updatePhpClassConstVersion(content, newVersion) {
 function updateJsonVersion(content, newVersion) {
   const obj = JSON.parse(content);
   obj.version = newVersion;
-  return JSON.stringify(obj, null, 2) + '\n';
+  // Preserve the file's existing indentation (tabs in package.json, spaces in composer.json).
+  const indentMatch = content.match(/^[ \t]+(?=")/m);
+  const indent = indentMatch ? indentMatch[0] : 2;
+  return JSON.stringify(obj, null, indent) + '\n';
 }
 
 function updateReadme(content, newVersion, title, description) {
@@ -98,6 +105,36 @@ function updateReadme(content, newVersion, title, description) {
   return out;
 }
 
+function getHeaderValue(content, header) {
+  const re = new RegExp(`^[ \\t\\/*#@]*${header}:\\s*([0-9.]+)`, 'mi');
+  const match = content.match(re);
+  return match ? match[1] : null;
+}
+
+function setHeaderValue(content, header, value) {
+  const re = new RegExp(`^([ \\t\\/*#@]*${header}:\\s*)[0-9.]+`, 'mi');
+  return content.replace(re, `$1${value}`);
+}
+
+function updateWpHeaders(content, testedUpTo, requiresAtLeast) {
+  let out = setHeaderValue(content, 'Tested up to', testedUpTo);
+  out = setHeaderValue(out, 'Requires at least', requiresAtLeast);
+  return out;
+}
+
+async function fetchLatestWpMajorMinor() {
+  try {
+    const res = await fetch('https://api.wordpress.org/core/version-check/1.7/');
+    if (!res.ok) return null;
+    const data = await res.json();
+    const current = data?.offers?.[0]?.current;
+    if (!current) return null;
+    return current.split('.').slice(0, 2).join('.');
+  } catch {
+    return null;
+  }
+}
+
 async function prompt(query) {
   const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
   const answer = await new Promise((resolve) => rl.question(query, resolve));
@@ -123,17 +160,28 @@ async function main() {
 
     const newVersion = bumpSemver(currentVersion, bumpType);
 
+    const currentTested = getHeaderValue(pluginMainContent, 'Tested up to');
+    const currentRequires = getHeaderValue(pluginMainContent, 'Requires at least');
+    const latestWp = await fetchLatestWpMajorMinor();
+    const testedDefault = latestWp || currentTested;
+    if (latestWp && latestWp !== currentTested) {
+      console.log(`Latest WordPress is ${latestWp}; plugin currently says "Tested up to: ${currentTested}".`);
+    }
+    const testedUpTo = (await prompt(`Tested up to [${testedDefault}]: `)).trim() || testedDefault;
+    const requiresAtLeast = (await prompt(`Requires at least [${currentRequires}]: `)).trim() || currentRequires;
+
     // Write all updates
-    write(FILES.pluginMain, updatePluginMain(pluginMainContent, newVersion));
+    write(FILES.pluginMain, updateWpHeaders(updatePluginMain(pluginMainContent, newVersion), testedUpTo, requiresAtLeast));
     write(FILES.classPlugin, updatePhpClassConstVersion(read(FILES.classPlugin), newVersion));
     write(FILES.classConstants, updatePhpClassConstVersion(read(FILES.classConstants), newVersion));
     write(FILES.packageJson, updateJsonVersion(read(FILES.packageJson), newVersion));
     write(FILES.composerJson, updateJsonVersion(read(FILES.composerJson), newVersion));
-    write(FILES.readme, updateReadme(read(FILES.readme), newVersion, title, description));
+    write(FILES.readme, updateWpHeaders(updateReadme(read(FILES.readme), newVersion, title, description), testedUpTo, requiresAtLeast));
 
     // Summary
     console.log('\nVersion bump complete.');
     console.log(`  ${currentVersion} -> ${newVersion}`);
+    console.log(`  Tested up to: ${testedUpTo}, Requires at least: ${requiresAtLeast}`);
     console.log('Updated files:');
     Object.values(FILES).forEach((f) => console.log(`  - ${path.relative(ROOT, f)}`));
     console.log('\nNext steps:');
