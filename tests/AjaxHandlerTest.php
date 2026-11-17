@@ -25,6 +25,7 @@ class AjaxHandlerTest extends TestCase
         // WP helpers used inside handler
         when('__')->alias(function ($text) { return $text; });
         when('wp_json_encode')->alias(function ($data) { return json_encode($data); });
+        when('wp_unslash')->returnArg();
         // Error helpers
         when('status_header')->justReturn(null);
         when('wp_send_json_error')->justReturn(null);
